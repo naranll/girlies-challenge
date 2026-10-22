@@ -1,0 +1,19 @@
+{
+  "name": "girlies-challenge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Girlies' 30-Day growth challenge tracker (Express + MongoDB)",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --env-file=.env server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.22.3",
+    "mongodb": "^6.21.0"
+  }
+}

@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>🌸 Girlies' 30-Day Growth Challenge</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            pink: '#FFE5EC',
+                            rose: '#FFB3C6',
+                            deepPink: '#FF8FAB',
+                            purple: '#F0E6FF',
+                            lavender: '#D8B4F8',
+                            mint: '#E8F5E9',
+                            cream: '#FFF9F5',
+                            yellow: '#FFF3BF',
+                            amber: '#FEF3C7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FFF9F5;
+            color: #334155;
+        }
+
+        .border-3 { border-width: 3px; }
+
+        .pixel-rendering {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .modal-bg {
+            background-color: rgba(71, 85, 105, 0.4);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Hover / active frame glow (colour comes from --glow, set per card) */
+        .glow-card {
+            --glow: #FF8FAB;
+            --glow-soft: rgba(255, 143, 171, 0.45);
+            transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+        }
+        .glow-card:hover,
+        .glow-card.glow-active {
+            transform: translateY(-2px);
+            border-color: var(--glow) !important;
+            box-shadow: 0 0 0 2px var(--glow), 0 0 22px 4px var(--glow-soft);
+        }
+
+        @keyframes confettiDrop {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: confettiDrop 2.5s ease-out forwards;
+        }
+
+        #toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+        /* Custom scrollbar for cute look */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #FFF3BF; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #FFB3C6; border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen pb-16">
+
+    <!-- TOP HEADER BAR -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-pink-100 sticky top-0 z-30 px-3 sm:px-4 py-2">
+        <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
+            <div class="flex items-center space-x-2 shrink-0">
+                <span class="text-xl">🌸</span>
+                <span class="font-extrabold text-slate-800 tracking-tight text-sm sm:text-base">GlowUp.girlies</span>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                <span id="sync-dot" class="text-[10px] font-black text-slate-300" title="Connecting…">●</span>
+                <div class="text-right leading-tight">
+                    <div id="header-date" class="text-[10px] sm:text-xs font-bold text-slate-500"></div>
+                    <div id="header-day" class="text-xs sm:text-sm font-black text-pink-600"></div>
+                </div>
+                <button onclick="openBannerModal()" class="px-2.5 sm:px-3 py-1.5 rounded-full bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold text-xs transition flex items-center space-x-1 shrink-0">
+                    <span>🖼️</span>
+                    <span class="hidden sm:inline">Kick-Off Banner</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-6xl mx-auto px-3 sm:px-6 pt-3 space-y-5">
+
+        <!-- Offer to bring over progress that was saved only in this browser -->
+        <div id="import-banner" class="hidden bg-amber-50 border border-amber-200 rounded-2xl px-3 py-2 flex flex-wrap items-center justify-between gap-2">
+            <p class="text-xs font-bold text-amber-800">We found progress saved only in this browser. Bring it into the shared tracker?</p>
+            <div class="flex gap-2">
+                <button id="import-btn" onclick="doImport()" class="px-3 py-1 rounded-full bg-amber-400 hover:bg-amber-500 text-white font-extrabold text-xs">Import it</button>
+                <button onclick="dismissImport()" class="px-3 py-1 rounded-full bg-white hover:bg-amber-100 text-amber-700 font-bold text-xs border border-amber-200">Not now</button>
+            </div>
+        </div>
+
+        <!-- 1. HERO SECTION -->
+        <section class="bg-gradient-to-br from-pink-100 via-purple-100 to-pink-50 rounded-3xl p-3.5 sm:p-4 border-3 border-pink-200 shadow-sm relative overflow-hidden">
+            <div class="absolute -top-4 -right-4 text-pink-200 opacity-40 pointer-events-none">
+                <svg width="100" height="100" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+
+            <div class="relative z-10 space-y-3">
+                <h1 class="text-center text-lg sm:text-2xl font-black text-slate-800 tracking-tight">Girlies' 30-Day growth challenge</h1>
+
+                <!-- HERO CHARACTER CARDS GRID (4 PARTICIPANTS) -->
+                <div id="hero-characters-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+            </div>
+        </section>
+
+        <!-- 2. DETAILED CHARACTER STATS DRAWER -->
+        <section id="character-detail-view" class="hidden transition-all duration-300"></section>
+
+        <!-- 3. CHALLENGE VAULT -->
+        <section class="space-y-3">
+            <div class="flex items-center justify-between px-1 gap-2">
+                <div class="flex items-center space-x-2 min-w-0">
+                    <span class="text-lg">💎</span>
+                    <h2 class="text-base sm:text-lg font-black text-slate-800 truncate">Challenge Vault <span id="vault-count" class="text-slate-400 font-bold text-sm"></span></h2>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <span class="hidden sm:inline text-[11px] font-bold text-slate-400">Tap a card to log it</span>
+                    <button onclick="openQuestForm('add')" class="px-3 py-1.5 rounded-full bg-pink-400 hover:bg-pink-500 text-white font-extrabold text-xs shadow-sm transition">+ Add quest</button>
+                </div>
+            </div>
+
+            <div id="challenges-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+        </section>
+
+    </main>
+
+    <!-- LOG / PROOF MODAL -->
+    <div id="challenge-modal" class="fixed inset-0 modal-bg z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl border-3 border-pink-200 max-w-md w-full p-5 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+            <!-- Corner actions: quiet 3-dot menu + close -->
+            <div class="absolute top-3.5 right-3.5 flex items-center gap-0.5">
+                <div class="relative">
+                    <button id="more-btn" onclick="toggleMoreMenu(event)" aria-label="More options" class="w-7 h-7 rounded-full text-slate-300 hover:text-slate-500 hover:bg-slate-50 font-black leading-none text-base">⋯</button>
+                    <div id="more-menu" class="hidden absolute right-0 mt-1 bg-white border border-slate-100 rounded-lg shadow-md py-1 z-10 min-w-[110px]">
+                        <button onclick="editFromChallengeModal()" class="w-full text-left px-3 py-1.5 text-[11px] font-semibold text-slate-500 hover:bg-slate-50">Edit quest</button>
+                    </div>
+                </div>
+                <button onclick="closeChallengeModal()" aria-label="Close" class="w-7 h-7 text-slate-400 hover:text-slate-600 font-bold text-lg leading-none">✕</button>
+            </div>
+
+            <div id="modal-header" class="pr-16"></div>
+
+            <div class="space-y-2 border-t border-pink-100 pt-3" id="modal-friends-list"></div>
+
+            <p id="modal-error" class="hidden text-[11px] font-bold text-rose-500"></p>
+
+            <div class="flex space-x-2 pt-1">
+                <button id="modal-save-btn" onclick="saveChallengeModalData()" class="flex-1 bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">
+                    Save Updates ✨
+                </button>
+                <button onclick="closeChallengeModal()" class="px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-xs transition">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD / EDIT QUEST MODAL -->
+    <div id="quest-modal" class="fixed inset-0 modal-bg z-[60] flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl border-3 border-pink-200 max-w-md w-full p-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeQuestForm()" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-lg leading-none">✕</button>
+            <div id="quest-body"></div>
+        </div>
+    </div>
+
+    <!-- CUSTOMIZE CHARACTER MODAL -->
+    <div id="customize-modal" class="fixed inset-0 modal-bg z-[60] flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl border-3 border-pink-200 max-w-md w-full p-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeCustomizeModal()" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-lg leading-none">✕</button>
+            <div id="customize-body"></div>
+        </div>
+    </div>
+
+    <!-- KICK-OFF BANNER CEREMONIAL MODAL -->
+    <div id="banner-modal" class="fixed inset-0 modal-bg z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-gradient-to-br from-pink-100 via-purple-100 to-amber-50 rounded-3xl border-4 border-pink-300 max-w-lg w-full p-6 shadow-2xl relative text-center space-y-5 max-h-[92vh] overflow-y-auto">
+            <button onclick="closeBannerModal()" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-lg leading-none">✕</button>
+
+            <div class="space-y-1">
+                <span class="text-3xl">🎀</span>
+                <h2 class="text-xl font-black text-slate-800">OFFICIAL KICK-OFF CEREMONY</h2>
+                <p class="text-xs font-bold text-pink-600">Girlies' 30-Day Growth Challenge Pact · Kick-off 2026.10.20</p>
+            </div>
+
+            <div class="bg-white/80 rounded-2xl p-4 border border-pink-200 text-left space-y-3">
+                <p class="text-xs text-slate-700 leading-relaxed font-semibold">
+                    "We, the girlies (<span id="banner-names"></span>), hereby commit to 30 days of growth, self-love, and accountability. Any order, any pace — we support each other's full transformation!"
+                </p>
+                <div id="banner-avatars" class="flex justify-around pt-2 border-t border-pink-100"></div>
+            </div>
+
+            <p class="text-[11px] text-pink-500 font-bold">Screenshot this banner for your shared Instagram account! 📸</p>
+
+            <button onclick="closeBannerModal()" class="w-full bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-xs transition">
+                Close Banner View
+            </button>
+        </div>
+    </div>
+
+    <!-- PASSCODE GATE -->
+    <div id="gate" class="fixed inset-0 z-[100] bg-gradient-to-br from-pink-100 via-purple-100 to-pink-50 flex items-center justify-center p-4">
+        <form id="gate-form" onsubmit="submitGate(event)" class="hidden bg-white rounded-3xl border-4 border-pink-200 max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
+            <span class="text-4xl">🌸</span>
+            <div class="space-y-1">
+                <h2 class="text-lg font-black text-slate-800">Girlies' 30-Day growth challenge</h2>
+                <p class="text-xs font-bold text-pink-600">Enter the group passcode to step in.</p>
+            </div>
+            <input id="gate-input" type="password" autocomplete="current-password" placeholder="Passcode" class="w-full px-4 py-2.5 text-sm text-center rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+            <p id="gate-error" class="text-[11px] font-bold text-rose-500 min-h-[1rem]"></p>
+            <button id="gate-btn" type="submit" class="w-full bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-sm shadow-md transition">Enter ✨</button>
+        </form>
+        <div id="gate-loading" class="hidden text-center space-y-2">
+            <div class="text-4xl animate-pulse">🌸</div>
+            <p id="gate-loading-text" class="text-xs font-bold text-pink-600">Opening your challenge…</p>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 pointer-events-none transition-all duration-300 z-[70] bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg"></div>
+
+    <script>
+        // ==========================================================
+        // 0. HELPERS
+        // ==========================================================
+        const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+        function safeUrl(u) {
+            try {
+                const x = new URL(u);
+                return (x.protocol === 'http:' || x.protocol === 'https:') ? x.href : '';
+            } catch (e) { return ''; }
+        }
+
+        function hexToRgba(hex, a) {
+            const n = parseInt(hex.slice(1), 16);
+            return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+        }
+
+        function firstGrapheme(s) {
+            s = (s || '').trim();
+            if (!s) return '';
+            if (window.Intl && Intl.Segmenter) {
+                const seg = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
+                for (const x of seg.segment(s)) return x.segment;
+            }
+            return Array.from(s)[0];
+        }
+
+        function joinNames(names) {
+            if (names.length <= 1) return names.join('');
+            return names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1];
+        }
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+        }
+
+        // ==========================================================
+        // 1. DATES + DAY COUNTER  (Day-1 = 2026.10.20)
+        // ==========================================================
+        const START_DATE = new Date(2026, 9, 20);
+        const TOTAL_DAYS = 30;
+        const DAY_MS = 86400000;
+        const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const pad = n => String(n).padStart(2, '0');
+
+        const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        const dayDiffFromStart = d => Math.round((startOfDay(d) - START_DATE) / DAY_MS);
+        const currentDayNumber = () => dayDiffFromStart(new Date()) + 1; // <=0 means not started yet
+        const fmtDate = d => `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
+        const localDateStr = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        const parseLocal = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+        const dayIndexOf = s => Math.min(TOTAL_DAYS, Math.max(1, dayDiffFromStart(parseLocal(s)) + 1));
+
+        function renderHeaderClock() {
+            const now = new Date();
+            const dn = currentDayNumber();
+            document.getElementById('header-date').textContent = `${WEEKDAYS[now.getDay()]} · ${fmtDate(now)}`;
+            let label;
+            if (dn <= 0) {
+                const left = 1 - dn;
+                label = `Day-0 · starts in ${left} day${left === 1 ? '' : 's'}`;
+            } else if (dn <= TOTAL_DAYS) {
+                label = `Day-${dn} of ${TOTAL_DAYS}`;
+            } else {
+                label = `Day-${dn} · Challenge complete 🎉`;
+            }
+            document.getElementById('header-day').textContent = label;
+        }
+
+        // ==========================================================
+        // 2. FRIENDS (4 participants, customizable)
+        // ==========================================================
+        const PALETTES = {
+            rose:     { label: 'Rose',     hair: '#FFB3C6', face: '#FF8FAB', body: '#FFC2D1', mouth: '#FF477E', glow: '#FF8FAB' },
+            lavender: { label: 'Lavender', hair: '#D8B4F8', face: '#C084FC', body: '#E9D5FF', mouth: '#9333EA', glow: '#C084FC' },
+            sunshine: { label: 'Sunshine', hair: '#FDE047', face: '#FACC15', body: '#FEF08A', mouth: '#CA8A04', glow: '#FACC15' },
+            mint:     { label: 'Mint',     hair: '#86EFAC', face: '#4ADE80', body: '#BBF7D0', mouth: '#15803D', glow: '#4ADE80' },
+            sky:      { label: 'Sky',      hair: '#93C5FD', face: '#60A5FA', body: '#BFDBFE', mouth: '#1D4ED8', glow: '#60A5FA' },
+            peach:    { label: 'Peach',    hair: '#FDBA74', face: '#FB923C', body: '#FED7AA', mouth: '#C2410C', glow: '#FB923C' },
+            coral:    { label: 'Coral',    hair: '#FCA5A5', face: '#F87171', body: '#FECACA', mouth: '#B91C1C', glow: '#F87171' },
+            teal:     { label: 'Teal',     hair: '#5EEAD4', face: '#2DD4BF', body: '#99F6E4', mouth: '#0F766E', glow: '#2DD4BF' }
+        };
+
+        const EMOJI_CHOICES = ['🍓','🌸','💜','🌼','🦋','🌙','⭐','🔥','🍒','🍑','🐰','🐱','🦄','🌈','🍀','🌻','🎀','💎','🧸','🍵','🌷','✨','🐚','🍋'];
+
+        const BASE_FRIENDS = [
+            { id: 'mia',   name: 'Mia',   emoji: '🍓', vibe: 'Soft Girl & Mindfulness',    palette: 'rose',     indicator: '💖 Glowing Daily!' },
+            { id: 'chloe', name: 'Chloe', emoji: '💜', vibe: 'Fitness & Aesthetic Energy', palette: 'lavender', indicator: '✨ Unstoppable Vibe!' },
+            { id: 'lily',  name: 'Lily',  emoji: '🌼', vibe: 'Creative & Cozy Vibes',      palette: 'sunshine', indicator: '🌟 Blooming Beautifully!' },
+            { id: 'ava',   name: 'Ava',   emoji: '🍀', vibe: 'Fresh Start Energy',         palette: 'mint',     indicator: '🌈 Rising Bright!' }
+        ];
+
+        function getFriends() {
+            return BASE_FRIENDS.map(f => Object.assign({}, f, state.customs[f.id] || {}));
+        }
+        function getFriend(id) { return getFriends().find(f => f.id === id); }
+        function pal(f) { return PALETTES[f.palette] || PALETTES.rose; }
+
+        function pixelAvatar(paletteKey) {
+            const p = PALETTES[paletteKey] || PALETTES.rose;
+            return `<svg class="pixel-rendering w-full h-full" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M4 3h8v2H4z" fill="${p.hair}"/>
+                <path d="M3 5h10v5H3z" fill="${p.face}"/>
+                <path d="M4 10h8v4H4z" fill="${p.body}"/>
+                <circle cx="6" cy="7" r="1" fill="#334155"/>
+                <circle cx="10" cy="7" r="1" fill="#334155"/>
+                <path d="M7 9h2v1H7z" fill="${p.mouth}"/>
+            </svg>`;
+        }
+
+        // ==========================================================
+        // 3. QUEST ILLUSTRATIONS (inline SVG pictures instead of emojis)
+        // ==========================================================
+        const heart = (x, y, s, c) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0 10C-14 1-12-10-5-10C-2-10 0-8 0-6C0-8 2-10 5-10C12-10 14 1 0 10z" fill="${c}"/>`;
+
+        const ICONS = {
+            sunrise: '<g stroke="#F59E0B" stroke-width="3" stroke-linecap="round"><path d="M32 12v6M14 22l4 4M50 22l-4 4M6 38h6M52 38h6"/></g><circle cx="32" cy="40" r="13" fill="#FFD27D"/><rect x="4" y="40" width="56" height="16" rx="5" fill="#FFB3C6"/><path d="M12 47h40" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".7"/>',
+            water: '<path d="M32 6C32 6 14 28 14 40a18 18 0 0 0 36 0C50 28 32 6 32 6z" fill="#A5D8FF"/><path d="M23 40a9 9 0 0 0 9 9" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="46" cy="14" r="3" fill="#BFE3FF"/>',
+            workout: '<rect x="20" y="29" width="24" height="6" rx="3" fill="#94A3B8"/><rect x="11" y="18" width="9" height="28" rx="3" fill="#C084FC"/><rect x="44" y="18" width="9" height="28" rx="3" fill="#C084FC"/><rect x="4" y="25" width="7" height="14" rx="2.5" fill="#E9D5FF"/><rect x="53" y="25" width="7" height="14" rx="2.5" fill="#E9D5FF"/>',
+            book: '<path d="M6 14h20a6 6 0 0 1 6 6v34a6 6 0 0 0-6-6H6z" fill="#FFB3C6"/><path d="M58 14H38a6 6 0 0 0-6 6v34a6 6 0 0 1 6-6h20z" fill="#FFD6E0"/><path d="M12 24h14M12 32h14M38 24h14M38 32h14" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
+            outfit: '<path d="M22 6l10 10 10-10 5 18-8 4 11 30H14l11-30-8-4z" fill="#D8B4F8"/><path d="M24 28h16" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><path d="M26 6l6 6 6-6" stroke="#F0E6FF" stroke-width="2.5" fill="none" stroke-linecap="round"/>',
+            salad: '<circle cx="22" cy="26" r="9" fill="#86EFAC"/><circle cx="35" cy="21" r="10" fill="#4ADE80"/><circle cx="45" cy="28" r="8" fill="#BBF7D0"/><circle cx="30" cy="29" r="4.5" fill="#FCA5A5"/><circle cx="41" cy="30" r="3" fill="#FDE047"/><path d="M6 32h52c0 15-11 24-26 24S6 47 6 32z" fill="#FFE4B5"/><path d="M14 40h36" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/>',
+            nosugar: '<circle cx="32" cy="32" r="26" fill="#fff" stroke="#F87171" stroke-width="5"/><rect x="19" y="21" width="26" height="22" rx="5" fill="#FDE7EF" stroke="#FFB3C6" stroke-width="2.5"/><path d="M24 28h6M33 34h6" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M14 50L50 14" stroke="#F87171" stroke-width="5" stroke-linecap="round"/>',
+            detox: '<rect x="19" y="6" width="26" height="50" rx="6" fill="#CBD5E1"/><rect x="22.5" y="12" width="19" height="34" rx="2.5" fill="#F1F5F9"/><circle cx="32" cy="51" r="2.5" fill="#fff"/><path d="M10 58L54 8" stroke="#F43F5E" stroke-width="5" stroke-linecap="round"/>',
+            steps: '<path d="M6 40c0-6 4-9 9-9l8-14 7 4 4 7 14 4c6 2 9 6 9 11v7H6z" fill="#FF8FAB"/><rect x="6" y="46" width="52" height="8" rx="4" fill="#fff" stroke="#FFB3C6" stroke-width="2.5"/><path d="M25 27l5 5M32 30l5 5" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
+            gratitude: '<rect x="10" y="6" width="34" height="48" rx="5" fill="#FFF3BF" stroke="#FACC15" stroke-width="2.5"/><path d="M17 18h20M17 26h20M17 34h12" stroke="#FACC15" stroke-width="3" stroke-linecap="round"/><path d="M44 42l12-14 6 5-12 14-8 3z" fill="#FB7185"/><path d="M44 42l6 5" stroke="#fff" stroke-width="2"/>' + heart(36, 45, 0.55, '#FF8FAB'),
+            skincare: '<rect x="12" y="30" width="40" height="24" rx="7" fill="#FFD6E0"/><rect x="10" y="20" width="44" height="13" rx="5" fill="#FF8FAB"/><path d="M20 42h24" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><path d="M50 4l2.5 7 7 2.5-7 2.5-2.5 7-2.5-7-7-2.5 7-2.5z" fill="#FDE047"/>',
+            phrases: '<rect x="4" y="8" width="38" height="26" rx="9" fill="#A5D8FF"/><path d="M12 34l-3 11 12-11z" fill="#A5D8FF"/><rect x="22" y="26" width="38" height="24" rx="9" fill="#FFB3C6"/><path d="M50 50l5 9-14-9z" fill="#FFB3C6"/><circle cx="15" cy="21" r="3" fill="#fff"/><circle cx="23" cy="21" r="3" fill="#fff"/><circle cx="31" cy="21" r="3" fill="#fff"/>',
+            desk: '<rect x="4" y="38" width="56" height="7" rx="3.5" fill="#D9B99B"/><path d="M12 45v13M52 45v13" stroke="#B08968" stroke-width="5" stroke-linecap="round"/><rect x="12" y="12" width="26" height="20" rx="4" fill="#CBD5E1"/><rect x="15" y="15" width="20" height="14" rx="1.5" fill="#E0F2FE"/><path d="M25 32v6" stroke="#94A3B8" stroke-width="3"/><rect x="43" y="28" width="11" height="10" rx="2.5" fill="#FFB3C6"/><path d="M48.5 28c-7-4-7-12 0-15 7 3 7 11 0 15z" fill="#86EFAC"/>',
+            call: '<path d="M14 8l11 3 3 13-7 4c3 9 9 15 17 18l5-7 13 3 2 11c-2 7-9 9-16 7C26 54 10 38 6 20c-2-7 1-12 8-12z" fill="#86EFAC"/>' + heart(46, 18, 0.9, '#FF8FAB'),
+            recipe: '<circle cx="28" cy="34" r="21" fill="#94A3B8"/><circle cx="28" cy="34" r="16" fill="#F1F5F9"/><circle cx="28" cy="34" r="10" fill="#fff"/><circle cx="28" cy="34" r="5.5" fill="#FFD27D"/><rect x="46" y="31" width="15" height="7" rx="3.5" fill="#64748B"/>',
+            reel: '<rect x="6" y="14" width="46" height="38" rx="9" fill="#F9A8D4"/><path d="M26 25l15 8-15 8z" fill="#fff"/><circle cx="52" cy="16" r="7" fill="#C084FC"/><path d="M50 16h4M52 14v4" stroke="#fff" stroke-width="2" stroke-linecap="round"/>',
+            podcast: '<path d="M11 42V34a21 21 0 0 1 42 0v8" stroke="#C084FC" stroke-width="5.5" fill="none" stroke-linecap="round"/><rect x="6" y="38" width="14" height="19" rx="6" fill="#E9D5FF"/><rect x="44" y="38" width="14" height="19" rx="6" fill="#E9D5FF"/>',
+            stretch: '<circle cx="32" cy="13" r="7.5" fill="#FFB3C6"/><path d="M32 22v17M32 28L14 15M32 28l18-13M32 39l-13 17M32 39l13 17" stroke="#C084FC" stroke-width="5.5" stroke-linecap="round" fill="none"/>',
+            sleep: '<path d="M40 6a24 24 0 1 0 18 38A20 20 0 0 1 40 6z" fill="#FDE68A"/><path d="M46 12l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#C4B5FD"/><path d="M52 34l1.5 3.5 3.5 1.5-3.5 1.5L52 44l-1.5-3.5L47 39l3.5-1.5z" fill="#A5B4FC"/>',
+            flowers: '<path d="M32 36v22M20 40l12 18M44 40L32 58" stroke="#4ADE80" stroke-width="3.5" stroke-linecap="round"/><g fill="#FF8FAB"><circle cx="32" cy="12" r="7"/><circle cx="32" cy="28" r="7"/><circle cx="24" cy="20" r="7"/><circle cx="40" cy="20" r="7"/></g><circle cx="32" cy="20" r="5" fill="#FDE047"/><circle cx="14" cy="34" r="7" fill="#D8B4F8"/><circle cx="50" cy="34" r="7" fill="#FFD27D"/><path d="M24 52l8 4 8-4" stroke="#FF8FAB" stroke-width="3" fill="none" stroke-linecap="round"/>',
+            compliment: '<path d="M10 10h38a7 7 0 0 1 7 7v20a7 7 0 0 1-7 7H28l-11 11V44h-7a7 7 0 0 1-7-7V17a7 7 0 0 1 7-7z" fill="#FFB3C6"/>' + heart(29, 27, 1.05, '#fff'),
+            closet: '<path d="M32 20L8 46a4 4 0 0 0 3 7h42a4 4 0 0 0 3-7z" fill="#FBCFE8"/><path d="M32 20v-3a6 6 0 1 0-6-6" stroke="#94A3B8" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M8 48l24-28 24 28" stroke="#94A3B8" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+            nobuy: '<rect x="4" y="14" width="56" height="36" rx="7" fill="#93C5FD"/><rect x="4" y="22" width="56" height="8" fill="#1E3A8A" opacity=".45"/><rect x="11" y="36" width="18" height="5" rx="2.5" fill="#fff"/><rect x="38" y="34" width="20" height="18" rx="4" fill="#FDE047"/><path d="M43 34v-5a5 5 0 0 1 10 0v5" stroke="#CA8A04" stroke-width="3.5" fill="none"/>',
+            date: '<path d="M22 6c-3 4 3 6 0 11M32 6c-3 4 3 6 0 11" stroke="#CBD5E1" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M8 22h38v14a17 17 0 0 1-17 17h-4A17 17 0 0 1 8 36z" fill="#FFB3C6"/><path d="M46 27h4a7 7 0 0 1 0 15h-6" stroke="#FF8FAB" stroke-width="4.5" fill="none" stroke-linecap="round"/>' + heart(27, 36, 0.8, '#fff'),
+            matcha: '<path d="M38 4l-4 26" stroke="#FF8FAB" stroke-width="4.5" stroke-linecap="round"/><path d="M14 16h36l-4 38a5 5 0 0 1-5 4H23a5 5 0 0 1-5-4z" fill="#E8F5E9"/><path d="M17 30h30l-1.5 24a5 5 0 0 1-5 4H23.5a5 5 0 0 1-5-4z" fill="#86C98A"/><rect x="23" y="34" width="9" height="9" rx="2.5" fill="#fff" opacity=".65"/><rect x="33" y="42" width="8" height="8" rx="2.5" fill="#fff" opacity=".5"/>',
+            vision: '<rect x="6" y="8" width="52" height="48" rx="6" fill="#FFF3BF" stroke="#FACC15" stroke-width="2.5"/><rect x="13" y="15" width="17" height="15" rx="2.5" fill="#FFB3C6"/><rect x="34" y="15" width="17" height="10" rx="2.5" fill="#A5D8FF"/><rect x="34" y="29" width="17" height="19" rx="2.5" fill="#D8B4F8"/><rect x="13" y="34" width="17" height="14" rx="2.5" fill="#86EFAC"/><circle cx="32" cy="8" r="3.5" fill="#F43F5E"/>',
+            nature: '<path d="M32 4C12 13 10 38 32 58 54 38 52 13 32 4z" fill="#86EFAC"/><path d="M32 12v48M32 28l-10-8M32 38l11-9" stroke="#16A34A" stroke-width="3.5" stroke-linecap="round"/>',
+            unsub: '<rect x="4" y="14" width="52" height="36" rx="7" fill="#E0F2FE"/><path d="M7 19l23 19 23-19" stroke="#7DD3FC" stroke-width="3.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/><circle cx="50" cy="46" r="12" fill="#FB7185"/><path d="M44.5 40.5l11 11M55.5 40.5l-11 11" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>',
+            letters: '<rect x="12" y="6" width="38" height="50" rx="5" fill="#fff" stroke="#D8B4F8" stroke-width="3"/><path d="M20 18h22M20 26h22M20 34h14" stroke="#E9D5FF" stroke-width="3.5" stroke-linecap="round"/>' + heart(43, 46, 0.9, '#FF8FAB'),
+            party: '<path d="M6 58l14-38 24 24z" fill="#FDE047"/><path d="M13 42l13 13M20 26l20 20" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><circle cx="42" cy="14" r="3.5" fill="#FF8FAB"/><circle cx="54" cy="28" r="3.5" fill="#A5D8FF"/><rect x="30" y="6" width="6" height="6" fill="#C084FC" transform="rotate(20 33 9)"/><path d="M34 26c7-7 11-3 15-11" stroke="#FF8FAB" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="54" cy="10" r="2.5" fill="#86EFAC"/>',
+            // extra illustrations for custom quests
+            star: '<path d="M32 5l8 17 18 2-13 13 3.5 18L32 46l-16.5 9L19 37 6 24l18-2z" fill="#FDE047" stroke="#FACC15" stroke-width="2.5" stroke-linejoin="round"/>',
+            heart: heart(32, 32, 1.9, '#FF8FAB') + '<path d="M16 26c0-5 4-8 8-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>',
+            sparkle: '<path d="M30 6l7 20 20 7-20 7-7 20-7-20-20-7 20-7z" fill="#C4B5FD"/><path d="M52 6l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#FDE047"/>',
+            music: '<path d="M26 14l26-7v33" stroke="#C084FC" stroke-width="4.5" fill="none" stroke-linejoin="round"/><path d="M26 46V14" stroke="#C084FC" stroke-width="4.5"/><ellipse cx="19" cy="47" rx="10" ry="7.5" fill="#F0ABFC"/><ellipse cx="45" cy="41" rx="10" ry="7.5" fill="#F0ABFC"/>',
+            camera: '<rect x="4" y="18" width="56" height="36" rx="8" fill="#FBCFE8"/><rect x="20" y="11" width="18" height="9" rx="3.5" fill="#F9A8D4"/><circle cx="32" cy="36" r="12" fill="#fff"/><circle cx="32" cy="36" r="7.5" fill="#A5B4FC"/><circle cx="52" cy="26" r="2.5" fill="#fff"/>',
+            palette: '<path d="M32 6C15 6 4 19 4 32s11 26 24 26c5 0 7-4 3-8s-1-8 5-8h13c6 0 11-4 11-10C60 17 47 6 32 6z" fill="#FFE4B5"/><circle cx="19" cy="28" r="4.5" fill="#FF8FAB"/><circle cx="30" cy="18" r="4.5" fill="#A5D8FF"/><circle cx="43" cy="21" r="4.5" fill="#86EFAC"/><circle cx="14" cy="42" r="4" fill="#C084FC"/>'
+        };
+
+        const TILE_GRADS = [
+            ['#FFE5EC', '#FFD1DF'], ['#F0E6FF', '#E3D2FF'], ['#FFF3BF', '#FFE7A3'],
+            ['#E3F6E8', '#CDEFD6'], ['#E0F2FE', '#CDE8FB'], ['#FFE8D6', '#FFD7BA']
+        ];
+
+        function iconSvg(key) {
+            return `<svg viewBox="0 0 64 64" class="w-full h-full" aria-hidden="true">${ICONS[key] || ICONS.star}</svg>`;
+        }
+
+        // Illustrated tile for a quest (uploaded photo wins over illustration)
+        function visualHtml(ch, cls) {
+            const g = TILE_GRADS[(Math.abs(ch.id || 0)) % TILE_GRADS.length];
+            const hasImg = typeof ch.img === 'string' && ch.img.startsWith('data:image/');
+            const body = hasImg
+                ? `<img src="${ch.img}" alt="" class="w-full h-full object-cover">`
+                : `<div class="w-full h-full p-[14%]">${iconSvg(ch.icon)}</div>`;
+            return `<div class="${cls} overflow-hidden flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,${g[0]},${g[1]})">${body}</div>`;
+        }
+
+        // ==========================================================
+        // 4. STATE (localStorage)
+        // ==========================================================
+        const DEFAULT_QUEST_COUNT = 30;
+        const LEGACY_KEY = 'girlies_growth_v7';      // the old browser-only save
+        const PASS_KEY = 'girlies_pass_v1';
+        const IMPORT_FLAG = 'girlies_import_done_v1';
+        const POLL_MS = 8000;
+
+        let passcode = '';
+        let state = {
+            activeCharacterId: null,
+            challenges: [],     // [{id,title,icon,img?}]
+            completions: {},    // { challengeId: { friendId: true } }
+            proofs: {},         // { challengeId: { friendId: { url, note } } }
+            dates: {},          // { challengeId: { friendId: 'YYYY-MM-DD' } }
+            customs: {},        // { friendId: { name, vibe, emoji, palette } }
+            rev: -1
+        };
+        let pollTimer = null;
+        let bootTimer = null;
+
+        // Browser storage only remembers the passcode on this device.
+        const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+        const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* ignore */ } };
+        const lsDel = k => { try { localStorage.removeItem(k); } catch (e) { /* ignore */ } };
+
+        // ---------- talking to the server ----------
+        async function api(method, url, body) {
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', 'x-passcode': passcode },
+                body: body === undefined ? undefined : JSON.stringify(body)
+            });
+            let data = null;
+            try { data = await res.json(); } catch (e) { /* not json */ }
+            if (res.status === 401) {
+                showGate(passcode ? 'The passcode was changed or is wrong. Enter it again.' : '');
+                const err = new Error('unauthorized');
+                err.code = 'auth';
+                throw err;
+            }
+            if (!res.ok) throw new Error((data && data.error) || ('Request failed (' + res.status + ')'));
+            return data;
+        }
+
+        function setSync(ok) {
+            const el = document.getElementById('sync-dot');
+            if (!el) return;
+            el.className = 'text-[10px] font-black ' + (ok ? 'text-emerald-400' : 'text-rose-400');
+            el.title = ok ? 'Live — shared with everyone' : 'Offline — retrying';
+        }
+
+        async function refreshState(force) {
+            try {
+                const q = (!force && state.rev >= 0) ? '?rev=' + state.rev : '';
+                const data = await api('GET', '/api/state' + q);
+                setSync(true);
+                if (data.changed === false) return false;
+                state.challenges = data.challenges;
+                state.completions = data.completions;
+                state.proofs = data.proofs;
+                state.dates = data.dates;
+                state.customs = data.customs;
+                state.rev = data.rev;
+                renderAll();
+                return true;
+            } catch (e) {
+                if (e.code !== 'auth') setSync(false);
+                throw e;
+            }
+        }
+
+        function pollOnce() {
+            if (document.hidden || !passcode) return;
+            refreshState(false).catch(() => { /* the dot already shows offline */ });
+        }
+        function startPolling() {
+            stopPolling();
+            pollTimer = setInterval(pollOnce, POLL_MS);
+        }
+        function stopPolling() {
+            if (pollTimer) clearInterval(pollTimer);
+            pollTimer = null;
+        }
+
+        // ---------- passcode gate ----------
+        function setGateView(view, text) {
+            document.getElementById('gate').classList.remove('hidden');
+            document.getElementById('gate-form').classList.toggle('hidden', view !== 'form');
+            document.getElementById('gate-loading').classList.toggle('hidden', view !== 'loading');
+            if (text) document.getElementById('gate-loading-text').textContent = text;
+            if (view === 'form') setTimeout(() => document.getElementById('gate-input').focus(), 30);
+        }
+        function hideGate() { document.getElementById('gate').classList.add('hidden'); }
+
+        function showGate(msg) {
+            passcode = '';
+            lsDel(PASS_KEY);
+            stopPolling();
+            state.rev = -1;
+            setGateView('form');
+            document.getElementById('gate-error').textContent = msg || '';
+            document.getElementById('gate-btn').disabled = false;
+            document.getElementById('gate-input').value = '';
+        }
+
+        async function submitGate(e) {
+            e.preventDefault();
+            const input = document.getElementById('gate-input');
+            const errEl = document.getElementById('gate-error');
+            const btn = document.getElementById('gate-btn');
+            const value = input.value.trim();
+            if (!value) { errEl.textContent = 'Type the passcode first.'; return; }
+            btn.disabled = true;
+            errEl.textContent = '';
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ passcode: value })
+                });
+                if (res.status === 429) { errEl.textContent = 'Too many wrong tries. Wait a few minutes.'; btn.disabled = false; return; }
+                if (!res.ok) { errEl.textContent = "That passcode didn't work."; btn.disabled = false; input.select(); return; }
+                passcode = value;
+                lsSet(PASS_KEY, value);
+                setGateView('loading', 'Opening your challenge…');
+                await connect();
+            } catch (err) {
+                errEl.textContent = "Can't reach the server. Check your connection and try again.";
+                btn.disabled = false;
+            }
+        }
+
+        async function connect() {
+            try {
+                await refreshState(true);
+                hideGate();
+                startPolling();
+                maybeOfferImport();
+            } catch (e) {
+                if (e.code === 'auth') return; // gate is already showing
+                setGateView('loading', 'Waking the server up — the first load can take up to a minute…');
+                clearTimeout(bootTimer);
+                bootTimer = setTimeout(connect, 4000);
+            }
+        }
+
+        async function boot() {
+            passcode = lsGet(PASS_KEY) || '';
+            if (!passcode) { setGateView('form'); return; }
+            setGateView('loading', 'Opening your challenge…');
+            await connect();
+        }
+
+        // ---------- bring over progress saved in this browser before the shared version ----------
+        function readLegacy() {
+            const raw = lsGet(LEGACY_KEY);
+            if (!raw) return null;
+            try { const s = JSON.parse(raw); return s && typeof s === 'object' ? s : null; } catch (e) { return null; }
+        }
+        function legacyHasData(s) {
+            if (!s) return false;
+            const anyDone = Object.values(s.completions || {}).some(m => m && Object.values(m).some(v => v === true));
+            const customQuest = (Array.isArray(s.challenges) ? s.challenges : []).some(c => c && c.id > DEFAULT_QUEST_COUNT);
+            const customLook = Object.keys(s.customs || {}).length > 0;
+            return anyDone || customQuest || customLook;
+        }
+        function maybeOfferImport() {
+            if (lsGet(IMPORT_FLAG)) return;
+            if (!legacyHasData(readLegacy())) return;
+            document.getElementById('import-banner').classList.remove('hidden');
+        }
+        function dismissImport() { document.getElementById('import-banner').classList.add('hidden'); }
+        async function doImport() {
+            const s = readLegacy();
+            if (!s) { dismissImport(); return; }
+            const btn = document.getElementById('import-btn');
+            btn.disabled = true;
+            try {
+                const r = await api('POST', '/api/import', {
+                    state: { challenges: s.challenges, completions: s.completions, proofs: s.proofs, dates: s.dates, customs: s.customs }
+                });
+                lsSet(IMPORT_FLAG, '1');
+                dismissImport();
+                await refreshState(true);
+                showToast(`Imported ${r.progress} quest${r.progress === 1 ? '' : 's'} ✨`);
+            } catch (e) {
+                if (e.code !== 'auth') showToast('Import failed: ' + e.message);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        const getChallenge = id => state.challenges.find(c => c.id === id);
+        const isDone = (chId, fId) => !!(state.completions[chId] && state.completions[chId][fId]);
+
+        function getCompletedCount(friendId) {
+            return state.challenges.filter(c => isDone(c.id, friendId)).length;
+        }
+
+        function friendDayCounts(friendId) {
+            const counts = Array(TOTAL_DAYS).fill(0);
+            state.challenges.forEach(c => {
+                if (!isDone(c.id, friendId)) return;
+                const ds = state.dates[c.id] && state.dates[c.id][friendId];
+                counts[(ds ? dayIndexOf(ds) : 1) - 1]++;
+            });
+            return counts;
+        }
+
+        function computeStreak(friendId) {
+            const days = new Set();
+            state.challenges.forEach(c => {
+                const ds = isDone(c.id, friendId) && state.dates[c.id] && state.dates[c.id][friendId];
+                if (ds) days.add(ds);
+            });
+            let d = startOfDay(new Date());
+            if (!days.has(localDateStr(d))) d.setDate(d.getDate() - 1);
+            let streak = 0;
+            while (days.has(localDateStr(d))) { streak++; d.setDate(d.getDate() - 1); }
+            return streak;
+        }
+
+        // ==========================================================
+        // 5. RENDER: HERO CHARACTER CARDS
+        // ==========================================================
+        function renderHeroCharacters() {
+            const container = document.getElementById('hero-characters-grid');
+            container.innerHTML = '';
+
+            getFriends().forEach(friend => {
+                const p = pal(friend);
+                const count = getCompletedCount(friend.id);
+                const streak = computeStreak(friend.id);
+                const isSelected = state.activeCharacterId === friend.id;
+
+                const card = document.createElement('div');
+                card.className = `glow-card character-card cursor-pointer rounded-2xl p-3 border-3 relative overflow-hidden shadow-sm bg-white flex flex-col items-center text-center ${isSelected ? 'glow-active' : ''}`;
+                card.style.setProperty('--glow', p.glow);
+                card.style.setProperty('--glow-soft', hexToRgba(p.glow, 0.45));
+                card.style.borderColor = isSelected ? p.glow : '#fff';
+                card.onclick = () => toggleCharacterSelection(friend.id);
+
+                card.innerHTML = `
+                    <button onclick="event.stopPropagation(); openCustomizeModal('${friend.id}')" aria-label="Customize ${esc(friend.name)}" title="Customize" class="absolute top-2 left-2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-[11px] border border-slate-100 text-slate-400 hover:text-slate-600 leading-none">🎨</button>
+                    ${isSelected ? `<div class="absolute top-2 right-2 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow-sm" style="background:${p.glow}">ACTIVE</div>` : ''}
+
+                    <div class="relative mb-2 mt-1">
+                        <div class="w-16 h-16 rounded-2xl p-1 shadow-inner flex items-center justify-center overflow-hidden" style="border:3px solid ${p.face}; background:linear-gradient(180deg, #fff, ${p.body})">
+                            ${pixelAvatar(friend.palette)}
+                        </div>
+                        <div class="absolute -bottom-1 -right-1 bg-white text-xs p-0.5 rounded-full shadow-sm border" style="border-color:${p.face}">
+                            <span>${esc(friend.emoji)}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-0.5 mb-2 w-full">
+                        <h3 class="text-sm sm:text-base font-black text-slate-800 truncate">${esc(friend.name)}</h3>
+                        <p class="text-[10px] font-bold truncate px-1" style="color:${p.mouth}">${esc(friend.vibe)}</p>
+                    </div>
+
+                    <div class="w-full rounded-xl p-2 border space-y-1 text-center" style="background:${hexToRgba(p.glow, 0.10)}; border-color:${hexToRgba(p.glow, 0.35)}">
+                        <div class="flex justify-between items-center text-[11px] font-extrabold text-slate-700">
+                            <span>🏆 Quests:</span>
+                            <span class="font-black" style="color:${p.mouth}">${count} / ${state.challenges.length}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-[11px] font-extrabold text-slate-700 pt-0.5 border-t" style="border-color:${hexToRgba(p.glow, 0.3)}">
+                            <span>🔥 Streak:</span>
+                            <span class="text-amber-600 font-black">${streak} Day${streak === 1 ? '' : 's'}</span>
+                        </div>
+                        <div class="mt-1 bg-white rounded-lg py-1 px-1.5 border font-black text-[10px] shadow-sm" style="color:${p.mouth}; border-color:${hexToRgba(p.glow, 0.45)}">
+                            ${esc(friend.indicator)}
+                        </div>
+                    </div>
+
+                    <button class="mt-2 w-full py-1 rounded-xl text-[11px] font-extrabold transition-all" style="${isSelected ? `background:${p.glow}; color:#fff` : `background:${hexToRgba(p.glow, 0.18)}; color:${p.mouth}`}">
+                        ${isSelected ? 'Close View ✕' : 'View Journey ✨'}
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleCharacterSelection(friendId) {
+            state.activeCharacterId = state.activeCharacterId === friendId ? null : friendId;
+            renderHeroCharacters();
+            renderCharacterDetailView();
+        }
+
+        // ==========================================================
+        // 6. RENDER: GROWTH HUB
+        // ==========================================================
+        function renderCharacterDetailView() {
+            const box = document.getElementById('character-detail-view');
+            if (!state.activeCharacterId) {
+                box.classList.add('hidden');
+                box.innerHTML = '';
+                return;
+            }
+            const friend = getFriend(state.activeCharacterId);
+            if (!friend) return;
+            const p = pal(friend);
+
+            const completedList = state.challenges.filter(c => isDone(c.id, friend.id));
+            const pendingList = state.challenges.filter(c => !isDone(c.id, friend.id));
+            const completedCount = completedList.length;
+            const streak = computeStreak(friend.id);
+            const counts = friendDayCounts(friend.id);
+            const todayNum = currentDayNumber();
+
+            const weekStats = [0, 0, 0, 0];
+            counts.forEach((n, i) => { weekStats[Math.min(3, Math.floor(i / 7))] += n; });
+            const maxWeek = Math.max(...weekStats, 1);
+            const weekRanges = ['D1-7', 'D8-14', 'D15-21', 'D22-30'];
+
+            box.classList.remove('hidden');
+            box.innerHTML = `
+                <div class="bg-white rounded-3xl border-3 p-4 sm:p-5 shadow-md relative space-y-5" style="border-color:${p.glow}">
+
+                    <div class="flex items-center justify-between gap-2 pb-3 border-b border-pink-100">
+                        <div class="flex items-center space-x-3 min-w-0">
+                            <div class="w-12 h-12 rounded-2xl p-1 shrink-0" style="border:2px solid ${p.face}; background:${p.body}">${pixelAvatar(friend.palette)}</div>
+                            <div class="min-w-0">
+                                <div class="flex items-center flex-wrap gap-x-2 gap-y-1">
+                                    <h2 class="text-base sm:text-lg font-black text-slate-800">${esc(friend.name)}'s Growth Hub ${esc(friend.emoji)}</h2>
+                                    <span class="font-black text-[10px] px-2 py-0.5 rounded-full border" style="background:${hexToRgba(p.glow, 0.15)}; color:${p.mouth}; border-color:${hexToRgba(p.glow, 0.4)}">${esc(friend.indicator)}</span>
+                                </div>
+                                <p class="text-xs font-bold text-slate-500 truncate">${esc(friend.vibe)}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button onclick="openCustomizeModal('${friend.id}')" class="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold text-xs border border-slate-100">🎨<span class="hidden sm:inline"> Customize</span></button>
+                            <button onclick="toggleCharacterSelection('${friend.id}')" class="px-3 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">Close ✕</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <!-- 30-DAY CALENDAR -->
+                        <div class="rounded-2xl p-3.5 border space-y-2" style="background:${hexToRgba(p.glow, 0.08)}; border-color:${hexToRgba(p.glow, 0.3)}">
+                            <div class="flex items-center justify-between gap-2">
+                                <h3 class="text-xs font-black text-slate-800 flex items-center space-x-1"><span>📅</span><span>30-Day Activity Calendar</span></h3>
+                                <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-200">🔥 ${streak} Day Streak</span>
+                            </div>
+                            <p class="text-[10px] font-bold text-slate-400">Filled days = quests logged that day (Day-1 is 2026.10.20)</p>
+                            <div class="grid grid-cols-6 gap-1.5 pt-1">
+                                ${counts.map((n, i) => {
+                                    const dayNum = i + 1;
+                                    const done = n > 0;
+                                    const isToday = dayNum === todayNum;
+                                    return `
+                                    <div class="rounded-xl p-1.5 text-center border ${done ? 'text-white font-extrabold shadow-sm' : 'bg-white text-slate-400 font-bold opacity-70'}" style="${done ? `background:${p.glow}; border-color:${p.face}` : `border-color:${hexToRgba(p.glow, 0.3)}`}${isToday ? `; outline:2px solid ${p.mouth}; outline-offset:1px` : ''}">
+                                        <div class="text-[9px]">Day</div>
+                                        <div class="text-xs font-black">${dayNum}</div>
+                                        <div class="text-[8px]">${done ? (n > 1 ? '×' + n : '✨') : '⚪'}</div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <!-- WEEKLY GRAPH -->
+                        <div class="bg-purple-50/70 rounded-2xl p-3.5 border border-purple-100 space-y-3 flex flex-col justify-between">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-black text-slate-800 flex items-center space-x-1"><span>📊</span><span>Weekly Growth Graph</span></h3>
+                                <span class="text-[10px] text-purple-600 font-bold">4-Week Breakdown</span>
+                            </div>
+                            <div class="flex items-end justify-between h-36 pt-3 px-2 bg-white/80 rounded-xl border border-purple-100 pb-2">
+                                ${weekStats.map((val, idx) => {
+                                    const h = val === 0 ? 4 : Math.round((val / maxWeek) * 76) + 6;
+                                    return `
+                                    <div class="flex flex-col items-center flex-1 justify-end space-y-1">
+                                        <span class="text-[10px] font-black text-purple-700">${val}</span>
+                                        <div class="w-8 sm:w-10 rounded-t-lg transition-all duration-500 shadow-sm" style="height:${h}px; background:linear-gradient(to top, ${p.face}, ${p.hair})"></div>
+                                        <span class="text-[10px] font-bold text-slate-500">Wk ${idx + 1}</span>
+                                        <span class="text-[8px] font-bold text-slate-300">${weekRanges[idx]}</span>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                            <div class="bg-white/90 rounded-xl p-2 border border-purple-100 text-center">
+                                <span class="text-[11px] font-bold text-slate-600">Total Milestones Achieved: </span>
+                                <span class="text-xs font-black" style="color:${p.mouth}">${completedCount} / ${state.challenges.length} Challenges 🌟</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COMPLETED -->
+                    <div class="space-y-2 pt-1">
+                        <div class="flex items-center space-x-1.5">
+                            <span class="text-base">🏅</span>
+                            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wide">Completed Challenges (${completedList.length})</h3>
+                        </div>
+                        ${completedList.length > 0 ? `
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                                ${completedList.map(c => {
+                                    const proof = (state.proofs[c.id] && state.proofs[c.id][friend.id]) || {};
+                                    const url = proof.url ? safeUrl(proof.url) : '';
+                                    const ds = state.dates[c.id] && state.dates[c.id][friend.id];
+                                    return `
+                                    <div onclick="openChallengeModal(${c.id})" class="glow-card cursor-pointer bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl p-2.5 flex gap-2.5 text-left" style="--glow:#34D399; --glow-soft:rgba(52,211,153,.4)">
+                                        ${visualHtml(c, 'w-11 h-11 rounded-lg')}
+                                        <div class="min-w-0 flex-1 space-y-0.5">
+                                            <div class="flex items-center justify-between gap-1">
+                                                <span class="text-xs font-black text-emerald-800 truncate">🏅 ${esc(c.title)}</span>
+                                            </div>
+                                            <p class="text-[10px] font-bold text-slate-400">${ds ? esc(fmtDate(parseLocal(ds))) + ' · ' : ''}Medal earned</p>
+                                            ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-[10px] text-pink-600 underline font-bold block truncate hover:text-pink-700">🔗 Proof link</a>` : ''}
+                                            ${proof.note ? `<p class="text-[10px] text-slate-600 italic bg-white/80 p-1 rounded-md border border-emerald-100">"${esc(proof.note)}"</p>` : ''}
+                                        </div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        ` : `
+                            <div class="p-3 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-center text-xs font-bold text-slate-400">
+                                No completed challenges yet! Pick a quest from the vault below to earn your first medal.
+                            </div>
+                        `}
+                    </div>
+
+                    <!-- PENDING -->
+                    <div class="space-y-2 pt-1 border-t border-pink-100">
+                        <div class="flex items-center space-x-1.5">
+                            <span class="text-base">⏳</span>
+                            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wide">Pending Challenges (${pendingList.length})</h3>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                            ${pendingList.map(c => `
+                                <div onclick="openChallengeModal(${c.id})" class="glow-card cursor-pointer bg-amber-50/60 border border-amber-200/80 rounded-xl p-2 text-center space-y-1" style="--glow:#FBBF24; --glow-soft:rgba(251,191,36,.4)">
+                                    ${visualHtml(c, 'w-full h-12 rounded-lg')}
+                                    <h4 class="text-[11px] font-bold text-slate-700 line-clamp-1">${esc(c.title)}</h4>
+                                    <span class="text-[9px] font-black text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded-full inline-block border border-amber-200">⏳ Pending</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================================
+        // 7. RENDER: CHALLENGE VAULT
+        // ==========================================================
+        function challengeCardInner(ch) {
+            const badges = getFriends().map(friend => {
+                const done = isDone(ch.id, friend.id);
+                return `
+                    <div class="relative" title="${esc(friend.name)}: ${done ? 'Completed' : 'Pending'}">
+                        <div class="w-6 h-6 rounded-full border border-pink-200 p-0.5 bg-white transition-all ${done ? 'opacity-100 scale-105' : 'filter grayscale opacity-30'}">
+                            ${pixelAvatar(friend.palette)}
+                        </div>
+                        ${done ? '<div class="absolute -top-1 -right-1 bg-emerald-500 text-white rounded-full w-3 h-3 flex items-center justify-center text-[7px] font-black shadow-sm">✓</div>' : ''}
+                    </div>`;
+            }).join('');
+
+            return `
+                ${visualHtml(ch, 'w-full h-24 rounded-xl')}
+                <h3 class="text-xs font-black text-slate-800 line-clamp-2 min-h-[2rem] leading-snug">${esc(ch.title)}</h3>
+                <div class="flex items-center justify-between pt-2 border-t border-pink-50">
+                    <span class="text-[10px] font-bold text-slate-400">Status</span>
+                    <div class="flex space-x-1">${badges}</div>
+                </div>`;
+        }
+
+        function renderChallengesGrid() {
+            const grid = document.getElementById('challenges-grid');
+            grid.innerHTML = '';
+            document.getElementById('vault-count').textContent = `(${state.challenges.length} Quests)`;
+
+            state.challenges.forEach(ch => {
+                const card = document.createElement('div');
+                card.className = 'glow-card bg-white rounded-2xl p-2.5 border-2 border-pink-100 shadow-sm flex flex-col justify-between cursor-pointer space-y-2';
+                card.onclick = () => openChallengeModal(ch.id);
+                card.innerHTML = challengeCardInner(ch);
+                grid.appendChild(card);
+            });
+        }
+
+        function renderAll() {
+            renderHeroCharacters();
+            renderCharacterDetailView();
+            renderChallengesGrid();
+        }
+
+        // ==========================================================
+        // 8. LOG / PROOF MODAL
+        // ==========================================================
+        let activeModalChallengeId = null;
+        let modalSnapshot = {};
+        let savingProgress = false;
+
+        function openChallengeModal(chId) {
+            const ch = getChallenge(chId);
+            if (!ch) return;
+
+            // Picking a quest closes any open growth hub
+            if (state.activeCharacterId) {
+                state.activeCharacterId = null;
+                renderHeroCharacters();
+                renderCharacterDetailView();
+            }
+
+            activeModalChallengeId = chId;
+            modalSnapshot = {};
+            getFriends().forEach(f => {
+                const p = (state.proofs[chId] && state.proofs[chId][f.id]) || {};
+                modalSnapshot[f.id] = { done: isDone(chId, f.id), url: p.url || '', note: p.note || '' };
+            });
+            document.getElementById('more-menu').classList.add('hidden');
+            document.getElementById('modal-error').classList.add('hidden');
+
+            document.getElementById('modal-header').innerHTML = `
+                <div class="flex items-center gap-3">
+                    ${visualHtml(ch, 'w-14 h-14 rounded-2xl')}
+                    <div class="min-w-0">
+                        <h3 class="text-base font-extrabold text-slate-800 leading-snug">${esc(ch.title)}</h3>
+                        <span class="text-xs text-pink-500 font-bold">Who completed it?</span>
+                    </div>
+                </div>`;
+
+            const list = document.getElementById('modal-friends-list');
+            list.innerHTML = '';
+            getFriends().forEach(friend => {
+                const done = isDone(chId, friend.id);
+                const proof = (state.proofs[chId] && state.proofs[chId][friend.id]) || { url: '', note: '' };
+                const row = document.createElement('div');
+                row.className = 'rounded-xl border border-pink-100 p-2 space-y-1.5';
+                row.innerHTML = `
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 rounded-full border border-pink-200 p-0.5 bg-white">${pixelAvatar(friend.palette)}</div>
+                            <span class="text-xs font-bold text-slate-700">${esc(friend.name)}</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <span id="status-${friend.id}" class="text-[10px] font-bold ${done ? 'text-emerald-600' : 'text-slate-400'}">${done ? '🏅 Medal' : '⏳ Pending'}</span>
+                            <input type="checkbox" id="chk-${friend.id}" ${done ? 'checked' : ''} onchange="onFriendCheck('${friend.id}')" class="w-4 h-4 accent-pink-500 rounded">
+                        </div>
+                    </label>
+                    <div id="proof-${friend.id}" class="${done ? '' : 'hidden'} space-y-1.5">
+                        <input type="url" id="url-${friend.id}" value="${esc(proof.url || '')}" placeholder="Instagram / TikTok proof link" class="w-full px-3 py-1.5 text-xs rounded-lg border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                        <input type="text" id="note-${friend.id}" value="${esc(proof.note || '')}" maxlength="140" placeholder="Quick reflection (optional)" class="w-full px-3 py-1.5 text-xs rounded-lg border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                    </div>`;
+                list.appendChild(row);
+            });
+
+            document.getElementById('challenge-modal').classList.remove('hidden');
+        }
+
+        function onFriendCheck(fid) {
+            const checked = document.getElementById('chk-' + fid).checked;
+            document.getElementById('proof-' + fid).classList.toggle('hidden', !checked);
+            const st = document.getElementById('status-' + fid);
+            st.textContent = checked ? '🏅 Medal' : '⏳ Pending';
+            st.className = 'text-[10px] font-bold ' + (checked ? 'text-emerald-600' : 'text-slate-400');
+        }
+
+        function closeChallengeModal() {
+            document.getElementById('challenge-modal').classList.add('hidden');
+            document.getElementById('more-menu').classList.add('hidden');
+            activeModalChallengeId = null;
+        }
+
+        function toggleMoreMenu(e) {
+            e.stopPropagation();
+            document.getElementById('more-menu').classList.toggle('hidden');
+        }
+
+        function editFromChallengeModal() {
+            const id = activeModalChallengeId;
+            closeChallengeModal();
+            if (id != null) openQuestForm('edit', id);
+        }
+
+        async function saveChallengeModalData() {
+            if (activeModalChallengeId == null || savingProgress) return;
+            const chId = activeModalChallengeId;
+            const friends = getFriends();
+            const err = document.getElementById('modal-error');
+
+            // Validate proof links first
+            for (const f of friends) {
+                const checked = document.getElementById('chk-' + f.id).checked;
+                const raw = document.getElementById('url-' + f.id).value.trim();
+                if (checked && raw && !safeUrl(raw)) {
+                    err.textContent = `${f.name}'s proof link needs to start with http:// or https://`;
+                    err.classList.remove('hidden');
+                    return;
+                }
+            }
+            err.classList.add('hidden');
+
+            // Only send what changed, so we never overwrite a friend's newer update
+            const today = localDateStr();
+            const changes = [];
+            let newlyCompleted = false;
+            friends.forEach(f => {
+                const checked = document.getElementById('chk-' + f.id).checked;
+                const url = safeUrl(document.getElementById('url-' + f.id).value.trim());
+                const note = document.getElementById('note-' + f.id).value.trim();
+                const snap = modalSnapshot[f.id] || { done: false, url: '', note: '' };
+                if (checked) {
+                    if (!snap.done || snap.url !== url || snap.note !== note) {
+                        changes.push({ challengeId: chId, friendId: f.id, done: true, url, note, date: today });
+                    }
+                    if (!snap.done) newlyCompleted = true;
+                } else if (snap.done) {
+                    changes.push({ challengeId: chId, friendId: f.id, done: false });
+                }
+            });
+
+            if (!changes.length) { closeChallengeModal(); return; }
+
+            savingProgress = true;
+            const btn = document.getElementById('modal-save-btn');
+            btn.disabled = true;
+            try {
+                await api('PUT', '/api/progress', { changes });
+                await refreshState(true);
+                closeChallengeModal();
+                if (newlyCompleted) triggerConfetti();
+            } catch (e) {
+                if (e.code !== 'auth') {
+                    err.textContent = 'Could not save: ' + e.message;
+                    err.classList.remove('hidden');
+                }
+            } finally {
+                savingProgress = false;
+                btn.disabled = false;
+            }
+        }
+
+        // ==========================================================
+        // 9. ADD / EDIT QUEST (with preview + confirm)
+        // ==========================================================
+        let formState = null;
+
+        function openQuestForm(mode, id) {
+            if (mode === 'edit') {
+                const ch = getChallenge(id);
+                if (!ch) return;
+                formState = { mode, id, title: ch.title, icon: ch.icon || 'star', img: ch.img || null, stage: 'form', error: '', orig: Object.assign({}, ch) };
+            } else {
+                formState = { mode: 'add', id: null, title: '', icon: 'star', img: null, stage: 'form', error: '' };
+            }
+            renderQuestForm();
+            document.getElementById('quest-modal').classList.remove('hidden');
+            setTimeout(() => { const t = document.getElementById('quest-title'); if (t) t.focus(); }, 30);
+        }
+
+        function closeQuestForm() {
+            document.getElementById('quest-modal').classList.add('hidden');
+            formState = null;
+        }
+
+        function nextChallengeId() {
+            return state.challenges.reduce((m, c) => Math.max(m, c.id), 0) + 1;
+        }
+
+        function draftQuest() {
+            return { id: formState.mode === 'edit' ? formState.id : nextChallengeId(), title: formState.title.trim(), icon: formState.icon, img: formState.img };
+        }
+
+        function renderQuestForm() {
+            const body = document.getElementById('quest-body');
+            const f = formState;
+            if (!f) return;
+
+            if (f.stage === 'form') {
+                const draft = { id: f.mode === 'edit' ? f.id : nextChallengeId(), title: f.title, icon: f.icon, img: f.img };
+                body.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="pr-6">
+                            <h3 class="text-base font-black text-slate-800">${f.mode === 'add' ? 'Add a new quest' : 'Edit quest'}</h3>
+                            <p class="text-[11px] font-bold text-slate-400">You'll preview it before anything is saved.</p>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label for="quest-title" class="block text-xs font-bold text-slate-700">Quest name</label>
+                            <input id="quest-title" type="text" maxlength="40" value="${esc(f.title)}" oninput="formState.title=this.value" onkeydown="if(event.key==='Enter'){goQuestPreview()}" placeholder="e.g. Dance to one full song" class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-slate-700">Picture</label>
+                            <div class="flex items-center gap-3">
+                                ${visualHtml(draft, 'w-16 h-16 rounded-2xl')}
+                                <div class="flex flex-wrap gap-2">
+                                    <label class="px-3 py-1.5 rounded-xl bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold text-[11px] cursor-pointer transition">
+                                        Upload photo
+                                        <input type="file" accept="image/*" class="hidden" onchange="handleQuestImage(this)">
+                                    </label>
+                                    ${f.img ? `<button onclick="formState.img=null; renderQuestForm()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-[11px]">Remove photo</button>` : ''}
+                                </div>
+                            </div>
+                            <p class="text-[10px] font-bold text-slate-400">…or pick an illustration</p>
+                            <div class="grid grid-cols-6 gap-1.5 max-h-40 overflow-y-auto p-1 rounded-xl border border-pink-100">
+                                ${Object.keys(ICONS).map(key => {
+                                    const sel = !f.img && f.icon === key;
+                                    return `<button type="button" onclick="formState.icon='${key}'; formState.img=null; renderQuestForm()" aria-label="${key}" class="aspect-square rounded-lg p-1 bg-pink-50/60 hover:bg-pink-100 transition ${sel ? 'ring-2 ring-pink-400 bg-pink-100' : ''}">${iconSvg(key)}</button>`;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <p id="quest-error" class="${f.error ? '' : 'hidden'} text-[11px] font-bold text-rose-500">${esc(f.error)}</p>
+
+                        <div class="flex space-x-2 pt-1">
+                            <button onclick="goQuestPreview()" class="flex-1 bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">Preview →</button>
+                            <button onclick="closeQuestForm()" class="px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-xs transition">Cancel</button>
+                        </div>
+                    </div>`;
+            } else {
+                const draft = draftQuest();
+                const previewCard = ch => `<div class="glow-card bg-white rounded-2xl p-2.5 border-2 border-pink-200 shadow-sm flex flex-col justify-between space-y-2 w-full">${challengeCardInner(ch)}</div>`;
+                body.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="pr-6">
+                            <h3 class="text-base font-black text-slate-800">Does this look right?</h3>
+                            <p class="text-[11px] font-bold text-slate-400">${f.mode === 'add' ? 'This is how your new quest will appear in the vault.' : 'Here is the quest before and after your changes.'}</p>
+                        </div>
+
+                        ${f.mode === 'add' ? `
+                            <div class="max-w-[180px] mx-auto">${previewCard(draft)}</div>
+                        ` : `
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="space-y-1"><p class="text-[10px] font-black text-slate-400 uppercase text-center">Before</p>${previewCard(f.orig)}</div>
+                                <div class="space-y-1"><p class="text-[10px] font-black text-pink-500 uppercase text-center">After</p>${previewCard(draft)}</div>
+                            </div>
+                        `}
+
+                        <div class="flex space-x-2 pt-1">
+                            <button onclick="confirmQuest()" class="flex-1 bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">Confirm &amp; ${f.mode === 'add' ? 'add' : 'save'} ✨</button>
+                            <button onclick="formState.stage='form'; renderQuestForm()" class="px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-xs transition">← Back to edit</button>
+                        </div>
+                    </div>`;
+            }
+        }
+
+        function goQuestPreview() {
+            const f = formState;
+            if (!f) return;
+            const title = f.title.trim();
+            let error = '';
+            if (!title) error = 'Give your quest a name first.';
+            else if (title.length > 40) error = 'Keep the name to 40 characters or fewer.';
+            else if (state.challenges.some(c => c.id !== f.id && c.title.trim().toLowerCase() === title.toLowerCase())) error = 'A quest with that name already exists.';
+
+            if (error) {
+                f.error = error;
+                renderQuestForm();
+                return;
+            }
+            f.error = '';
+            f.title = title;
+            f.stage = 'preview';
+            renderQuestForm();
+        }
+
+        async function confirmQuest() {
+            const f = formState;
+            if (!f || f.saving) return;
+            f.saving = true;
+            const d = draftQuest();
+            const body = { title: d.title, icon: d.icon, img: d.img || null };
+            try {
+                if (f.mode === 'add') await api('POST', '/api/quests', body);
+                else await api('PUT', '/api/quests/' + f.id, body);
+                await refreshState(true);
+                closeQuestForm();
+                showToast(f.mode === 'add' ? 'New quest added ✨' : 'Quest updated ✨');
+            } catch (e) {
+                if (e.code === 'auth') return;
+                f.saving = false;
+                f.stage = 'form';
+                f.error = e.message;
+                renderQuestForm();
+            }
+        }
+
+        function handleQuestImage(input) {
+            const file = input.files && input.files[0];
+            if (!file || !formState) return;
+            if (!file.type.startsWith('image/')) { formState.error = 'Please choose an image file.'; renderQuestForm(); return; }
+            const reader = new FileReader();
+            reader.onload = () => {
+                const img = new Image();
+                img.onload = () => {
+                    const size = 192;
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size; canvas.height = size;
+                    const min = Math.min(img.width, img.height);
+                    canvas.getContext('2d').drawImage(img, (img.width - min) / 2, (img.height - min) / 2, min, min, 0, 0, size, size);
+                    if (!formState) return;
+                    formState.img = canvas.toDataURL('image/jpeg', 0.8);
+                    formState.error = '';
+                    renderQuestForm();
+                };
+                img.onerror = () => { if (formState) { formState.error = 'That image could not be read.'; renderQuestForm(); } };
+                img.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ==========================================================
+        // 10. CUSTOMIZE CHARACTER
+        // ==========================================================
+        let custState = null;
+
+        function openCustomizeModal(friendId) {
+            const f = getFriend(friendId);
+            if (!f) return;
+            custState = { id: f.id, name: f.name, vibe: f.vibe, emoji: f.emoji, palette: f.palette };
+            renderCustomize();
+            document.getElementById('customize-modal').classList.remove('hidden');
+        }
+
+        function closeCustomizeModal() {
+            document.getElementById('customize-modal').classList.add('hidden');
+            custState = null;
+        }
+
+        function renderCustomize() {
+            const c = custState;
+            if (!c) return;
+            const p = PALETTES[c.palette] || PALETTES.rose;
+            document.getElementById('customize-body').innerHTML = `
+                <div class="space-y-4">
+                    <div class="pr-6">
+                        <h3 class="text-base font-black text-slate-800">Customize your character</h3>
+                        <p class="text-[11px] font-bold text-slate-400">Pick your colour and emoji — it updates everywhere.</p>
+                    </div>
+
+                    <div class="flex items-center gap-3 p-3 rounded-2xl border" style="background:${hexToRgba(p.glow, 0.1)}; border-color:${hexToRgba(p.glow, 0.35)}">
+                        <div class="relative">
+                            <div class="w-16 h-16 rounded-2xl p-1" style="border:3px solid ${p.face}; background:linear-gradient(180deg,#fff,${p.body})">${pixelAvatar(c.palette)}</div>
+                            <div class="absolute -bottom-1 -right-1 bg-white text-sm p-0.5 rounded-full shadow-sm border" style="border-color:${p.face}">${esc(c.emoji)}</div>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-black text-slate-800 truncate">${esc(c.name || '…')}</div>
+                            <div class="text-[11px] font-bold truncate" style="color:${p.mouth}">${esc(c.vibe)}</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-slate-700">Name</label>
+                            <input type="text" maxlength="14" value="${esc(c.name)}" oninput="custState.name=this.value" class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-slate-700">Vibe</label>
+                            <input type="text" maxlength="28" value="${esc(c.vibe)}" oninput="custState.vibe=this.value" class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-slate-700">Colour</label>
+                        <div class="flex flex-wrap gap-2">
+                            ${Object.keys(PALETTES).map(k => `
+                                <button type="button" onclick="custState.palette='${k}'; renderCustomize()" aria-label="${PALETTES[k].label}" title="${PALETTES[k].label}" class="w-8 h-8 rounded-full border-2 transition ${c.palette === k ? 'scale-110 ring-2 ring-offset-2' : ''}" style="background:${PALETTES[k].face}; border-color:#fff; ${c.palette === k ? `--tw-ring-color:${PALETTES[k].face}` : ''}"></button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-slate-700">Emoji</label>
+                        <div class="grid grid-cols-8 gap-1">
+                            ${EMOJI_CHOICES.map(e => `
+                                <button type="button" onclick="custState.emoji='${e}'; renderCustomize()" class="aspect-square rounded-lg text-base hover:bg-pink-50 ${c.emoji === e ? 'bg-pink-100 ring-2 ring-pink-300' : ''}">${e}</button>
+                            `).join('')}
+                        </div>
+                        <div class="flex items-center gap-2 pt-1">
+                            <span class="text-[10px] font-bold text-slate-400">or type your own:</span>
+                            <input type="text" id="cust-emoji-input" maxlength="8" placeholder="🙂" oninput="onCustomEmoji(this.value)" class="w-16 px-2 py-1 text-center text-sm rounded-lg border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-2 pt-1">
+                        <button onclick="saveCustomize()" class="flex-1 bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">Save look ✨</button>
+                        <button onclick="closeCustomizeModal()" class="px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-xs transition">Cancel</button>
+                    </div>
+                </div>`;
+        }
+
+        function onCustomEmoji(v) {
+            const g = firstGrapheme(v);
+            if (g) custState.emoji = g;
+        }
+
+        async function saveCustomize() {
+            const c = custState;
+            if (!c || c.saving) return;
+            const base = BASE_FRIENDS.find(f => f.id === c.id);
+            const body = {
+                name: c.name.trim() || base.name,
+                vibe: c.vibe.trim() || base.vibe,
+                emoji: firstGrapheme(c.emoji) || base.emoji,
+                palette: PALETTES[c.palette] ? c.palette : base.palette
+            };
+            c.saving = true;
+            try {
+                await api('PUT', '/api/characters/' + c.id, body);
+                await refreshState(true);
+                closeCustomizeModal();
+                showToast('Look saved ✨');
+            } catch (e) {
+                c.saving = false;
+                if (e.code !== 'auth') showToast('Could not save: ' + e.message);
+            }
+        }
+
+        // ==========================================================
+        // 11. BANNER + CONFETTI
+        // ==========================================================
+        function openBannerModal() {
+            const fr = getFriends();
+            document.getElementById('banner-names').textContent = joinNames(fr.map(f => f.name));
+            document.getElementById('banner-avatars').innerHTML = fr.map(f => {
+                const p = pal(f);
+                return `<div class="text-center space-y-0.5">
+                    <div class="w-12 h-12 mx-auto rounded-full p-1" style="background:${p.body}; border:2px solid ${p.face}">${pixelAvatar(f.palette)}</div>
+                    <span class="text-[10px] font-bold text-slate-600">${esc(f.name)} ${esc(f.emoji)}</span>
+                </div>`;
+            }).join('');
+            document.getElementById('banner-modal').classList.remove('hidden');
+        }
+        function closeBannerModal() {
+            document.getElementById('banner-modal').classList.add('hidden');
+        }
+
+        function triggerConfetti() {
+            const colors = ['#FF8FAB', '#D8B4F8', '#FDE047', '#A7F3D0'];
+            for (let i = 0; i < 25; i++) {
+                const conf = document.createElement('div');
+                conf.className = 'confetti-piece';
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.top = '-10px';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+                document.body.appendChild(conf);
+                setTimeout(() => conf.remove(), 2500);
+            }
+        }
+
+        // ==========================================================
+        // 12. INIT
+        // ==========================================================
+        window.onload = function () {
+            renderHeaderClock();
+            setInterval(renderHeaderClock, 60000);
+
+            // Click on dimmed backdrop closes a modal; Esc closes the top-most one
+            const closers = {
+                'challenge-modal': closeChallengeModal,
+                'quest-modal': closeQuestForm,
+                'customize-modal': closeCustomizeModal,
+                'banner-modal': closeBannerModal
+            };
+            Object.keys(closers).forEach(id => {
+                const el = document.getElementById(id);
+                el.addEventListener('click', e => { if (e.target === el) closers[id](); });
+            });
+            document.addEventListener('keydown', e => {
+                if (e.key !== 'Escape') return;
+                for (const id of ['quest-modal', 'customize-modal', 'challenge-modal', 'banner-modal']) {
+                    if (!document.getElementById(id).classList.contains('hidden')) { closers[id](); break; }
+                }
+            });
+            // Close the quiet 3-dot menu on outside click
+            document.addEventListener('click', () => document.getElementById('more-menu').classList.add('hidden'));
+            // Catch up right away when the tab comes back or the phone regains signal
+            document.addEventListener('visibilitychange', () => { if (!document.hidden) pollOnce(); });
+            window.addEventListener('online', pollOnce);
+
+            boot();
+        };
+    </script>
+</body>
+</html>
