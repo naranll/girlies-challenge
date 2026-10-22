@@ -12,6 +12,10 @@ const ICON_RE = /^[a-z]{2,20}$/;
 const IMG_RE = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/;
 const MAX_IMG_CHARS = 200 * 1024;
 
+// Bump when the built-in quest list changes; init() re-seeds once per version.
+const SEED_VERSION = 2;
+const PLACEHOLDER_MAX_ID = 30; // ids 1..30 were the original placeholder quests
+
 const FAIL_WINDOW_MS = 10 * 60 * 1000;
 const MAX_FAILS = 10;
 
@@ -59,6 +63,12 @@ function cleanUrl(v) {
 
 function cleanNote(v) {
   return typeof v === 'string' ? v.trim().slice(0, 140) : '';
+}
+
+function cleanInfo(v) {
+  const t = typeof v === 'string' ? v.trim().replace(/\s+/g, ' ') : '';
+  if (t.length > 140) throw new HttpError(400, 'Keep the short info to 140 characters or fewer.');
+  return t;
 }
 
 function cleanCharacter(c) {
@@ -114,17 +124,23 @@ function createApp({ db, passcode }) {
 
   async function init() {
     await col.progress.createIndex({ challengeId: 1, friendId: 1 }, { unique: true });
-    if ((await col.quests.countDocuments({})) === 0) {
-      try {
-        await col.quests.insertMany(
-          DEFAULT_QUESTS.map(q => ({ _id: q.id, title: q.title, icon: q.icon })),
-          { ordered: false }
-        );
-      } catch (e) {
-        if (!/E11000/.test(String(e && e.message))) throw e;
-      }
-      await bumpRev();
+    const seed = await col.meta.findOne({ _id: 'seed' });
+    if (seed && seed.v >= SEED_VERSION) return;
+
+    // One-time switch to the real quest list: the original placeholder quests (ids 1-30)
+    // and any progress logged on them are removed. Quests added later (ids 31+) are kept.
+    await col.progress.deleteMany({ challengeId: { $lte: PLACEHOLDER_MAX_ID } });
+    await col.quests.deleteMany({ _id: { $lte: PLACEHOLDER_MAX_ID } });
+    try {
+      await col.quests.insertMany(
+        DEFAULT_QUESTS.map(q => ({ _id: q.id, title: q.title, icon: q.icon, info: q.info || '' })),
+        { ordered: false }
+      );
+    } catch (e) {
+      if (!/E11000/.test(String(e && e.message))) throw e;
     }
+    await col.meta.updateOne({ _id: 'seed' }, { $set: { v: SEED_VERSION } }, { upsert: true });
+    await bumpRev();
   }
 
   async function nextQuestId() {
@@ -132,10 +148,10 @@ function createApp({ db, passcode }) {
     return last.length ? last[0]._id + 1 : 1;
   }
 
-  async function insertQuest({ title, icon, img }) {
+  async function insertQuest({ title, icon, img, info }) {
     for (let attempt = 0; attempt < 3; attempt++) {
       const id = await nextQuestId();
-      const doc = { _id: id, title, icon };
+      const doc = { _id: id, title, icon, info: info || '' };
       if (img) doc.img = img;
       try {
         await col.quests.insertOne(doc);
@@ -156,7 +172,7 @@ function createApp({ db, passcode }) {
   }
 
   const questOut = q => {
-    const o = { id: q._id, title: q.title, icon: q.icon };
+    const o = { id: q._id, title: q.title, icon: q.icon, info: q.info || '' };
     if (q.img) o.img = q.img;
     return o;
   };
@@ -237,11 +253,13 @@ function createApp({ db, passcode }) {
       if (!FRIEND_IDS.includes(c.friendId)) throw new HttpError(400, 'Unknown person.');
       if (!(await col.quests.findOne({ _id: c.challengeId }))) throw new HttpError(404, 'Quest not found.');
       if (c.done === true) {
+        const url = cleanUrl(c.url);
+        if (!url) throw new HttpError(400, 'Add your proof link to mark this quest as done.');
         prepared.push({
           challengeId: c.challengeId,
           friendId: c.friendId,
           done: true,
-          url: cleanUrl(c.url),
+          url,
           note: cleanNote(c.note),
           date: DATE_RE.test(c.date) ? c.date : new Date().toISOString().slice(0, 10)
         });
@@ -271,7 +289,7 @@ function createApp({ db, passcode }) {
     const title = cleanTitle(b.title);
     const img = cleanImg(b.img);
     await assertUniqueTitle(title, null);
-    const id = await insertQuest({ title, icon: cleanIcon(b.icon), img });
+    const id = await insertQuest({ title, icon: cleanIcon(b.icon), img, info: cleanInfo(b.info) });
     await bumpRev();
     res.status(201).json(questOut(await col.quests.findOne({ _id: id })));
   }));
@@ -285,7 +303,7 @@ function createApp({ db, passcode }) {
     const title = cleanTitle(b.title);
     const img = cleanImg(b.img);
     await assertUniqueTitle(title, id);
-    const set = { title, icon: cleanIcon(b.icon) };
+    const set = { title, icon: cleanIcon(b.icon), info: cleanInfo(b.info) };
     const update = { $set: set };
     if (img) set.img = img; else update.$unset = { img: '' };
     await col.quests.updateOne({ _id: id }, update);
@@ -301,78 +319,6 @@ function createApp({ db, passcode }) {
     await col.characters.updateOne({ _id: fid }, { $set: clean }, { upsert: true });
     await bumpRev();
     res.json({ ok: true });
-  }));
-
-  // ----- one-time import of progress that only lived in someone's browser -----
-  api.post('/import', big, asyncH(async (req, res) => {
-    const s = req.body && req.body.state;
-    if (!isObj(s)) throw new HttpError(400, 'Nothing to import.');
-    const summary = { progress: 0, quests: 0, characters: 0 };
-
-    const serverQuests = await col.quests.find({}).toArray();
-    const byTitle = new Map(serverQuests.map(q => [q.title.toLowerCase(), q._id]));
-    const idMap = new Map();
-    for (let i = 1; i <= DEFAULT_QUESTS.length; i++) {
-      if (serverQuests.some(q => q._id === i)) idMap.set(i, i);
-    }
-
-    // custom quests added locally (ids beyond the 30 built-ins)
-    const localQuests = Array.isArray(s.challenges) ? s.challenges.slice(0, 200) : [];
-    for (const lq of localQuests) {
-      if (!isObj(lq) || !Number.isInteger(lq.id) || lq.id <= DEFAULT_QUESTS.length) continue;
-      let title;
-      try { title = cleanTitle(lq.title); } catch (e) { continue; }
-      const existing = byTitle.get(title.toLowerCase());
-      if (existing) { idMap.set(lq.id, existing); continue; }
-      let img = null;
-      try { img = cleanImg(lq.img); } catch (e) { img = null; }
-      const id = await insertQuest({ title, icon: cleanIcon(lq.icon), img });
-      idMap.set(lq.id, id);
-      byTitle.set(title.toLowerCase(), id);
-      summary.quests++;
-    }
-
-    // completions + proofs + dates (never overwrites what is already on the server)
-    const completions = isObj(s.completions) ? s.completions : {};
-    const proofs = isObj(s.proofs) ? s.proofs : {};
-    const dates = isObj(s.dates) ? s.dates : {};
-    for (const [localId, byFriend] of Object.entries(completions)) {
-      const cid = idMap.get(Number(localId));
-      if (!cid || !isObj(byFriend)) continue;
-      for (const fid of FRIEND_IDS) {
-        if (byFriend[fid] !== true) continue;
-        const proof = isObj(proofs[localId]) && isObj(proofs[localId][fid]) ? proofs[localId][fid] : {};
-        const d = isObj(dates[localId]) ? dates[localId][fid] : undefined;
-        let url = '';
-        try { url = cleanUrl(proof.url); } catch (e) { url = ''; }
-        const r = await col.progress.updateOne(
-          { challengeId: cid, friendId: fid },
-          {
-            $setOnInsert: {
-              url,
-              note: cleanNote(proof.note),
-              date: DATE_RE.test(d) ? d : new Date().toISOString().slice(0, 10),
-              updatedAt: new Date()
-            }
-          },
-          { upsert: true }
-        );
-        if (r.upsertedCount) summary.progress++;
-      }
-    }
-
-    // character looks
-    const customs = isObj(s.customs) ? s.customs : {};
-    for (const fid of FRIEND_IDS) {
-      if (!isObj(customs[fid])) continue;
-      let clean;
-      try { clean = cleanCharacter(customs[fid]); } catch (e) { continue; }
-      const r = await col.characters.updateOne({ _id: fid }, { $setOnInsert: clean }, { upsert: true });
-      if (r.upsertedCount) summary.characters++;
-    }
-
-    await bumpRev();
-    res.json(summary);
   }));
 
   api.use((req, res) => res.status(404).json({ error: 'Not found.' }));

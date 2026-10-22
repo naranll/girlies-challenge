@@ -1,4 +1,4 @@
-# Girlies' 30-Day Growth Challenge
+# Girlies' 30-Day Creative Challenge
 
 A shared tracker for four friends. Express serves the page and a small API; MongoDB Atlas stores everything.
 Everyone opens the same link, enters the group passcode once, and sees the same progress (it refreshes every ~8 seconds).
@@ -30,12 +30,20 @@ Free Render services go to sleep when idle, so the first visit after a quiet spe
 ## First visit
 
 - Everyone enters the passcode once per device.
-- If someone already logged quests in the old browser-only version, a banner offers **Import it**. It copies their progress, proof links, dates, custom quests and looks to the shared tracker without overwriting anything already there. Do it once per device.
+- Every quest has a number, a picture, a title and a short info line. Logging a quest needs a **proof link** (Instagram or TikTok); the reflection is optional.
+
+## Upgrading from the first version (placeholder quests)
+
+The first release came with 30 placeholder quests. The first time this version starts against that database it
+**replaces quests #1–#30 with your 19 real ones and clears any progress that was logged on the placeholders**
+(this happens once; a marker in the `meta` collection stops it repeating). Quests you added yourself with
+**+ Add quest** (ids 31 and up) are kept. A brand-new database simply starts with the 19 quests.
+The old "import from this browser" button is gone, because the old quest ids no longer match.
 
 ## Day to day
 
 - **Change the passcode:** edit `APP_PASSCODE` in Render → Environment, then let it redeploy. Everyone is asked for the new one.
-- **Quests** can be added and edited (from the faint ⋯ in a quest's popup) but not deleted.
+- **Quests** can be added and edited (from the faint ⋯ in a quest's popup) but not deleted. The built-in list lives in `default-quests.json` and is only used for brand-new databases.
 - **See or export your data:** Atlas → Browse Collections → database `glowup` (`quests`, `progress`, `characters`).
 - **Move to a different host:** any Node host works. Set the same two variables and run `npm start`.
 

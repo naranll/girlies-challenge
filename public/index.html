@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>🌸 Girlies' 30-Day Growth Challenge</title>
+    <title>🎨 Girlies' 30-Day Creative Challenge</title>
     <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -29,12 +29,44 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Alfa+Slab+One&family=Yellowtail&display=swap');
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #FFF9F5;
             color: #334155;
+            overflow-x: hidden;
+        }
+
+        /* Poster-inspired striped pink + orange backdrop */
+        .stripes {
+            background-color: #F7A1BB;
+            background-image:
+                repeating-linear-gradient(180deg, rgba(249, 134, 90, .55) 0 3px, transparent 3px 11px),
+                repeating-linear-gradient(180deg, rgba(240, 90, 150, .35) 0 2px, transparent 2px 7px),
+                repeating-linear-gradient(180deg, rgba(255, 255, 255, .18) 0 1px, transparent 1px 13px);
+            background-attachment: fixed;
+        }
+
+        /* The framed panel everything lives in, like the poster */
+        .frame {
+            background: #FFE3EC;
+            border: 5px solid #CF5171;
+            border-radius: 22px;
+            box-shadow: 0 10px 28px rgba(120, 40, 60, .22);
+        }
+
+        .slab {
+            font-family: 'Alfa Slab One', Georgia, serif;
+            color: #F2B544;
+            letter-spacing: .02em;
+            -webkit-text-stroke: 1.5px #CF5171;
+            paint-order: stroke fill;
+            text-shadow: 2px 2px 0 #F7A8B8;
+        }
+        .script {
+            font-family: 'Yellowtail', 'Brush Script MT', cursive;
+            color: #CF5171;
+            font-weight: 400;
         }
 
         .border-3 { border-width: 3px; }
@@ -51,8 +83,8 @@
 
         /* Hover / active frame glow (colour comes from --glow, set per card) */
         .glow-card {
-            --glow: #FF8FAB;
-            --glow-soft: rgba(255, 143, 171, 0.45);
+            --glow: #F28C38;
+            --glow-soft: rgba(242, 140, 56, 0.45);
             transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
         }
         .glow-card:hover,
@@ -83,23 +115,20 @@
         ::-webkit-scrollbar-thumb { background: #FFB3C6; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen pb-16">
+<body class="stripes min-h-screen pb-16">
 
     <!-- TOP HEADER BAR -->
-    <header class="bg-white/80 backdrop-blur-md border-b border-pink-100 sticky top-0 z-30 px-3 sm:px-4 py-2">
+    <header class="bg-[#CF5171] border-b-4 border-[#B3405C] sticky top-0 z-30 px-3 sm:px-4 py-2 shadow-md">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
             <div class="flex items-center space-x-2 shrink-0">
-                <span class="text-xl">🌸</span>
-                <span class="font-extrabold text-slate-800 tracking-tight text-sm sm:text-base">GlowUp.girlies</span>
+                <span class="text-xl">🎨</span>
+                <span class="script text-2xl sm:text-3xl leading-none" style="color:#FFE9B8">Create with girlies</span>
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3 min-w-0">
                 <span id="sync-dot" class="text-[10px] font-black text-slate-300" title="Connecting…">●</span>
-                <div class="text-right leading-tight">
-                    <div id="header-date" class="text-[10px] sm:text-xs font-bold text-slate-500"></div>
-                    <div id="header-day" class="text-xs sm:text-sm font-black text-pink-600"></div>
-                </div>
-                <button onclick="openBannerModal()" class="px-2.5 sm:px-3 py-1.5 rounded-full bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold text-xs transition flex items-center space-x-1 shrink-0">
+                <div id="header-date" class="text-[10px] sm:text-xs font-bold text-pink-50 text-right"></div>
+                <button onclick="openBannerModal()" class="px-2.5 sm:px-3 py-1.5 rounded-full bg-[#F2B544] hover:bg-[#F7C45F] text-[#6B2D0E] font-extrabold text-xs transition flex items-center space-x-1 shrink-0">
                     <span>🖼️</span>
                     <span class="hidden sm:inline">Kick-Off Banner</span>
                 </button>
@@ -108,25 +137,24 @@
     </header>
 
     <!-- MAIN CONTAINER -->
-    <main class="max-w-6xl mx-auto px-3 sm:px-6 pt-3 space-y-5">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="star-shape" viewBox="0 0 100 100">
+            <path d="M50 6l12.5 28 30.5 3-23 20.5 7 30L50 70 23 87.5l7-30L7 37l30.5-3z" fill="#C85A14" stroke="#FFD9A8" stroke-width="3.5" stroke-linejoin="round"/>
+            <path d="M50 6l12.5 28 30.5 3-23 20.5 7 30L50 70 23 87.5l7-30L7 37l30.5-3z" transform="translate(50 52) scale(.6) translate(-50 -50)" fill="none" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"/>
+        </symbol>
+    </svg>
 
-        <!-- Offer to bring over progress that was saved only in this browser -->
-        <div id="import-banner" class="hidden bg-amber-50 border border-amber-200 rounded-2xl px-3 py-2 flex flex-wrap items-center justify-between gap-2">
-            <p class="text-xs font-bold text-amber-800">We found progress saved only in this browser. Bring it into the shared tracker?</p>
-            <div class="flex gap-2">
-                <button id="import-btn" onclick="doImport()" class="px-3 py-1 rounded-full bg-amber-400 hover:bg-amber-500 text-white font-extrabold text-xs">Import it</button>
-                <button onclick="dismissImport()" class="px-3 py-1 rounded-full bg-white hover:bg-amber-100 text-amber-700 font-bold text-xs border border-amber-200">Not now</button>
-            </div>
-        </div>
+    <div class="relative w-[calc(100%-1.5rem)] max-w-6xl mx-auto mt-4 mb-10">
+    <main class="frame px-3 sm:px-6 pt-4 pb-10 space-y-5">
 
         <!-- 1. HERO SECTION -->
-        <section class="bg-gradient-to-br from-pink-100 via-purple-100 to-pink-50 rounded-3xl p-3.5 sm:p-4 border-3 border-pink-200 shadow-sm relative overflow-hidden">
-            <div class="absolute -top-4 -right-4 text-pink-200 opacity-40 pointer-events-none">
-                <svg width="100" height="100" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            </div>
+        <section class="bg-gradient-to-br from-[#FFD9E5] via-[#FFE6D3] to-[#FFF0C4] rounded-3xl p-3.5 sm:p-4 border-3 border-[#E58AA3] shadow-sm relative overflow-hidden">
 
             <div class="relative z-10 space-y-3">
-                <h1 class="text-center text-lg sm:text-2xl font-black text-slate-800 tracking-tight">Girlies' 30-Day growth challenge</h1>
+                <h1 class="text-center leading-tight">
+                    <span class="slab text-xl sm:text-3xl">Girlies' 30-Day Creative</span>
+                    <span class="script text-3xl sm:text-5xl align-middle ml-1">challenge</span>
+                </h1>
 
                 <!-- HERO CHARACTER CARDS GRID (4 PARTICIPANTS) -->
                 <div id="hero-characters-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
@@ -145,7 +173,7 @@
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
                     <span class="hidden sm:inline text-[11px] font-bold text-slate-400">Tap a card to log it</span>
-                    <button onclick="openQuestForm('add')" class="px-3 py-1.5 rounded-full bg-pink-400 hover:bg-pink-500 text-white font-extrabold text-xs shadow-sm transition">+ Add quest</button>
+                    <button onclick="openQuestForm('add')" class="px-3 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-xs shadow-sm transition">+ Add quest</button>
                 </div>
             </div>
 
@@ -153,6 +181,15 @@
         </section>
 
     </main>
+
+    <!-- poster-style corner stars -->
+    <div aria-hidden="true" class="pointer-events-none">
+        <svg viewBox="0 0 100 100" class="absolute -top-7 -right-4 w-14 sm:w-20 rotate-12 z-20"><use href="#star-shape"/></svg>
+        <svg viewBox="0 0 100 100" class="absolute top-9 sm:top-14 -right-3 w-5 sm:w-7 rotate-6 z-20"><use href="#star-shape"/></svg>
+        <svg viewBox="0 0 100 100" class="absolute -bottom-7 -left-4 w-14 sm:w-20 -rotate-12 z-20"><use href="#star-shape"/></svg>
+        <svg viewBox="0 0 100 100" class="absolute bottom-10 sm:bottom-14 -left-3 w-7 sm:w-10 rotate-12 z-20"><use href="#star-shape"/></svg>
+    </div>
+    </div>
 
     <!-- LOG / PROOF MODAL -->
     <div id="challenge-modal" class="fixed inset-0 modal-bg z-50 flex items-center justify-center p-4 hidden">
@@ -175,7 +212,7 @@
             <p id="modal-error" class="hidden text-[11px] font-bold text-rose-500"></p>
 
             <div class="flex space-x-2 pt-1">
-                <button id="modal-save-btn" onclick="saveChallengeModalData()" class="flex-1 bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">
+                <button id="modal-save-btn" onclick="saveChallengeModalData()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">
                     Save Updates ✨
                 </button>
                 <button onclick="closeChallengeModal()" class="px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-xs transition">
@@ -203,45 +240,45 @@
 
     <!-- KICK-OFF BANNER CEREMONIAL MODAL -->
     <div id="banner-modal" class="fixed inset-0 modal-bg z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-gradient-to-br from-pink-100 via-purple-100 to-amber-50 rounded-3xl border-4 border-pink-300 max-w-lg w-full p-6 shadow-2xl relative text-center space-y-5 max-h-[92vh] overflow-y-auto">
+        <div class="bg-gradient-to-br from-pink-100 via-orange-100 to-amber-100 rounded-3xl border-4 border-[#CF5171] max-w-lg w-full p-6 shadow-2xl relative text-center space-y-5 max-h-[92vh] overflow-y-auto">
             <button onclick="closeBannerModal()" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-lg leading-none">✕</button>
 
             <div class="space-y-1">
                 <span class="text-3xl">🎀</span>
                 <h2 class="text-xl font-black text-slate-800">OFFICIAL KICK-OFF CEREMONY</h2>
-                <p class="text-xs font-bold text-pink-600">Girlies' 30-Day Growth Challenge Pact · Kick-off 2026.10.20</p>
+                <p class="text-xs font-bold text-orange-700">Girlies' 30-Day Creative Challenge Pact · Kick-off 2026.10.21</p>
             </div>
 
             <div class="bg-white/80 rounded-2xl p-4 border border-pink-200 text-left space-y-3">
                 <p class="text-xs text-slate-700 leading-relaxed font-semibold">
-                    "We, the girlies (<span id="banner-names"></span>), hereby commit to 30 days of growth, self-love, and accountability. Any order, any pace — we support each other's full transformation!"
+                    "We, the girlies (<span id="banner-names"></span>), hereby commit to 30 days of creativity, growth, and cheering each other on. Any order, any pace — we make things we're proud of, together!"
                 </p>
                 <div id="banner-avatars" class="flex justify-around pt-2 border-t border-pink-100"></div>
             </div>
 
-            <p class="text-[11px] text-pink-500 font-bold">Screenshot this banner for your shared Instagram account! 📸</p>
+            <p class="text-[11px] text-orange-600 font-bold">Screenshot this banner for your shared Instagram account! 📸</p>
 
-            <button onclick="closeBannerModal()" class="w-full bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-xs transition">
+            <button onclick="closeBannerModal()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-xs transition">
                 Close Banner View
             </button>
         </div>
     </div>
 
     <!-- PASSCODE GATE -->
-    <div id="gate" class="fixed inset-0 z-[100] bg-gradient-to-br from-pink-100 via-purple-100 to-pink-50 flex items-center justify-center p-4">
-        <form id="gate-form" onsubmit="submitGate(event)" class="hidden bg-white rounded-3xl border-4 border-pink-200 max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
-            <span class="text-4xl">🌸</span>
+    <div id="gate" class="stripes fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <form id="gate-form" onsubmit="submitGate(event)" class="hidden bg-[#FFE3EC] rounded-3xl border-4 border-[#CF5171] max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
+            <span class="text-4xl">🎨</span>
             <div class="space-y-1">
-                <h2 class="text-lg font-black text-slate-800">Girlies' 30-Day growth challenge</h2>
-                <p class="text-xs font-bold text-pink-600">Enter the group passcode to step in.</p>
+                <h2 class="leading-tight"><span class="slab text-lg">Girlies' 30-Day Creative</span> <span class="script text-3xl align-middle">challenge</span></h2>
+                <p class="text-xs font-bold text-orange-700">Enter the group passcode to step in.</p>
             </div>
-            <input id="gate-input" type="password" autocomplete="current-password" placeholder="Passcode" class="w-full px-4 py-2.5 text-sm text-center rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+            <input id="gate-input" type="password" autocomplete="current-password" placeholder="Passcode" class="w-full px-4 py-2.5 text-sm text-center rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-orange-300">
             <p id="gate-error" class="text-[11px] font-bold text-rose-500 min-h-[1rem]"></p>
-            <button id="gate-btn" type="submit" class="w-full bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-sm shadow-md transition">Enter ✨</button>
+            <button id="gate-btn" type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-sm shadow-md transition">Enter ✨</button>
         </form>
         <div id="gate-loading" class="hidden text-center space-y-2">
-            <div class="text-4xl animate-pulse">🌸</div>
-            <p id="gate-loading-text" class="text-xs font-bold text-pink-600">Opening your challenge…</p>
+            <div class="text-4xl animate-pulse">🎨</div>
+            <p id="gate-loading-text" class="text-xs font-bold text-orange-700">Opening your challenge…</p>
         </div>
     </div>
 
@@ -290,9 +327,9 @@
         }
 
         // ==========================================================
-        // 1. DATES + DAY COUNTER  (Day-1 = 2026.10.20)
+        // 1. DATES  (calendar Day-1 = 2026.10.21; no countdown is shown anywhere)
         // ==========================================================
-        const START_DATE = new Date(2026, 9, 20);
+        const START_DATE = new Date(2026, 9, 21);
         const TOTAL_DAYS = 30;
         const DAY_MS = 86400000;
         const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -308,18 +345,7 @@
 
         function renderHeaderClock() {
             const now = new Date();
-            const dn = currentDayNumber();
             document.getElementById('header-date').textContent = `${WEEKDAYS[now.getDay()]} · ${fmtDate(now)}`;
-            let label;
-            if (dn <= 0) {
-                const left = 1 - dn;
-                label = `Day-0 · starts in ${left} day${left === 1 ? '' : 's'}`;
-            } else if (dn <= TOTAL_DAYS) {
-                label = `Day-${dn} of ${TOTAL_DAYS}`;
-            } else {
-                label = `Day-${dn} · Challenge complete 🎉`;
-            }
-            document.getElementById('header-day').textContent = label;
         }
 
         // ==========================================================
@@ -400,6 +426,25 @@
             letters: '<rect x="12" y="6" width="38" height="50" rx="5" fill="#fff" stroke="#D8B4F8" stroke-width="3"/><path d="M20 18h22M20 26h22M20 34h14" stroke="#E9D5FF" stroke-width="3.5" stroke-linecap="round"/>' + heart(43, 46, 0.9, '#FF8FAB'),
             party: '<path d="M6 58l14-38 24 24z" fill="#FDE047"/><path d="M13 42l13 13M20 26l20 20" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><circle cx="42" cy="14" r="3.5" fill="#FF8FAB"/><circle cx="54" cy="28" r="3.5" fill="#A5D8FF"/><rect x="30" y="6" width="6" height="6" fill="#C084FC" transform="rotate(20 33 9)"/><path d="M34 26c7-7 11-3 15-11" stroke="#FF8FAB" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="54" cy="10" r="2.5" fill="#86EFAC"/>',
             // extra illustrations for custom quests
+            // warm, orange-and-pink illustrations for the creative quest list
+            dance: '<circle cx="30" cy="12" r="7" fill="#F28C38"/><path d="M30 20v18M30 26L14 14M30 26l18-8M30 38L18 56M30 38l14 8 4 10" stroke="#CF5171" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M53 6v15" stroke="#F2B544" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="48.5" cy="22" rx="5.5" ry="4" fill="#F2B544"/><path d="M53 6l6 3" stroke="#F2B544" stroke-width="3.5" stroke-linecap="round"/>',
+            movie: '<rect x="6" y="28" width="52" height="28" rx="5" fill="#CF5171"/><path d="M6 25l4-13 48 8-3 13z" fill="#FFF4E0"/><path d="M15 14l-4 12M27 16l-4 12M39 18l-4 12M51 20l-4 12" stroke="#F28C38" stroke-width="5.5" stroke-linecap="round"/><circle cx="32" cy="43" r="8" fill="#F2B544"/><path d="M29.5 39l7 4-7 4z" fill="#CF5171"/>',
+            edit: '<rect x="6" y="8" width="52" height="34" rx="6" fill="#CF5171"/><path d="M27 17l14 8-14 8z" fill="#FFF4E0"/><rect x="6" y="48" width="14" height="9" rx="2.5" fill="#F2B544"/><rect x="22" y="48" width="20" height="9" rx="2.5" fill="#F28C38"/><rect x="44" y="48" width="14" height="9" rx="2.5" fill="#FF8FAB"/>',
+            travel: '<path d="M32 6L61 42Q32 55 3 42z" fill="#F2B544"/><path d="M32 6L22 47M32 6l10 41M32 6L12 45M32 6l20 39" stroke="#E8962B" stroke-width="1.8" opacity=".75"/><path d="M13 47q19 9 38 0" stroke="#CF5171" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M19 49v9M45 49v9" stroke="#CF5171" stroke-width="3.2" stroke-linecap="round"/>',
+            mic: '<rect x="22" y="5" width="20" height="31" rx="10" fill="#CF5171"/><path d="M26 15h12M26 21h12M26 27h12" stroke="#FFD6E0" stroke-width="2.5" stroke-linecap="round"/><path d="M13 29a19 19 0 0 0 38 0" stroke="#F28C38" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M32 48v9M22 58h20" stroke="#F28C38" stroke-width="4.5" stroke-linecap="round"/>',
+            dessert: '<path d="M14 34h36l-5 22H19z" fill="#F28C38"/><path d="M23 35l2 20M32 35v20M41 35l-2 20" stroke="#FFD2A8" stroke-width="2" opacity=".85"/><path d="M11 35a21 15 0 0 1 42 0z" fill="#FF8FAB"/><path d="M20 25a12 10 0 0 1 24 0z" fill="#FFB3C6"/><circle cx="32" cy="13" r="5" fill="#CF5171"/><path d="M32 8q2-5 7-5" stroke="#4C8A3C" stroke-width="2.5" fill="none" stroke-linecap="round"/>',
+            album: '<rect x="4" y="10" width="44" height="44" rx="5" fill="#FFD2A8"/><circle cx="39" cy="36" r="21" fill="#5B2A12"/><circle cx="39" cy="36" r="14" fill="none" stroke="#7A3F25" stroke-width="1.5"/><circle cx="39" cy="36" r="8" fill="#F28C38"/><circle cx="39" cy="36" r="2.2" fill="#FFF4E0"/><path d="M11 22h20M11 30h13" stroke="#CF5171" stroke-width="3.5" stroke-linecap="round"/>',
+            poem: '<path d="M14 8h30a6 6 0 0 1 6 6v36a6 6 0 0 0 6 6H20a6 6 0 0 1-6-6z" fill="#FFF4E0" stroke="#F2B544" stroke-width="2.5" stroke-linejoin="round"/><path d="M21 20h22M21 28h22M21 36h14" stroke="#E8962B" stroke-width="3" stroke-linecap="round"/><path d="M45 47l14-26c-8 2-14 8-17 16z" fill="#CF5171"/><path d="M45 47l-5 8" stroke="#CF5171" stroke-width="2.5" stroke-linecap="round"/>',
+            season: '<path d="M32 6c14 8 22 20 14 34-4 7-10 9-14 9s-10-2-14-9C10 26 18 14 32 6z" fill="#F28C38"/><path d="M32 14v44M32 26l-9-7M32 34l11-8M32 42l-8-6" stroke="#C85A14" stroke-width="3" stroke-linecap="round" fill="none"/><circle cx="53" cy="12" r="6" fill="#F2B544"/>',
+            collage: '<rect x="6" y="10" width="28" height="24" rx="3" fill="#FF8FAB" transform="rotate(-8 20 22)"/><rect x="28" y="8" width="28" height="22" rx="3" fill="#F2B544" transform="rotate(7 42 19)"/><rect x="12" y="30" width="30" height="24" rx="3" fill="#F28C38" transform="rotate(4 27 42)"/>' + heart(47, 44, 0.9, '#CF5171') + '<path d="M17 18h10M36 15h12" stroke="#FFF4E0" stroke-width="3" stroke-linecap="round"/>',
+            certificate: '<path d="M40 44l-3 13 9-4 9 4-3-13" fill="#F28C38"/><rect x="5" y="9" width="54" height="37" rx="4" fill="#FFF4E0" stroke="#F2B544" stroke-width="3"/><path d="M13 19h38M13 27h38M13 35h20" stroke="#E8962B" stroke-width="3" stroke-linecap="round"/><circle cx="46" cy="40" r="9" fill="#CF5171"/><circle cx="46" cy="40" r="4.5" fill="none" stroke="#FFD6E0" stroke-width="2"/>',
+            accessory: '<circle cx="32" cy="41" r="15" fill="none" stroke="#F2B544" stroke-width="7"/><path d="M22 18l5-9h10l5 9-10 13z" fill="#FF8FAB"/><path d="M22 18h20M27 9l5 9 5-9M32 18v13" stroke="#CF5171" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M52 8l1.8 4.2L58 14l-4.2 1.8L52 20l-1.8-4.2L46 14l4.2-1.8z" fill="#F2B544"/>',
+            poster: '<rect x="12" y="4" width="40" height="54" rx="4" fill="#FFF4E0" stroke="#CF5171" stroke-width="3"/><path d="M32 12l3.5 7.5 8.2 1-6 5.7 1.6 8.1-7.3-4-7.3 4 1.6-8.1-6-5.7 8.2-1z" fill="#F28C38"/><path d="M20 43h24M23 50h18" stroke="#CF5171" stroke-width="3.5" stroke-linecap="round"/>',
+            romance: '<rect x="8" y="6" width="38" height="50" rx="5" fill="#FFF4E0" stroke="#CF5171" stroke-width="3"/>' + heart(27, 24, 1.25, '#FF8FAB') + '<path d="M16 41h22M16 48h14" stroke="#E8962B" stroke-width="3" stroke-linecap="round"/><path d="M42 57l-2-8 14-27 6 3-14 27z" fill="#F2B544"/><path d="M40 49l-2 8 7-3z" fill="#CF5171"/>',
+            fashion: '<path d="M32 4a4 4 0 1 1 4 4v3" stroke="#7A3F25" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M32 11L10 26h44z" fill="none" stroke="#7A3F25" stroke-width="3" stroke-linejoin="round"/><path d="M23 26l2 12h14l2-12z" fill="#CF5171"/><path d="M25 38L12 58h40L39 38z" fill="#FF8FAB"/><path d="M25 38h14" stroke="#F2B544" stroke-width="4" stroke-linecap="round"/>',
+            places: '<path d="M32 4c-10 0-17 7-17 16 0 12 17 30 17 30s17-18 17-30c0-9-7-16-17-16z" fill="#CF5171"/><circle cx="32" cy="20" r="7" fill="#FFF4E0"/><path d="M7 59q13-9 25-3t25-3" stroke="#F28C38" stroke-width="3.5" stroke-dasharray="1 7" stroke-linecap="round" fill="none"/>',
+            avatar: '<circle cx="32" cy="32" r="20" fill="#FFD9B8"/><path d="M12 32c0-14 9-24 20-24s20 10 20 24c-7-3-11-9-13-15-6 8-16 14-27 15z" fill="#CF5171"/><circle cx="25" cy="35" r="2.6" fill="#5B2A12"/><circle cx="39" cy="35" r="2.6" fill="#5B2A12"/><path d="M27 43q5 4 10 0" stroke="#CF5171" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M55 6l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#F2B544"/>',
+            world: '<circle cx="30" cy="32" r="23" fill="#FFD9B8" stroke="#F28C38" stroke-width="3"/><ellipse cx="30" cy="32" rx="10" ry="23" fill="none" stroke="#F28C38" stroke-width="2.5"/><path d="M7 32h46M11 20h38M11 44h38" stroke="#F28C38" stroke-width="2.5"/><circle cx="47" cy="47" r="12" fill="#CF5171"/><path d="M43.5 41l10 6-10 6z" fill="#FFF4E0"/>',
             star: '<path d="M32 5l8 17 18 2-13 13 3.5 18L32 46l-16.5 9L19 37 6 24l18-2z" fill="#FDE047" stroke="#FACC15" stroke-width="2.5" stroke-linejoin="round"/>',
             heart: heart(32, 32, 1.9, '#FF8FAB') + '<path d="M16 26c0-5 4-8 8-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>',
             sparkle: '<path d="M30 6l7 20 20 7-20 7-7 20-7-20-20-7 20-7z" fill="#C4B5FD"/><path d="M52 6l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#FDE047"/>',
@@ -409,8 +454,8 @@
         };
 
         const TILE_GRADS = [
-            ['#FFE5EC', '#FFD1DF'], ['#F0E6FF', '#E3D2FF'], ['#FFF3BF', '#FFE7A3'],
-            ['#E3F6E8', '#CDEFD6'], ['#E0F2FE', '#CDE8FB'], ['#FFE8D6', '#FFD7BA']
+            ['#FFE0EA', '#FFC9DA'], ['#FFE9D2', '#FFD2A8'], ['#FFF0C4', '#FFE08A'],
+            ['#FFD9E5', '#FFB8CE'], ['#FFE5D0', '#FFC79A'], ['#FFF3D6', '#FFE3A3']
         ];
 
         function iconSvg(key) {
@@ -423,17 +468,14 @@
             const hasImg = typeof ch.img === 'string' && ch.img.startsWith('data:image/');
             const body = hasImg
                 ? `<img src="${ch.img}" alt="" class="w-full h-full object-cover">`
-                : `<div class="w-full h-full p-[14%]">${iconSvg(ch.icon)}</div>`;
+                : `<div class="w-full h-full p-1.5">${iconSvg(ch.icon)}</div>`;
             return `<div class="${cls} overflow-hidden flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,${g[0]},${g[1]})">${body}</div>`;
         }
 
         // ==========================================================
         // 4. STATE (localStorage)
         // ==========================================================
-        const DEFAULT_QUEST_COUNT = 30;
-        const LEGACY_KEY = 'girlies_growth_v7';      // the old browser-only save
         const PASS_KEY = 'girlies_pass_v1';
-        const IMPORT_FLAG = 'girlies_import_done_v1';
         const POLL_MS = 8000;
 
         let passcode = '';
@@ -566,7 +608,6 @@
                 await refreshState(true);
                 hideGate();
                 startPolling();
-                maybeOfferImport();
             } catch (e) {
                 if (e.code === 'auth') return; // gate is already showing
                 setGateView('loading', 'Waking the server up — the first load can take up to a minute…');
@@ -580,45 +621,6 @@
             if (!passcode) { setGateView('form'); return; }
             setGateView('loading', 'Opening your challenge…');
             await connect();
-        }
-
-        // ---------- bring over progress saved in this browser before the shared version ----------
-        function readLegacy() {
-            const raw = lsGet(LEGACY_KEY);
-            if (!raw) return null;
-            try { const s = JSON.parse(raw); return s && typeof s === 'object' ? s : null; } catch (e) { return null; }
-        }
-        function legacyHasData(s) {
-            if (!s) return false;
-            const anyDone = Object.values(s.completions || {}).some(m => m && Object.values(m).some(v => v === true));
-            const customQuest = (Array.isArray(s.challenges) ? s.challenges : []).some(c => c && c.id > DEFAULT_QUEST_COUNT);
-            const customLook = Object.keys(s.customs || {}).length > 0;
-            return anyDone || customQuest || customLook;
-        }
-        function maybeOfferImport() {
-            if (lsGet(IMPORT_FLAG)) return;
-            if (!legacyHasData(readLegacy())) return;
-            document.getElementById('import-banner').classList.remove('hidden');
-        }
-        function dismissImport() { document.getElementById('import-banner').classList.add('hidden'); }
-        async function doImport() {
-            const s = readLegacy();
-            if (!s) { dismissImport(); return; }
-            const btn = document.getElementById('import-btn');
-            btn.disabled = true;
-            try {
-                const r = await api('POST', '/api/import', {
-                    state: { challenges: s.challenges, completions: s.completions, proofs: s.proofs, dates: s.dates, customs: s.customs }
-                });
-                lsSet(IMPORT_FLAG, '1');
-                dismissImport();
-                await refreshState(true);
-                showToast(`Imported ${r.progress} quest${r.progress === 1 ? '' : 's'} ✨`);
-            } catch (e) {
-                if (e.code !== 'auth') showToast('Import failed: ' + e.message);
-            } finally {
-                btn.disabled = false;
-            }
         }
 
         const getChallenge = id => state.challenges.find(c => c.id === id);
@@ -772,7 +774,7 @@
                                 <h3 class="text-xs font-black text-slate-800 flex items-center space-x-1"><span>📅</span><span>30-Day Activity Calendar</span></h3>
                                 <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-200">🔥 ${streak} Day Streak</span>
                             </div>
-                            <p class="text-[10px] font-bold text-slate-400">Filled days = quests logged that day (Day-1 is 2026.10.20)</p>
+                            <p class="text-[10px] font-bold text-slate-400">Filled days = quests logged that day (Day-1 is 2026.10.21)</p>
                             <div class="grid grid-cols-6 gap-1.5 pt-1">
                                 ${counts.map((n, i) => {
                                     const dayNum = i + 1;
@@ -833,7 +835,7 @@
                                                 <span class="text-xs font-black text-emerald-800 truncate">🏅 ${esc(c.title)}</span>
                                             </div>
                                             <p class="text-[10px] font-bold text-slate-400">${ds ? esc(fmtDate(parseLocal(ds))) + ' · ' : ''}Medal earned</p>
-                                            ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-[10px] text-pink-600 underline font-bold block truncate hover:text-pink-700">🔗 Proof link</a>` : ''}
+                                            ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-[10px] text-orange-700 underline font-bold block truncate hover:text-pink-700">🔗 Proof link</a>` : ''}
                                             ${proof.note ? `<p class="text-[10px] text-slate-600 italic bg-white/80 p-1 rounded-md border border-emerald-100">"${esc(proof.note)}"</p>` : ''}
                                         </div>
                                     </div>`;
@@ -869,12 +871,17 @@
         // ==========================================================
         // 7. RENDER: CHALLENGE VAULT
         // ==========================================================
+        function questNo(ch) {
+            const i = state.challenges.findIndex(c => c.id === ch.id);
+            return String((i >= 0 ? i : state.challenges.length) + 1).padStart(2, '0');
+        }
+
         function challengeCardInner(ch) {
             const badges = getFriends().map(friend => {
                 const done = isDone(ch.id, friend.id);
                 return `
                     <div class="relative" title="${esc(friend.name)}: ${done ? 'Completed' : 'Pending'}">
-                        <div class="w-6 h-6 rounded-full border border-pink-200 p-0.5 bg-white transition-all ${done ? 'opacity-100 scale-105' : 'filter grayscale opacity-30'}">
+                        <div class="w-6 h-6 rounded-full border border-orange-200 p-0.5 bg-white transition-all ${done ? 'opacity-100 scale-105' : 'filter grayscale opacity-30'}">
                             ${pixelAvatar(friend.palette)}
                         </div>
                         ${done ? '<div class="absolute -top-1 -right-1 bg-emerald-500 text-white rounded-full w-3 h-3 flex items-center justify-center text-[7px] font-black shadow-sm">✓</div>' : ''}
@@ -882,9 +889,13 @@
             }).join('');
 
             return `
-                ${visualHtml(ch, 'w-full h-24 rounded-xl')}
+                <div class="relative">
+                    ${visualHtml(ch, 'w-full h-24 rounded-xl')}
+                    <span class="absolute top-1.5 left-1.5 text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm" style="background:#F2B544;color:#6B2D0E">#${questNo(ch)}</span>
+                </div>
                 <h3 class="text-xs font-black text-slate-800 line-clamp-2 min-h-[2rem] leading-snug">${esc(ch.title)}</h3>
-                <div class="flex items-center justify-between pt-2 border-t border-pink-50">
+                ${ch.info ? `<p class="text-[10px] font-semibold text-slate-500 leading-snug line-clamp-3">${esc(ch.info)}</p>` : ''}
+                <div class="flex items-center justify-between pt-2 border-t border-orange-100 mt-auto">
                     <span class="text-[10px] font-bold text-slate-400">Status</span>
                     <div class="flex space-x-1">${badges}</div>
                 </div>`;
@@ -897,7 +908,7 @@
 
             state.challenges.forEach(ch => {
                 const card = document.createElement('div');
-                card.className = 'glow-card bg-white rounded-2xl p-2.5 border-2 border-pink-100 shadow-sm flex flex-col justify-between cursor-pointer space-y-2';
+                card.className = 'glow-card bg-white rounded-2xl p-2.5 border-2 border-orange-200 shadow-sm flex flex-col justify-between cursor-pointer space-y-2';
                 card.onclick = () => openChallengeModal(ch.id);
                 card.innerHTML = challengeCardInner(ch);
                 grid.appendChild(card);
@@ -914,7 +925,10 @@
         // 8. LOG / PROOF MODAL
         // ==========================================================
         let activeModalChallengeId = null;
-        let modalSnapshot = {};
+        let modalSnapshot = {};   // what the server has for each person
+        let modalDraft = {};      // what is currently typed / ticked
+        let modalActive = null;   // whose square is selected
+        let modalUrlError = false;
         let savingProgress = false;
 
         function openChallengeModal(chId) {
@@ -930,56 +944,107 @@
 
             activeModalChallengeId = chId;
             modalSnapshot = {};
+            modalDraft = {};
             getFriends().forEach(f => {
                 const p = (state.proofs[chId] && state.proofs[chId][f.id]) || {};
-                modalSnapshot[f.id] = { done: isDone(chId, f.id), url: p.url || '', note: p.note || '' };
+                const snap = { done: isDone(chId, f.id), url: p.url || '', note: p.note || '' };
+                modalSnapshot[f.id] = snap;
+                modalDraft[f.id] = Object.assign({}, snap);
             });
+            modalActive = null;
+            modalUrlError = false;
+
             document.getElementById('more-menu').classList.add('hidden');
             document.getElementById('modal-error').classList.add('hidden');
 
             document.getElementById('modal-header').innerHTML = `
                 <div class="flex items-center gap-3">
-                    ${visualHtml(ch, 'w-14 h-14 rounded-2xl')}
+                    ${visualHtml(ch, 'w-16 h-16 rounded-2xl')}
                     <div class="min-w-0">
+                        <span class="inline-block text-[10px] font-black px-2 py-0.5 rounded-full" style="background:#F2B544;color:#6B2D0E">Quest #${questNo(ch)}</span>
                         <h3 class="text-base font-extrabold text-slate-800 leading-snug">${esc(ch.title)}</h3>
-                        <span class="text-xs text-pink-500 font-bold">Who completed it?</span>
                     </div>
-                </div>`;
+                </div>
+                ${ch.info ? `<p class="text-xs font-semibold text-slate-500 leading-snug mt-2">${esc(ch.info)}</p>` : ''}`;
 
-            const list = document.getElementById('modal-friends-list');
-            list.innerHTML = '';
-            getFriends().forEach(friend => {
-                const done = isDone(chId, friend.id);
-                const proof = (state.proofs[chId] && state.proofs[chId][friend.id]) || { url: '', note: '' };
-                const row = document.createElement('div');
-                row.className = 'rounded-xl border border-pink-100 p-2 space-y-1.5';
-                row.innerHTML = `
-                    <label class="flex items-center justify-between cursor-pointer">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-6 h-6 rounded-full border border-pink-200 p-0.5 bg-white">${pixelAvatar(friend.palette)}</div>
-                            <span class="text-xs font-bold text-slate-700">${esc(friend.name)}</span>
-                        </div>
-                        <div class="flex items-center space-x-1.5">
-                            <span id="status-${friend.id}" class="text-[10px] font-bold ${done ? 'text-emerald-600' : 'text-slate-400'}">${done ? '🏅 Medal' : '⏳ Pending'}</span>
-                            <input type="checkbox" id="chk-${friend.id}" ${done ? 'checked' : ''} onchange="onFriendCheck('${friend.id}')" class="w-4 h-4 accent-pink-500 rounded">
-                        </div>
-                    </label>
-                    <div id="proof-${friend.id}" class="${done ? '' : 'hidden'} space-y-1.5">
-                        <input type="url" id="url-${friend.id}" value="${esc(proof.url || '')}" placeholder="Instagram / TikTok proof link" class="w-full px-3 py-1.5 text-xs rounded-lg border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
-                        <input type="text" id="note-${friend.id}" value="${esc(proof.note || '')}" maxlength="140" placeholder="Quick reflection (optional)" class="w-full px-3 py-1.5 text-xs rounded-lg border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
-                    </div>`;
-                list.appendChild(row);
-            });
-
+            renderModalRoles();
             document.getElementById('challenge-modal').classList.remove('hidden');
         }
 
-        function onFriendCheck(fid) {
-            const checked = document.getElementById('chk-' + fid).checked;
-            document.getElementById('proof-' + fid).classList.toggle('hidden', !checked);
-            const st = document.getElementById('status-' + fid);
-            st.textContent = checked ? '🏅 Medal' : '⏳ Pending';
-            st.className = 'text-[10px] font-bold ' + (checked ? 'text-emerald-600' : 'text-slate-400');
+        function renderModalRoles() {
+            const friends = getFriends();
+            const tiles = friends.map(f => {
+                const p = pal(f);
+                const d = modalDraft[f.id] || { done: false };
+                const active = modalActive === f.id;
+                return `
+                    <button type="button" onclick="selectModalPerson('${f.id}')" aria-pressed="${active}" aria-label="${esc(f.name)}"
+                        class="relative aspect-square rounded-2xl border-2 flex flex-col items-center justify-center gap-0.5 p-1 transition ${d.done ? '' : 'bg-white'}"
+                        style="border-color:${active ? p.glow : hexToRgba(p.glow, 0.35)}; ${d.done ? `background:${hexToRgba(p.glow, 0.16)};` : ''} ${active ? `box-shadow:0 0 0 2px ${p.glow}, 0 0 14px 2px ${hexToRgba(p.glow, 0.4)};` : ''}">
+                        <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl p-0.5 ${d.done ? '' : 'opacity-60'}" style="background:${p.body}">${pixelAvatar(f.palette)}</div>
+                        <span class="text-[11px] font-black text-slate-700 truncate max-w-full">${esc(f.name)}</span>
+                        <span class="text-[9px] font-extrabold ${d.done ? 'text-emerald-600' : 'text-slate-400'}">${d.done ? '🏅 Done' : '⏳ Pending'}</span>
+                    </button>`;
+            }).join('');
+
+            let panel;
+            if (!modalActive) {
+                panel = `<p class="text-[11px] font-bold text-slate-400 text-center py-2">Tap your square to log this quest.</p>`;
+            } else {
+                const f = getFriend(modalActive);
+                const p = pal(f);
+                const d = modalDraft[modalActive];
+                panel = `
+                    <div class="rounded-2xl border p-3 space-y-3" style="border-color:${hexToRgba(p.glow, 0.45)}; background:${hexToRgba(p.glow, 0.07)}">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-black text-slate-800 truncate">${esc(f.name)}'s entry</span>
+                            <label class="flex items-center gap-1.5 cursor-pointer text-xs font-extrabold text-slate-700 shrink-0">
+                                <input type="checkbox" id="done-chk" ${d.done ? 'checked' : ''} onchange="toggleModalDone(this.checked)" class="w-4 h-4 accent-orange-500 rounded">
+                                Completed
+                            </label>
+                        </div>
+                        ${d.done ? `
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <label for="proof-url" class="text-xs font-bold text-slate-700">Proof link</label>
+                                    <span class="text-[9px] font-black uppercase tracking-wide text-white bg-orange-500 px-1.5 py-0.5 rounded-full">Required</span>
+                                </div>
+                                <input type="url" id="proof-url" value="${esc(d.url)}" oninput="onModalInput('url', this.value)" placeholder="Paste your Instagram / TikTok link" class="w-full px-3 py-2 text-xs rounded-xl border ${modalUrlError ? 'border-rose-500 ring-2 ring-rose-200' : 'border-orange-200'} bg-white focus:outline-none focus:ring-2 focus:ring-orange-300">
+                            </div>
+                            <div class="space-y-1">
+                                <label for="proof-note" class="text-xs font-bold text-slate-700">Reflection <span class="font-semibold text-slate-400">(optional)</span></label>
+                                <input type="text" id="proof-note" maxlength="140" value="${esc(d.note)}" oninput="onModalInput('note', this.value)" placeholder="How did it feel?" class="w-full px-3 py-2 text-xs rounded-xl border border-orange-200 bg-white focus:outline-none focus:ring-2 focus:ring-orange-300">
+                            </div>
+                        ` : `
+                            <p class="text-[11px] font-bold text-slate-400">Tick “Completed” when you've done it, then add your proof link.</p>
+                        `}
+                    </div>`;
+            }
+
+            document.getElementById('modal-friends-list').innerHTML = `
+                <div class="grid grid-cols-4 gap-2">${tiles}</div>
+                ${panel}`;
+        }
+
+        function selectModalPerson(fid) {
+            modalActive = fid;
+            modalUrlError = false;
+            document.getElementById('modal-error').classList.add('hidden');
+            renderModalRoles();
+        }
+
+        function toggleModalDone(checked) {
+            if (!modalActive) return;
+            modalDraft[modalActive].done = checked;
+            modalUrlError = false;
+            document.getElementById('modal-error').classList.add('hidden');
+            renderModalRoles();
+            if (checked) setTimeout(() => { const i = document.getElementById('proof-url'); if (i) i.focus(); }, 0);
+        }
+
+        function onModalInput(kind, value) {
+            if (!modalActive) return;
+            modalDraft[modalActive][kind] = value;
         }
 
         function closeChallengeModal() {
@@ -1002,39 +1067,39 @@
         async function saveChallengeModalData() {
             if (activeModalChallengeId == null || savingProgress) return;
             const chId = activeModalChallengeId;
-            const friends = getFriends();
             const err = document.getElementById('modal-error');
-
-            // Validate proof links first
-            for (const f of friends) {
-                const checked = document.getElementById('chk-' + f.id).checked;
-                const raw = document.getElementById('url-' + f.id).value.trim();
-                if (checked && raw && !safeUrl(raw)) {
-                    err.textContent = `${f.name}'s proof link needs to start with http:// or https://`;
-                    err.classList.remove('hidden');
-                    return;
-                }
-            }
-            err.classList.add('hidden');
 
             // Only send what changed, so we never overwrite a friend's newer update
             const today = localDateStr();
             const changes = [];
             let newlyCompleted = false;
-            friends.forEach(f => {
-                const checked = document.getElementById('chk-' + f.id).checked;
-                const url = safeUrl(document.getElementById('url-' + f.id).value.trim());
-                const note = document.getElementById('note-' + f.id).value.trim();
-                const snap = modalSnapshot[f.id] || { done: false, url: '', note: '' };
-                if (checked) {
-                    if (!snap.done || snap.url !== url || snap.note !== note) {
-                        changes.push({ challengeId: chId, friendId: f.id, done: true, url, note, date: today });
+
+            for (const f of getFriends()) {
+                const d = modalDraft[f.id];
+                const snap = modalSnapshot[f.id];
+                const url = d.url.trim();
+                const note = d.note.trim();
+                if (d.done) {
+                    const changed = !snap.done || snap.url !== url || snap.note !== note;
+                    if (!changed) continue;
+                    if (!url || !safeUrl(url)) {
+                        modalActive = f.id;
+                        modalUrlError = true;
+                        renderModalRoles();
+                        err.textContent = !url
+                            ? `${f.name}: add a proof link to mark this quest as done.`
+                            : `${f.name}'s proof link needs to start with http:// or https://`;
+                        err.classList.remove('hidden');
+                        setTimeout(() => { const i = document.getElementById('proof-url'); if (i) i.focus(); }, 0);
+                        return;
                     }
+                    changes.push({ challengeId: chId, friendId: f.id, done: true, url: safeUrl(url), note, date: today });
                     if (!snap.done) newlyCompleted = true;
                 } else if (snap.done) {
                     changes.push({ challengeId: chId, friendId: f.id, done: false });
                 }
-            });
+            }
+            err.classList.add('hidden');
 
             if (!changes.length) { closeChallengeModal(); return; }
 
@@ -1066,9 +1131,9 @@
             if (mode === 'edit') {
                 const ch = getChallenge(id);
                 if (!ch) return;
-                formState = { mode, id, title: ch.title, icon: ch.icon || 'star', img: ch.img || null, stage: 'form', error: '', orig: Object.assign({}, ch) };
+                formState = { mode, id, title: ch.title, info: ch.info || '', icon: ch.icon || 'star', img: ch.img || null, stage: 'form', error: '', orig: Object.assign({}, ch) };
             } else {
-                formState = { mode: 'add', id: null, title: '', icon: 'star', img: null, stage: 'form', error: '' };
+                formState = { mode: 'add', id: null, title: '', info: '', icon: 'star', img: null, stage: 'form', error: '' };
             }
             renderQuestForm();
             document.getElementById('quest-modal').classList.remove('hidden');
@@ -1085,7 +1150,7 @@
         }
 
         function draftQuest() {
-            return { id: formState.mode === 'edit' ? formState.id : nextChallengeId(), title: formState.title.trim(), icon: formState.icon, img: formState.img };
+            return { id: formState.mode === 'edit' ? formState.id : nextChallengeId(), title: formState.title.trim(), info: (formState.info || '').trim(), icon: formState.icon, img: formState.img };
         }
 
         function renderQuestForm() {
@@ -1094,7 +1159,7 @@
             if (!f) return;
 
             if (f.stage === 'form') {
-                const draft = { id: f.mode === 'edit' ? f.id : nextChallengeId(), title: f.title, icon: f.icon, img: f.img };
+                const draft = { id: f.mode === 'edit' ? f.id : nextChallengeId(), title: f.title, info: f.info, icon: f.icon, img: f.img };
                 body.innerHTML = `
                     <div class="space-y-4">
                         <div class="pr-6">
@@ -1104,7 +1169,12 @@
 
                         <div class="space-y-1">
                             <label for="quest-title" class="block text-xs font-bold text-slate-700">Quest name</label>
-                            <input id="quest-title" type="text" maxlength="40" value="${esc(f.title)}" oninput="formState.title=this.value" onkeydown="if(event.key==='Enter'){goQuestPreview()}" placeholder="e.g. Dance to one full song" class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                            <input id="quest-title" type="text" maxlength="40" value="${esc(f.title)}" oninput="formState.title=this.value" onkeydown="if(event.key==='Enter'){goQuestPreview()}" placeholder="e.g. Dance to one full song" class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-orange-300">
+                        </div>
+
+                        <div class="space-y-1">
+                            <label for="quest-info" class="block text-xs font-bold text-slate-700">Short info <span class="font-semibold text-slate-400">(what it is, how to show it)</span></label>
+                            <textarea id="quest-info" rows="2" maxlength="140" oninput="formState.info=this.value" placeholder="e.g. Learn a dance and film your take." class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-orange-300">${esc(f.info || '')}</textarea>
                         </div>
 
                         <div class="space-y-2">
@@ -1123,7 +1193,7 @@
                             <div class="grid grid-cols-6 gap-1.5 max-h-40 overflow-y-auto p-1 rounded-xl border border-pink-100">
                                 ${Object.keys(ICONS).map(key => {
                                     const sel = !f.img && f.icon === key;
-                                    return `<button type="button" onclick="formState.icon='${key}'; formState.img=null; renderQuestForm()" aria-label="${key}" class="aspect-square rounded-lg p-1 bg-pink-50/60 hover:bg-pink-100 transition ${sel ? 'ring-2 ring-pink-400 bg-pink-100' : ''}">${iconSvg(key)}</button>`;
+                                    return `<button type="button" onclick="formState.icon='${key}'; formState.img=null; renderQuestForm()" aria-label="${key}" class="aspect-square rounded-lg p-1 bg-pink-50/60 hover:bg-pink-100 transition ${sel ? 'ring-2 ring-orange-400 bg-pink-100' : ''}">${iconSvg(key)}</button>`;
                                 }).join('')}
                             </div>
                         </div>
@@ -1131,7 +1201,7 @@
                         <p id="quest-error" class="${f.error ? '' : 'hidden'} text-[11px] font-bold text-rose-500">${esc(f.error)}</p>
 
                         <div class="flex space-x-2 pt-1">
-                            <button onclick="goQuestPreview()" class="flex-1 bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">Preview →</button>
+                            <button onclick="goQuestPreview()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">Preview →</button>
                             <button onclick="closeQuestForm()" class="px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-xs transition">Cancel</button>
                         </div>
                     </div>`;
@@ -1150,12 +1220,12 @@
                         ` : `
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="space-y-1"><p class="text-[10px] font-black text-slate-400 uppercase text-center">Before</p>${previewCard(f.orig)}</div>
-                                <div class="space-y-1"><p class="text-[10px] font-black text-pink-500 uppercase text-center">After</p>${previewCard(draft)}</div>
+                                <div class="space-y-1"><p class="text-[10px] font-black text-orange-600 uppercase text-center">After</p>${previewCard(draft)}</div>
                             </div>
                         `}
 
                         <div class="flex space-x-2 pt-1">
-                            <button onclick="confirmQuest()" class="flex-1 bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">Confirm &amp; ${f.mode === 'add' ? 'add' : 'save'} ✨</button>
+                            <button onclick="confirmQuest()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">Confirm &amp; ${f.mode === 'add' ? 'add' : 'save'} ✨</button>
                             <button onclick="formState.stage='form'; renderQuestForm()" class="px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-xs transition">← Back to edit</button>
                         </div>
                     </div>`;
@@ -1187,7 +1257,7 @@
             if (!f || f.saving) return;
             f.saving = true;
             const d = draftQuest();
-            const body = { title: d.title, icon: d.icon, img: d.img || null };
+            const body = { title: d.title, info: d.info, icon: d.icon, img: d.img || null };
             try {
                 if (f.mode === 'add') await api('POST', '/api/quests', body);
                 else await api('PUT', '/api/quests/' + f.id, body);
@@ -1270,11 +1340,11 @@
                     <div class="grid grid-cols-2 gap-2">
                         <div class="space-y-1">
                             <label class="block text-xs font-bold text-slate-700">Name</label>
-                            <input type="text" maxlength="14" value="${esc(c.name)}" oninput="custState.name=this.value" class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                            <input type="text" maxlength="14" value="${esc(c.name)}" oninput="custState.name=this.value" class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-orange-300">
                         </div>
                         <div class="space-y-1">
                             <label class="block text-xs font-bold text-slate-700">Vibe</label>
-                            <input type="text" maxlength="28" value="${esc(c.vibe)}" oninput="custState.vibe=this.value" class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                            <input type="text" maxlength="28" value="${esc(c.vibe)}" oninput="custState.vibe=this.value" class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-orange-300">
                         </div>
                     </div>
 
@@ -1291,17 +1361,17 @@
                         <label class="block text-xs font-bold text-slate-700">Emoji</label>
                         <div class="grid grid-cols-8 gap-1">
                             ${EMOJI_CHOICES.map(e => `
-                                <button type="button" onclick="custState.emoji='${e}'; renderCustomize()" class="aspect-square rounded-lg text-base hover:bg-pink-50 ${c.emoji === e ? 'bg-pink-100 ring-2 ring-pink-300' : ''}">${e}</button>
+                                <button type="button" onclick="custState.emoji='${e}'; renderCustomize()" class="aspect-square rounded-lg text-base hover:bg-pink-50 ${c.emoji === e ? 'bg-pink-100 ring-2 ring-orange-300' : ''}">${e}</button>
                             `).join('')}
                         </div>
                         <div class="flex items-center gap-2 pt-1">
                             <span class="text-[10px] font-bold text-slate-400">or type your own:</span>
-                            <input type="text" id="cust-emoji-input" maxlength="8" placeholder="🙂" oninput="onCustomEmoji(this.value)" class="w-16 px-2 py-1 text-center text-sm rounded-lg border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                            <input type="text" id="cust-emoji-input" maxlength="8" placeholder="🙂" oninput="onCustomEmoji(this.value)" class="w-16 px-2 py-1 text-center text-sm rounded-lg border border-pink-200 focus:outline-none focus:ring-2 focus:ring-orange-300">
                         </div>
                     </div>
 
                     <div class="flex space-x-2 pt-1">
-                        <button onclick="saveCustomize()" class="flex-1 bg-pink-400 hover:bg-pink-500 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">Save look ✨</button>
+                        <button onclick="saveCustomize()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">Save look ✨</button>
                         <button onclick="closeCustomizeModal()" class="px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-xs transition">Cancel</button>
                     </div>
                 </div>`;

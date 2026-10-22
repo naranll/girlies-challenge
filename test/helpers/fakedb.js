@@ -4,7 +4,14 @@
 // semantics, and the "$set and $setOnInsert on the same path" conflict error.
 
 const clone = o => structuredClone(o);
-const match = (doc, f) => Object.entries(f).every(([k, v]) => doc[k] === v);
+const cmp = (val, cond) => {
+  if (cond !== null && typeof cond === 'object' && !Array.isArray(cond)) {
+    return Object.entries(cond).every(([op, v]) =>
+      op === '$lte' ? val <= v : op === '$lt' ? val < v : op === '$gte' ? val >= v : op === '$gt' ? val > v : false);
+  }
+  return val === cond;
+};
+const match = (doc, f) => Object.entries(f).every(([k, v]) => cmp(doc[k], v));
 const dup = () => Object.assign(new Error('E11000 duplicate key error'), { code: 11000 });
 
 class Cursor {
@@ -65,6 +72,11 @@ class Collection {
     for (const k of Object.keys(unset)) delete doc[k];
     for (const [k, v] of Object.entries(inc)) doc[k] = (doc[k] || 0) + v;
     return { matchedCount: 1, upsertedCount: 0 };
+  }
+  async deleteMany(f) {
+    const before = this.docs.length;
+    this.docs = this.docs.filter(d => !match(d, f));
+    return { deletedCount: before - this.docs.length };
   }
   async deleteOne(f) {
     const i = this.docs.findIndex(d => match(d, f));
