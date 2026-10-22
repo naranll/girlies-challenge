@@ -29,7 +29,7 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Alfa+Slab+One&family=Yellowtail&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Yellowtail&display=swap');
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -55,14 +55,6 @@
             box-shadow: 0 10px 28px rgba(120, 40, 60, .22);
         }
 
-        .slab {
-            font-family: 'Alfa Slab One', Georgia, serif;
-            color: #F2B544;
-            letter-spacing: .02em;
-            -webkit-text-stroke: 1.5px #CF5171;
-            paint-order: stroke fill;
-            text-shadow: 2px 2px 0 #F7A8B8;
-        }
         .script {
             font-family: 'Yellowtail', 'Brush Script MT', cursive;
             color: #CF5171;
@@ -151,10 +143,7 @@
         <section class="bg-gradient-to-br from-[#FFD9E5] via-[#FFE6D3] to-[#FFF0C4] rounded-3xl p-3.5 sm:p-4 border-3 border-[#E58AA3] shadow-sm relative overflow-hidden">
 
             <div class="relative z-10 space-y-3">
-                <h1 class="text-center leading-tight">
-                    <span class="slab text-xl sm:text-3xl">Girlies' 30-Day Creative</span>
-                    <span class="script text-3xl sm:text-5xl align-middle ml-1">challenge</span>
-                </h1>
+                <h1 class="text-center text-lg sm:text-2xl font-black text-slate-800 tracking-tight">Girlies' 30-Day Creative challenge</h1>
 
                 <!-- HERO CHARACTER CARDS GRID (4 PARTICIPANTS) -->
                 <div id="hero-characters-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
@@ -269,7 +258,7 @@
         <form id="gate-form" onsubmit="submitGate(event)" class="hidden bg-[#FFE3EC] rounded-3xl border-4 border-[#CF5171] max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
             <span class="text-4xl">🎨</span>
             <div class="space-y-1">
-                <h2 class="leading-tight"><span class="slab text-lg">Girlies' 30-Day Creative</span> <span class="script text-3xl align-middle">challenge</span></h2>
+                <h2 class="text-lg font-black text-slate-800 tracking-tight">Girlies' 30-Day Creative challenge</h2>
                 <p class="text-xs font-bold text-orange-700">Enter the group passcode to step in.</p>
             </div>
             <input id="gate-input" type="password" autocomplete="current-password" placeholder="Passcode" class="w-full px-4 py-2.5 text-sm text-center rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-orange-300">
