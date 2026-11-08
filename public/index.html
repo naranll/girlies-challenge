@@ -133,7 +133,7 @@
 
             <div class="flex items-center gap-2 sm:gap-3 min-w-0">
                 <span id="sync-dot" class="text-[11px] font-black text-slate-300" title="Connecting…">●</span>
-                <div id="header-date" class="text-[11px] sm:text-xs font-bold text-pink-50 text-right"></div>
+                <div id="header-date" class="hidden sm:block whitespace-nowrap text-xs font-bold text-pink-50 text-right"></div>
                 <button onclick="openBannerModal()" class="px-2.5 sm:px-3 py-1.5 rounded-full bg-[#F2B544] hover:bg-[#F7C45F] text-[#6B2D0E] font-extrabold text-xs transition flex items-center space-x-1 shrink-0">
                     <span>🖼️</span>
                     <span class="hidden sm:inline">Kick-Off Banner</span>
@@ -764,12 +764,12 @@
         }
 
         // One short, encouraging line per person. It changes with what they actually did.
-        function friendStatus(stats, next) {
-            if (stats.count === 0) return "🌱 First one's easy!";
-            if (stats.today) return '🔥 Logged today!';
-            if (stats.streak >= 2) return `🔥 ${stats.streak}-day streak!`;
-            if (next) return `🎯 ${next.goal - next.cur} to go: ${next.name}`;
-            return '💎 Badge collector!';
+        function friendStatus(stats, next, short) {
+            if (stats.count === 0) return short ? '🌱 Start here!' : "🌱 First one's easy!";
+            if (stats.today) return short ? '🔥 Done today' : '🔥 Logged today!';
+            if (stats.streak >= 2) return short ? `🔥 ${stats.streak} days` : `🔥 ${stats.streak}-day streak!`;
+            if (next) return short ? `🎯 ${next.goal - next.cur} to go` : `🎯 ${next.goal - next.cur} to go: ${next.name}`;
+            return short ? '💎 Collector!' : '💎 Badge collector!';
         }
 
         // ==========================================================
@@ -1086,7 +1086,7 @@
                 const isSelected = state.activeCharacterId === friend.id;
 
                 const card = document.createElement('div');
-                card.className = `glow-card character-card cursor-pointer rounded-2xl px-3 pt-3 pb-2.5 border-3 relative overflow-hidden shadow-sm bg-white flex flex-col items-center text-center ${isSelected ? 'glow-active' : ''}`;
+                card.className = `glow-card character-card cursor-pointer rounded-2xl px-2 sm:px-3 pt-3 pb-2.5 border-3 relative overflow-hidden shadow-sm bg-white flex flex-col items-center text-center ${isSelected ? 'glow-active' : ''}`;
                 card.style.setProperty('--glow', p.glow);
                 card.style.setProperty('--glow-soft', hexToRgba(p.glow, 0.45));
                 card.style.borderColor = isSelected ? p.glow : '#fff';
@@ -1118,7 +1118,7 @@
                         </div>
                         <div class="h-2 rounded-full overflow-hidden" style="background:${hexToRgba(p.glow, 0.18)}"><div class="bar-fill h-full rounded-full" style="width:${pct}%; background:linear-gradient(90deg, ${p.hair}, ${p.face})"></div></div>
                         ${earned.length ? `<div class="flex justify-center items-center gap-0.5 text-base leading-none">${earned.slice(0, 5).map(b => `<span title="${esc(b.name)}">${b.emoji}</span>`).join('')}${earned.length > 5 ? `<span class="text-xs font-black text-slate-500 pl-0.5">+${earned.length - 5}</span>` : ''}</div>` : '<div class="h-4"></div>'}
-                        <p class="min-h-[2.25rem] flex items-center justify-center rounded-xl px-2 py-1 text-xs font-black leading-tight" style="color:${p.mouth}; background:${hexToRgba(p.glow, 0.2)}">${esc(friendStatus(stats, nextBadge(badges)))}</p>
+                        <p class="min-h-[2.25rem] flex items-center justify-center rounded-xl px-1.5 sm:px-2 py-1 text-xs font-black leading-tight" style="color:${p.mouth}; background:${hexToRgba(p.glow, 0.2)}"><span class="sm:hidden">${esc(friendStatus(stats, nextBadge(badges), true))}</span><span class="hidden sm:inline">${esc(friendStatus(stats, nextBadge(badges)))}</span></p>
                     </div>
 
                     <span class="mt-auto pt-2 text-xs font-extrabold" style="color:${p.mouth}">${isSelected ? 'Close ✕' : 'Journey ›'}</span>
@@ -1250,27 +1250,26 @@
             const stats = friendStats(friend.id);
             const badges = badgeList(friend.id, stats);
             const completedList = state.challenges.filter(c => isDone(c.id, friend.id));
-            const pendingList = state.challenges.filter(c => !isDone(c.id, friend.id));
 
             box.classList.remove('hidden');
             box.innerHTML = `
                 <div class="bg-white rounded-3xl border-3 p-4 sm:p-5 shadow-md relative space-y-5" style="border-color:${p.glow}">
 
-                    <div class="flex items-center justify-between gap-2 pb-3 border-b border-pink-100">
-                        <div class="flex items-center space-x-3 min-w-0">
+                    <div class="flex flex-wrap sm:flex-nowrap items-center gap-x-2 gap-y-3 pb-3 border-b border-pink-100">
+                        <div class="order-1 flex items-center gap-3 min-w-0 flex-1">
                             <div class="w-12 h-12 rounded-2xl p-1 shrink-0" style="border:2px solid ${p.face}; background:${p.body}">${pixelAvatar(friend.palette)}</div>
                             <div class="min-w-0">
                                 <div class="flex items-center flex-wrap gap-x-2 gap-y-1">
-                                    <h2 class="text-base sm:text-lg font-black text-slate-800 whitespace-nowrap">${esc(friend.name)}'s journey ${esc(friend.emoji)}</h2>
-                                    <span class="font-black text-xs px-2 py-0.5 rounded-full border whitespace-nowrap" style="background:${hexToRgba(p.glow, 0.15)}; color:${p.mouth}; border-color:${hexToRgba(p.glow, 0.4)}">${esc(friendStatus(stats, nextBadge(badges)))}</span>
+                                    <h2 class="text-base sm:text-lg font-black text-slate-800 truncate">${esc(friend.name)}'s journey ${esc(friend.emoji)}</h2>
+                                    <span class="hidden sm:inline-block font-black text-xs px-2 py-0.5 rounded-full border whitespace-nowrap" style="background:${hexToRgba(p.glow, 0.15)}; color:${p.mouth}; border-color:${hexToRgba(p.glow, 0.4)}">${esc(friendStatus(stats, nextBadge(badges)))}</span>
                                 </div>
                                 <p class="text-xs font-bold text-slate-500 truncate">${esc(friend.vibe)}</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-1.5 shrink-0">
-                            <button onclick="openShare('progress','${friend.id}')" class="px-2.5 py-1 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs">↗<span class="hidden sm:inline"> Share</span></button>
-                            <button onclick="openCustomizeModal('${friend.id}')" class="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold text-xs border border-slate-100">🎨<span class="hidden sm:inline"> Customize</span></button>
-                            <button onclick="toggleCharacterSelection('${friend.id}')" class="px-3 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">Close ✕</button>
+                        <button onclick="toggleCharacterSelection('${friend.id}')" aria-label="Close" class="order-2 sm:order-3 shrink-0 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">✕<span class="hidden sm:inline"> Close</span></button>
+                        <div class="order-3 sm:order-2 w-full sm:w-auto grid grid-cols-2 sm:flex gap-2">
+                            <button onclick="openShare('progress','${friend.id}')" class="px-3 py-2 sm:py-1 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs">↗ Share</button>
+                            <button onclick="openCustomizeModal('${friend.id}')" class="px-3 py-2 sm:py-1 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold text-xs border border-slate-100">🎨 Customize</button>
                         </div>
                     </div>
 
@@ -1304,21 +1303,6 @@
                                 Your first win is one tap away. Pick any challenge below, they're all quick 🌱
                             </div>
                         `}
-                    </div>
-
-                    <!-- UP NEXT -->
-                    <div class="space-y-2 pt-3 border-t border-pink-100">
-                        <h3 class="text-sm font-black text-slate-800">✨ Up next (${pendingList.length})</h3>
-                        ${pendingList.length ? `
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
-                            ${pendingList.map(c => `
-                                <div onclick="openChallengeModal(${c.id})" class="glow-card cursor-pointer bg-amber-50/60 border border-amber-200/80 rounded-xl p-2 text-center space-y-1" style="--glow:#F28C38; --glow-soft:rgba(242,140,56,.4)">
-                                    ${visualHtml(c, 'w-full h-12 rounded-lg')}
-                                    <h4 class="text-xs font-bold text-slate-700 line-clamp-1">${esc(c.title)}</h4>
-                                    <span class="text-xs font-black text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full inline-block border border-orange-200">+ Log it</span>
-                                </div>
-                            `).join('')}
-                        </div>` : '<p class="text-xs font-bold text-slate-500">Nothing left. You did it all! 🏆</p>'}
                     </div>
                 </div>
             `;
