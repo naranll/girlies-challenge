@@ -92,27 +92,27 @@ function createApp({ db, passcode }) {
     quests: db.collection('quests'),
     progress: db.collection('progress'),
     characters: db.collection('characters'),
-    meta: db.collection('meta')
+    meta: db.collection('meta'),
+    fails: db.collection('loginFails')
   };
 
   const passHash = sha(passcode);
   const passOk = given => typeof given === 'string' && crypto.timingSafeEqual(sha(given), passHash);
 
-  // wrong-passcode limiter (per IP, in memory)
-  const fails = new Map();
-  function limited(ip) {
-    const e = fails.get(ip);
-    if (!e) return false;
-    if (Date.now() > e.reset) { fails.delete(ip); return false; }
-    return e.n >= MAX_FAILS;
+  // wrong-passcode limiter (per IP). Kept in MongoDB, not memory, so it still works
+  // when the app runs as serverless functions that don't share memory.
+  async function limited(ip) {
+    const e = await col.fails.findOne({ _id: ip });
+    return !!e && Date.now() <= e.reset && e.n >= MAX_FAILS;
   }
-  function noteFail(ip) {
-    if (fails.size > 1000) {
-      for (const [k, v] of fails) if (Date.now() > v.reset) fails.delete(k);
+  async function noteFail(ip) {
+    const e = await col.fails.findOne({ _id: ip });
+    if (e && Date.now() <= e.reset) {
+      await col.fails.updateOne({ _id: ip }, { $inc: { n: 1 } });
+    } else {
+      const reset = Date.now() + FAIL_WINDOW_MS;
+      await col.fails.updateOne({ _id: ip }, { $set: { n: 1, reset, expireAt: new Date(reset) } }, { upsert: true });
     }
-    const e = fails.get(ip);
-    if (!e || Date.now() > e.reset) fails.set(ip, { n: 1, reset: Date.now() + FAIL_WINDOW_MS });
-    else e.n++;
   }
 
   // revision counter: bumps on every write so clients can cheaply ask "anything new?"
@@ -124,6 +124,7 @@ function createApp({ db, passcode }) {
 
   async function init() {
     await col.progress.createIndex({ challengeId: 1, friendId: 1 }, { unique: true });
+    await col.fails.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 }); // Mongo cleans up old entries
     const seed = await col.meta.findOne({ _id: 'seed' });
     if (seed && seed.v >= SEED_VERSION) return;
 
@@ -196,25 +197,24 @@ function createApp({ db, passcode }) {
   app.get('/healthz', (req, res) => res.type('text').send('ok'));
 
   // ----- auth -----
-  function checkPass(req, given) {
-    if (limited(req.ip)) throw new HttpError(429, 'Too many wrong tries. Wait a few minutes and try again.');
+  async function checkPass(req, given) {
+    if (await limited(req.ip)) throw new HttpError(429, 'Too many wrong tries. Wait a few minutes and try again.');
     if (passOk(given)) return;
-    if (given !== undefined) noteFail(req.ip);
+    if (given !== undefined) await noteFail(req.ip);
     throw new HttpError(401, 'Wrong passcode.');
   }
 
-  app.post('/api/login', small, (req, res, next) => {
-    try {
-      checkPass(req, req.body && req.body.passcode);
-      res.set('Cache-Control', 'no-store').json({ ok: true });
-    } catch (e) { next(e); }
-  });
+  app.post('/api/login', small, asyncH(async (req, res) => {
+    await checkPass(req, req.body && req.body.passcode);
+    res.set('Cache-Control', 'no-store').json({ ok: true });
+  }));
 
   const api = express.Router();
-  api.use((req, res, next) => {
+  api.use(asyncH(async (req, res, next) => {
     res.set('Cache-Control', 'no-store');
-    try { checkPass(req, req.get('x-passcode')); next(); } catch (e) { next(e); }
-  });
+    await checkPass(req, req.get('x-passcode'));
+    next();
+  }));
 
   // ----- read -----
   api.get('/state', asyncH(async (req, res) => {

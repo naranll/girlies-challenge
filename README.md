@@ -27,6 +27,19 @@ Everyone opens the same link, enters the group passcode once, and sees the same 
 
 Free Render services go to sleep when idle, so the first visit after a quiet spell can take up to a minute (the page says "Waking the server up…"). Opening the link a few minutes before you post it avoids this.
 
+## Deploy on Vercel (free, no sleeping)
+
+The repo is already set up for it: `api/index.js` runs the Express app as a serverless function, `vercel.json` sends `/api/*` and `/healthz` to it, and `public/` is served from Vercel's CDN.
+
+1. Push the repo to GitHub.
+2. On vercel.com: **Add New → Project**, import the repo. Leave Framework as **Other** and the build settings empty.
+3. **Environment Variables:** add `MONGODB_URI` and `APP_PASSCODE` (optionally `MONGODB_DB`).
+4. **Deploy.** Atlas must allow `0.0.0.0/0` in Network Access, because Vercel has no fixed IP.
+
+Or from the terminal: `npm i -g vercel`, then `vercel`, then `vercel --prod`.
+
+Tip: in Vercel → Settings → Functions, set the region closest to your Atlas cluster. Vercel's Hobby plan is for non-commercial use.
+
 ## First visit
 
 - Everyone enters the passcode once per device.
@@ -59,5 +72,5 @@ npm test                 # API tests (no database needed)
 ## Notes
 
 - The passcode is a shared secret, enough to keep strangers out of a friends-only page. Anyone who has it can edit anyone's entries.
-- Wrong passcodes are rate-limited (10 tries per 10 minutes per IP).
+- Wrong passcodes are rate-limited (10 tries per 10 minutes per IP). The counters live in MongoDB (`loginFails` collection, cleaned up automatically), so the limit also holds on Vercel.
 - Keep the Atlas password to letters and numbers. Special characters must be URL-encoded inside the connection string.
