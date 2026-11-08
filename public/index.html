@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>🎨 Girlies' 30-Day Creative Challenge</title>
+    <title>Girlies' 30 Challenges</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 6C15 6 4 19 4 32s11 26 24 26c5 0 7-4 3-8s-1-8 5-8h13c6 0 11-4 11-10C60 17 47 6 32 6z' fill='%23FFE4B5' stroke='%23CF5171' stroke-width='3'/%3E%3Ccircle cx='19' cy='28' r='4.5' fill='%23FF8FAB'/%3E%3Ccircle cx='30' cy='18' r='4.5' fill='%23A5D8FF'/%3E%3Ccircle cx='43' cy='21' r='4.5' fill='%2386EFAC'/%3E%3Ccircle cx='14' cy='42' r='4' fill='%23C084FC'/%3E%3C/svg%3E">
     <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -39,20 +40,16 @@
 
         /* Poster-inspired striped pink + orange backdrop */
         .stripes {
-            background-color: #F7A1BB;
-            background-image:
-                repeating-linear-gradient(180deg, rgba(249, 134, 90, .55) 0 3px, transparent 3px 11px),
-                repeating-linear-gradient(180deg, rgba(240, 90, 150, .35) 0 2px, transparent 2px 7px),
-                repeating-linear-gradient(180deg, rgba(255, 255, 255, .18) 0 1px, transparent 1px 13px);
-            background-attachment: fixed;
+            background-color: #F6BFD0;
+            background-image: repeating-linear-gradient(180deg, rgba(249, 134, 90, .16) 0 2px, transparent 2px 14px);
         }
 
         /* The framed panel everything lives in, like the poster */
         .frame {
             background: #FFE3EC;
-            border: 5px solid #CF5171;
+            border: 3px solid #CF5171;
             border-radius: 22px;
-            box-shadow: 0 10px 28px rgba(120, 40, 60, .22);
+            box-shadow: 0 6px 20px rgba(120, 40, 60, .12);
         }
 
         .script {
@@ -77,13 +74,12 @@
         .glow-card {
             --glow: #F28C38;
             --glow-soft: rgba(242, 140, 56, 0.45);
-            transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+            transition: box-shadow .2s ease, border-color .2s ease;
         }
         .glow-card:hover,
         .glow-card.glow-active {
-            transform: translateY(-2px);
             border-color: var(--glow) !important;
-            box-shadow: 0 0 0 2px var(--glow), 0 0 22px 4px var(--glow-soft);
+            box-shadow: 0 0 0 2px var(--glow), 0 4px 14px var(--glow-soft);
         }
 
         @keyframes confettiDrop {
@@ -101,6 +97,24 @@
 
         #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+        .no-scrollbar { scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        .bar-fill { transition: width .6s ease; }
+        .badge-locked { filter: grayscale(1); opacity: .5; }
+
+        @keyframes popIn {
+            0% { transform: scale(.6); opacity: 0; }
+            60% { transform: scale(1.08); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pop-in { animation: popIn .45s cubic-bezier(.2, .9, .3, 1.2) both; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .pop-in, .glow-card { animation: none !important; transition: none !important; }
+            .confetti-piece { display: none; }
+        }
+
         /* Custom scrollbar for cute look */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #FFF3BF; border-radius: 10px; }
@@ -110,7 +124,7 @@
 <body class="stripes min-h-screen pb-16">
 
     <!-- TOP HEADER BAR -->
-    <header class="bg-[#CF5171] border-b-4 border-[#B3405C] sticky top-0 z-30 px-3 sm:px-4 py-2 shadow-md">
+    <header class="bg-[#CF5171] sticky top-0 z-30 px-3 sm:px-4 py-2">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
             <div class="flex items-center space-x-2 shrink-0">
                 <span class="text-xl">🎨</span>
@@ -118,8 +132,8 @@
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-                <span id="sync-dot" class="text-[10px] font-black text-slate-300" title="Connecting…">●</span>
-                <div id="header-date" class="text-[10px] sm:text-xs font-bold text-pink-50 text-right"></div>
+                <span id="sync-dot" class="text-[11px] font-black text-slate-300" title="Connecting…">●</span>
+                <div id="header-date" class="text-[11px] sm:text-xs font-bold text-pink-50 text-right"></div>
                 <button onclick="openBannerModal()" class="px-2.5 sm:px-3 py-1.5 rounded-full bg-[#F2B544] hover:bg-[#F7C45F] text-[#6B2D0E] font-extrabold text-xs transition flex items-center space-x-1 shrink-0">
                     <span>🖼️</span>
                     <span class="hidden sm:inline">Kick-Off Banner</span>
@@ -139,13 +153,15 @@
     <div class="relative w-[calc(100%-1.5rem)] max-w-6xl mx-auto mt-4 mb-10">
     <main class="frame px-3 sm:px-6 pt-4 pb-10 space-y-5">
 
-        <!-- 1. HERO SECTION -->
-        <section class="bg-gradient-to-br from-[#FFD9E5] via-[#FFE6D3] to-[#FFF0C4] rounded-3xl p-3.5 sm:p-4 border-3 border-[#E58AA3] shadow-sm relative overflow-hidden">
+        <!-- 1. HERO: title, today's win, the four girlies -->
+        <section class="bg-gradient-to-br from-[#FFD9E5] via-[#FFE6D3] to-[#FFF0C4] rounded-3xl p-3.5 sm:p-4 border-3 border-[#E58AA3] shadow-sm">
+            <div class="space-y-3">
+                <h1 class="text-center text-xl sm:text-3xl font-black text-slate-800 tracking-tight">Girlies' 30 Challenges</h1>
 
-            <div class="relative z-10 space-y-3">
-                <h1 class="text-center text-lg sm:text-2xl font-black text-slate-800 tracking-tight">Girlies' 30-Day Creative challenge</h1>
+                <!-- TODAY'S WIN -->
+                <div id="hero-boost"></div>
 
-                <!-- HERO CHARACTER CARDS GRID (4 PARTICIPANTS) -->
+                <!-- THE FOUR GIRLIES -->
                 <div id="hero-characters-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
             </div>
         </section>
@@ -154,19 +170,46 @@
         <section id="character-detail-view" class="hidden transition-all duration-300"></section>
 
         <!-- 3. CHALLENGE VAULT -->
-        <section class="space-y-3">
+        <section id="vault-section" class="space-y-3 scroll-mt-16">
             <div class="flex items-center justify-between px-1 gap-2">
                 <div class="flex items-center space-x-2 min-w-0">
-                    <span class="text-lg">💎</span>
-                    <h2 class="text-base sm:text-lg font-black text-slate-800 truncate">Challenge Vault <span id="vault-count" class="text-slate-400 font-bold text-sm"></span></h2>
+                    <span class="text-lg">✨</span>
+                    <h2 class="text-base sm:text-lg font-black text-slate-800 whitespace-nowrap">All Challenges <span id="vault-count" class="text-slate-400 font-bold text-sm"></span></h2>
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
-                    <span class="hidden sm:inline text-[11px] font-bold text-slate-400">Tap a card to log it</span>
-                    <button onclick="openQuestForm('add')" class="px-3 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-xs shadow-sm transition">+ Add quest</button>
+                    <button id="watch-jump" onclick="jumpToWatch()" class="hidden px-3 py-1.5 rounded-full bg-white hover:bg-pink-50 border-2 border-[#E58AA3] text-[#CF5171] font-extrabold text-xs shadow-sm transition"></button>
+                    <button onclick="openQuestForm('add')" class="px-3 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-xs shadow-sm transition">+ Add<span class="hidden sm:inline"> challenge</span></button>
                 </div>
+            </div>
+            <div class="flex items-center px-1">
+                <div id="vault-filters" class="flex items-center gap-1.5 flex-wrap"></div>
             </div>
 
             <div id="challenges-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+        </section>
+
+        <!-- 4. WATCH PARTY: every proof link plays right here -->
+        <section id="watch-section" class="space-y-3 scroll-mt-16">
+            <div class="flex items-center justify-between px-1 gap-2 flex-wrap">
+                <div class="flex items-center space-x-2 min-w-0">
+                    <span class="text-lg">🎬</span>
+                    <h2 class="text-base sm:text-lg font-black text-slate-800 truncate">Watch Party <span id="watch-count" class="text-slate-400 font-bold text-sm"></span></h2>
+                </div>
+                <div id="watch-filters" class="flex items-center gap-1.5 flex-wrap"></div>
+            </div>
+            <div class="rounded-3xl border-3 border-[#E58AA3] bg-white/70 p-3 sm:p-4">
+                <div id="watch-empty" class="hidden text-center space-y-1.5 py-6"></div>
+                <div id="watch-main" class="hidden grid grid-cols-1 md:grid-cols-[340px_minmax(0,1fr)] gap-4 items-start">
+                    <div id="watch-player" class="space-y-3 min-w-0">
+                        <div id="watch-stage"></div>
+                        <div id="watch-meta"></div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-extrabold text-slate-500 mb-2">Tap a clip to play it here 👇</p>
+                        <div id="watch-list" class="flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible md:overflow-y-auto md:max-h-[560px] no-scrollbar pb-1 md:pr-1"></div>
+                    </div>
+                </div>
+            </div>
         </section>
 
     </main>
@@ -188,7 +231,7 @@
                 <div class="relative">
                     <button id="more-btn" onclick="toggleMoreMenu(event)" aria-label="More options" class="w-7 h-7 rounded-full text-slate-300 hover:text-slate-500 hover:bg-slate-50 font-black leading-none text-base">⋯</button>
                     <div id="more-menu" class="hidden absolute right-0 mt-1 bg-white border border-slate-100 rounded-lg shadow-md py-1 z-10 min-w-[110px]">
-                        <button onclick="editFromChallengeModal()" class="w-full text-left px-3 py-1.5 text-[11px] font-semibold text-slate-500 hover:bg-slate-50">Edit quest</button>
+                        <button onclick="editFromChallengeModal()" class="w-full text-left px-3 py-1.5 text-xs font-semibold text-slate-500 hover:bg-slate-50">Edit challenge</button>
                     </div>
                 </div>
                 <button onclick="closeChallengeModal()" aria-label="Close" class="w-7 h-7 text-slate-400 hover:text-slate-600 font-bold text-lg leading-none">✕</button>
@@ -198,7 +241,7 @@
 
             <div class="space-y-2 border-t border-pink-100 pt-3" id="modal-friends-list"></div>
 
-            <p id="modal-error" class="hidden text-[11px] font-bold text-rose-500"></p>
+            <p id="modal-error" class="hidden text-xs font-bold text-rose-500"></p>
 
             <div class="flex space-x-2 pt-1">
                 <button id="modal-save-btn" onclick="saveChallengeModalData()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">
@@ -235,21 +278,40 @@
             <div class="space-y-1">
                 <span class="text-3xl">🎀</span>
                 <h2 class="text-xl font-black text-slate-800">OFFICIAL KICK-OFF CEREMONY</h2>
-                <p class="text-xs font-bold text-orange-700">Girlies' 30-Day Creative Challenge Pact · Kick-off 2026.10.21</p>
+                <p class="text-xs font-bold text-orange-700">Girlies' 30 Challenges Pact · Kick-off 2026.10.21</p>
             </div>
 
             <div class="bg-white/80 rounded-2xl p-4 border border-pink-200 text-left space-y-3">
                 <p class="text-xs text-slate-700 leading-relaxed font-semibold">
-                    "We, the girlies (<span id="banner-names"></span>), hereby commit to 30 days of creativity, growth, and cheering each other on. Any order, any pace — we make things we're proud of, together!"
+                    "We, the girlies (<span id="banner-names"></span>), hereby commit to 30 creative challenges and to cheering each other on. Any order, any pace — we make things we're proud of, together!"
                 </p>
                 <div id="banner-avatars" class="flex justify-around pt-2 border-t border-pink-100"></div>
             </div>
 
-            <p class="text-[11px] text-orange-600 font-bold">Screenshot this banner for your shared Instagram account! 📸</p>
+            <p class="text-xs text-orange-600 font-bold">Screenshot this banner for your shared Instagram account! 📸</p>
 
             <button onclick="closeBannerModal()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-xs transition">
                 Close Banner View
             </button>
+        </div>
+    </div>
+
+    <!-- SHARE CARD MODAL -->
+    <div id="share-modal" class="fixed inset-0 modal-bg z-[65] flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl border-3 border-pink-200 max-w-sm w-full p-4 shadow-2xl relative space-y-3 max-h-[94vh] overflow-y-auto">
+            <button onclick="closeShare()" aria-label="Close" class="absolute top-3.5 right-4 text-slate-400 hover:text-slate-600 font-bold text-lg leading-none">✕</button>
+            <h3 id="share-title" class="text-base font-black text-slate-800 pr-8">Share your badge</h3>
+            <div class="flex justify-center">
+                <div class="relative rounded-2xl overflow-hidden bg-pink-50 shadow-md" style="aspect-ratio:9/16; height:min(58vh, 520px)">
+                    <div id="share-loading" class="absolute inset-0 flex items-center justify-center text-xs font-bold text-slate-400 animate-pulse">Making your card…</div>
+                    <img id="share-img" alt="Your share card" class="hidden absolute inset-0 w-full h-full">
+                </div>
+            </div>
+            <div id="share-actions" class="hidden flex gap-2">
+                <button id="share-btn" onclick="shareImage()" class="hidden flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-sm shadow-md transition">Share ↗</button>
+                <button onclick="saveImage()" class="flex-1 bg-pink-100 hover:bg-pink-200 text-[#CF5171] font-extrabold py-2.5 rounded-xl text-sm transition">Save image</button>
+            </div>
+            <p id="share-note" class="text-xs font-bold text-slate-400 text-center"></p>
         </div>
     </div>
 
@@ -258,17 +320,22 @@
         <form id="gate-form" onsubmit="submitGate(event)" class="hidden bg-[#FFE3EC] rounded-3xl border-4 border-[#CF5171] max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
             <span class="text-4xl">🎨</span>
             <div class="space-y-1">
-                <h2 class="text-lg font-black text-slate-800 tracking-tight">Girlies' 30-Day Creative challenge</h2>
+                <h2 class="text-lg font-black text-slate-800 tracking-tight">Girlies' 30 Challenges</h2>
                 <p class="text-xs font-bold text-orange-700">Enter the group passcode to step in.</p>
             </div>
             <input id="gate-input" type="password" autocomplete="current-password" placeholder="Passcode" class="w-full px-4 py-2.5 text-sm text-center rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-orange-300">
-            <p id="gate-error" class="text-[11px] font-bold text-rose-500 min-h-[1rem]"></p>
+            <p id="gate-error" class="text-xs font-bold text-rose-500 min-h-[1rem]"></p>
             <button id="gate-btn" type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-sm shadow-md transition">Enter ✨</button>
         </form>
         <div id="gate-loading" class="hidden text-center space-y-2">
             <div class="text-4xl animate-pulse">🎨</div>
             <p id="gate-loading-text" class="text-xs font-bold text-orange-700">Opening your challenge…</p>
         </div>
+    </div>
+
+    <!-- CELEBRATION (badge unlocked) -->
+    <div id="celebrate" onclick="hideCelebrate()" class="fixed inset-0 modal-bg z-[90] flex items-center justify-center p-4 hidden">
+        <div id="celebrate-card" class="pop-in bg-white rounded-3xl border-4 border-[#F2B544] max-w-xs w-full p-6 text-center space-y-2 shadow-2xl"></div>
     </div>
 
     <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 pointer-events-none transition-all duration-300 z-[70] bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg"></div>
@@ -316,10 +383,9 @@
         }
 
         // ==========================================================
-        // 1. DATES  (calendar Day-1 = 2026.10.21; no countdown is shown anywhere)
+        // 1. DATES  (we started on 2026.10.21; there is no end date or countdown)
         // ==========================================================
         const START_DATE = new Date(2026, 9, 21);
-        const TOTAL_DAYS = 30;
         const DAY_MS = 86400000;
         const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const pad = n => String(n).padStart(2, '0');
@@ -330,7 +396,6 @@
         const fmtDate = d => `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
         const localDateStr = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
         const parseLocal = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
-        const dayIndexOf = s => Math.min(TOTAL_DAYS, Math.max(1, dayDiffFromStart(parseLocal(s)) + 1));
 
         function renderHeaderClock() {
             const now = new Date();
@@ -354,10 +419,10 @@
         const EMOJI_CHOICES = ['🍓','🌸','💜','🌼','🦋','🌙','⭐','🔥','🍒','🍑','🐰','🐱','🦄','🌈','🍀','🌻','🎀','💎','🧸','🍵','🌷','✨','🐚','🍋'];
 
         const BASE_FRIENDS = [
-            { id: 'mia',   name: 'Mia',   emoji: '🍓', vibe: 'Soft Girl & Mindfulness',    palette: 'rose',     indicator: '💖 Glowing Daily!' },
-            { id: 'chloe', name: 'Chloe', emoji: '💜', vibe: 'Fitness & Aesthetic Energy', palette: 'lavender', indicator: '✨ Unstoppable Vibe!' },
-            { id: 'lily',  name: 'Lily',  emoji: '🌼', vibe: 'Creative & Cozy Vibes',      palette: 'sunshine', indicator: '🌟 Blooming Beautifully!' },
-            { id: 'ava',   name: 'Ava',   emoji: '🍀', vibe: 'Fresh Start Energy',         palette: 'mint',     indicator: '🌈 Rising Bright!' }
+            { id: 'mia',   name: 'Mia',   emoji: '🍓', vibe: 'Soft Girl & Mindfulness',    palette: 'rose' },
+            { id: 'chloe', name: 'Chloe', emoji: '💜', vibe: 'Fitness & Aesthetic Energy', palette: 'lavender' },
+            { id: 'lily',  name: 'Lily',  emoji: '🌼', vibe: 'Creative & Cozy Vibes',      palette: 'sunshine' },
+            { id: 'ava',   name: 'Ava',   emoji: '🍀', vibe: 'Fresh Start Energy',         palette: 'mint' }
         ];
 
         function getFriends() {
@@ -507,7 +572,7 @@
         function setSync(ok) {
             const el = document.getElementById('sync-dot');
             if (!el) return;
-            el.className = 'text-[10px] font-black ' + (ok ? 'text-emerald-400' : 'text-rose-400');
+            el.className = 'text-[11px] font-black ' + (ok ? 'text-emerald-400' : 'text-rose-400');
             el.title = ok ? 'Live — shared with everyone' : 'Offline — retrying';
         }
 
@@ -615,59 +680,427 @@
         const getChallenge = id => state.challenges.find(c => c.id === id);
         const isDone = (chId, fId) => !!(state.completions[chId] && state.completions[chId][fId]);
 
-        function getCompletedCount(friendId) {
-            return state.challenges.filter(c => isDone(c.id, friendId)).length;
-        }
+        const getCompletedCount = friendId => state.challenges.filter(c => isDone(c.id, friendId)).length;
 
-        function friendDayCounts(friendId) {
-            const counts = Array(TOTAL_DAYS).fill(0);
+        // date (YYYY-MM-DD) -> ids of the quests this person logged that day
+        function friendDayMap(friendId) {
+            const map = {};
             state.challenges.forEach(c => {
                 if (!isDone(c.id, friendId)) return;
                 const ds = state.dates[c.id] && state.dates[c.id][friendId];
-                counts[(ds ? dayIndexOf(ds) : 1) - 1]++;
+                if (ds) (map[ds] = map[ds] || []).push(c.id);
             });
-            return counts;
+            return map;
         }
 
         function computeStreak(friendId) {
-            const days = new Set();
-            state.challenges.forEach(c => {
-                const ds = isDone(c.id, friendId) && state.dates[c.id] && state.dates[c.id][friendId];
-                if (ds) days.add(ds);
-            });
-            let d = startOfDay(new Date());
-            if (!days.has(localDateStr(d))) d.setDate(d.getDate() - 1);
+            const days = friendDayMap(friendId);
+            const d = startOfDay(new Date());
+            if (!days[localDateStr(d)]) d.setDate(d.getDate() - 1);
             let streak = 0;
-            while (days.has(localDateStr(d))) { streak++; d.setDate(d.getDate() - 1); }
+            while (days[localDateStr(d)]) { streak++; d.setDate(d.getDate() - 1); }
             return streak;
         }
 
+        function longestStreak(days) {
+            let best = 0, run = 0, prev = null;
+            Object.keys(days).sort().forEach(k => {
+                run = prev && Math.round((parseLocal(k) - parseLocal(prev)) / DAY_MS) === 1 ? run + 1 : 1;
+                best = Math.max(best, run);
+                prev = k;
+            });
+            return best;
+        }
+
+        function friendStats(friendId) {
+            const days = friendDayMap(friendId);
+            const done = state.challenges.filter(c => isDone(c.id, friendId));
+            return {
+                count: done.length,
+                total: state.challenges.length,
+                streak: computeStreak(friendId),
+                best: longestStreak(days),
+                activeDays: Object.keys(days).length,
+                maxPerDay: Math.max(0, ...Object.values(days).map(a => a.length)),
+                notes: done.filter(c => { const p = state.proofs[c.id] && state.proofs[c.id][friendId]; return p && p.note; }).length,
+                today: !!days[localDateStr()]
+            };
+        }
+
         // ==========================================================
-        // 5. RENDER: HERO CHARACTER CARDS
+        // 4b. BADGES (worked out from what has been logged, nothing extra is stored)
         // ==========================================================
+        const BADGES = [
+            { id: 'first',   emoji: '🌱', name: 'First Step',     hint: 'Log your first challenge',         goal: () => 1,  val: s => s.count },
+            { id: 'five',    emoji: '⭐', name: 'High Five',      hint: 'Complete 5 challenges',            goal: () => 5,  val: s => s.count },
+            { id: 'streak3', emoji: '🔥', name: 'Heating Up',     hint: '3 days in a row',              goal: () => 3,  val: s => s.best },
+            { id: 'half',    emoji: '🚀', name: 'Halfway There',  hint: 'Complete half of them',  goal: s => Math.max(1, Math.ceil(s.total / 2)), val: s => s.count },
+            { id: 'double',  emoji: '⚡', name: 'Double Trouble', hint: '2 challenges in one day',          goal: () => 2,  val: s => s.maxPerDay },
+            { id: 'story',   emoji: '💬', name: 'Storyteller',    hint: 'Write 3 reflections',          goal: () => 3,  val: s => s.notes },
+            { id: 'regular', emoji: '🗓️', name: 'Regular',        hint: 'Show up on 5 different days',  goal: () => 5,  val: s => s.activeDays },
+            { id: 'streak7', emoji: '🌋', name: 'Unstoppable',    hint: '7 days in a row',              goal: () => 7,  val: s => s.best },
+            { id: 'all',     emoji: '🏆', name: 'Finisher',       hint: 'Complete every challenge',         goal: s => Math.max(1, s.total), val: s => s.count }
+        ];
+
+        function badgeList(friendId, stats) {
+            const s = stats || friendStats(friendId);
+            return BADGES.map(b => {
+                const goal = b.goal(s);
+                const cur = Math.min(b.val(s), goal);
+                return { id: b.id, emoji: b.emoji, name: b.name, hint: b.hint, cur, goal, earned: cur >= goal };
+            });
+        }
+
+        function nextBadge(list) {
+            const open = list.filter(b => !b.earned);
+            if (!open.length) return null;
+            return open.sort((a, b) => b.cur / b.goal - a.cur / a.goal)[0];
+        }
+
+        function earnedSnapshot() {
+            const out = {};
+            getFriends().forEach(f => { out[f.id] = new Set(badgeList(f.id).filter(b => b.earned).map(b => b.id)); });
+            return out;
+        }
+
+        // One short, encouraging line per person. It changes with what they actually did.
+        function friendStatus(stats, next) {
+            if (stats.count === 0) return "🌱 First one's easy!";
+            if (stats.today) return '🔥 Logged today!';
+            if (stats.streak >= 2) return `🔥 ${stats.streak}-day streak!`;
+            if (next) return `🎯 ${next.goal - next.cur} to go: ${next.name}`;
+            return '💎 Badge collector!';
+        }
+
+        // ==========================================================
+        // 4c. VIDEOS: proof links that can play inside the page
+        // ==========================================================
+        const PLATFORM_ICON = { tiktok: '🎵', instagram: '📸', youtube: '▶️', link: '🔗' };
+
+        // Only ever builds an embed address from a pattern-checked id, never from raw text.
+        function parseVideo(raw) {
+            const href = safeUrl(raw);
+            if (!href) return null;
+            const u = new URL(href);
+            const host = u.hostname.toLowerCase().replace(/^www\./, '');
+            const isHost = d => host === d || host.endsWith('.' + d);
+            let m;
+
+            if (isHost('tiktok.com')) {
+                m = u.pathname.match(/\/video\/(\d{8,25})/);
+                const v = { platform: 'tiktok', label: 'TikTok', ratio: 'tall', embed: null };
+                if (m) v.embed = `https://www.tiktok.com/player/v1/${m[1]}?autoplay=1&rel=0&music_info=1&description=1`;
+                else v.short = true; // vm.tiktok.com / tiktok.com/t/… cannot be resolved from the browser
+                return v;
+            }
+            if (isHost('instagram.com')) {
+                m = u.pathname.match(/\/(p|reels?|tv)\/([\w-]{5,})/);
+                const kind = m ? (m[1] === 'p' ? 'p' : m[1] === 'tv' ? 'tv' : 'reel') : '';
+                return { platform: 'instagram', label: 'Instagram', ratio: 'tall', embed: m ? `https://www.instagram.com/${kind}/${m[2]}/embed` : null };
+            }
+            if (isHost('youtube.com') || host === 'youtu.be') {
+                let id = '';
+                if (host === 'youtu.be') id = u.pathname.slice(1).split('/')[0];
+                else if (u.pathname === '/watch') id = u.searchParams.get('v') || '';
+                else { m = u.pathname.match(/^\/(?:shorts|embed|live)\/([\w-]{11})/); if (m) id = m[1]; }
+                const ok = /^[\w-]{11}$/.test(id);
+                return {
+                    platform: 'youtube', label: 'YouTube',
+                    ratio: u.pathname.startsWith('/shorts/') ? 'tall' : 'wide',
+                    embed: ok ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1` : null
+                };
+            }
+            return { platform: 'link', label: 'Link', ratio: 'tall', embed: null };
+        }
+
+        function proofHint(value) {
+            const v = (value || '').trim();
+            if (!v) return { text: '💡 Full TikTok, Instagram or YouTube links play right here on the dashboard.', cls: 'text-slate-400' };
+            const info = parseVideo(v);
+            if (!info) return { text: 'The link has to start with https://', cls: 'text-rose-500' };
+            if (info.embed) return { text: `▶ This ${info.label} clip will play on the dashboard.`, cls: 'text-emerald-600' };
+            if (info.short) return { text: '↗ Short TikTok links open in a new tab. To play it here, open the link first and copy the full address (tiktok.com/@name/video/…).', cls: 'text-amber-600' };
+            return { text: '↗ This link will open in a new tab.', cls: 'text-slate-500' };
+        }
+
+        // Small "Watch" / "Open" button for somebody's proof on a quest
+        function proofAction(chId, fid) {
+            const pr = state.proofs[chId] && state.proofs[chId][fid];
+            const url = pr && pr.url ? safeUrl(pr.url) : '';
+            if (!url) return '';
+            const v = parseVideo(url);
+            return v && v.embed
+                ? `<button type="button" onclick="event.stopPropagation(); playClip(${chId},'${fid}')" class="shrink-0 self-center whitespace-nowrap px-2.5 py-1 rounded-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-extrabold transition">▶ Watch</button>`
+                : `<a href="${esc(url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="shrink-0 self-center whitespace-nowrap px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-extrabold transition">↗ Open</a>`;
+        }
+
+        // Every logged proof link, newest first
+        function getClips() {
+            const out = [];
+            state.challenges.forEach(c => {
+                const per = state.proofs[c.id] || {};
+                getFriends().forEach(f => {
+                    const p = per[f.id];
+                    if (!isDone(c.id, f.id) || !p || !p.url) return;
+                    const href = safeUrl(p.url);
+                    if (!href) return;
+                    out.push({
+                        key: c.id + ':' + f.id, chId: c.id, fid: f.id, url: href, note: p.note || '',
+                        date: (state.dates[c.id] && state.dates[c.id][f.id]) || '', video: parseVideo(href)
+                    });
+                });
+            });
+            out.sort((a, b) => (b.date > a.date ? 1 : b.date < a.date ? -1 : 0) || b.chId - a.chId);
+            return out;
+        }
+
+        // ==========================================================
+        // 4d. WATCH PARTY (the video section of the dashboard)
+        // ==========================================================
+        const watch = { key: null, playing: false, filter: 'all' };
+        let stageSig = '';
+
+        function shownClips() {
+            const all = getClips();
+            return { all, shown: watch.filter === 'all' ? all : all.filter(c => c.fid === watch.filter) };
+        }
+
+        function renderWatchFilters(all) {
+            const el = document.getElementById('watch-filters');
+            if (!all.length) { el.innerHTML = ''; return; }
+            const chip = (id, inner, label) => {
+                const on = watch.filter === id;
+                return `<button type="button" onclick="setWatchFilter('${id}')" aria-pressed="${on}" aria-label="${esc(label)}" title="${esc(label)}" class="h-8 px-2.5 rounded-full border-2 text-xs font-extrabold flex items-center gap-1 transition ${on ? 'bg-[#CF5171] text-white border-[#CF5171]' : 'bg-white text-slate-600 border-pink-200 hover:border-[#CF5171]'}">${inner}</button>`;
+            };
+            el.innerHTML = chip('all', 'All', 'All clips') + getFriends().map(f => {
+                const n = all.filter(c => c.fid === f.id).length;
+                return chip(f.id, `<span class="w-5 h-5 block">${pixelAvatar(f.palette)}</span>${n}`, `${f.name}: ${n} clips`);
+            }).join('');
+        }
+
+        function stageHtml(clip) {
+            if (!clip) {
+                return `<div class="w-full h-full flex flex-col items-center justify-center gap-2 text-center p-5 text-white">
+                    <div class="text-4xl">🎬</div><p class="text-sm font-extrabold">No clips from this person yet</p></div>`;
+            }
+            const v = clip.video || { label: 'Link', platform: 'link', embed: null };
+            const ch = getChallenge(clip.chId), f = getFriend(clip.fid), p = pal(f);
+            if (v.embed && watch.playing) {
+                return `<iframe src="${esc(v.embed)}" title="${esc(f.name)}: ${esc(ch.title)}" class="w-full h-full border-0"
+                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-presentation"></iframe>`;
+            }
+            if (v.embed) {
+                return `<button type="button" onclick="playCurrentClip()" aria-label="Play ${esc(ch.title)}" class="w-full h-full flex flex-col items-center justify-center gap-3 text-white p-4" style="background:linear-gradient(160deg, ${p.mouth}, #CF5171 55%, #F28C38)">
+                    ${visualHtml(ch, 'w-24 h-24 rounded-3xl opacity-95')}
+                    <span class="w-16 h-16 rounded-full bg-white/95 text-[#CF5171] flex items-center justify-center text-2xl shadow-lg pl-1">▶</span>
+                    <span class="text-sm font-extrabold">Tap to play · ${PLATFORM_ICON[v.platform]} ${esc(v.label)}</span>
+                </button>`;
+            }
+            return `<div class="w-full h-full flex flex-col items-center justify-center gap-2.5 text-center p-5 text-white" style="background:linear-gradient(160deg, #6B2D0E, #CF5171)">
+                <div class="text-4xl">🔗</div>
+                <p class="text-sm font-extrabold">This one opens on ${v.platform === 'link' ? 'its own site' : esc(v.label)}</p>
+                ${v.short ? '<p class="text-xs font-semibold text-pink-100 leading-snug">Short TikTok links can’t play here. Open it, then copy the full address (tiktok.com/@name/video/…) next time.</p>' : ''}
+                <a href="${esc(clip.url)}" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-white text-[#CF5171] text-xs font-extrabold">Open link ↗</a>
+            </div>`;
+        }
+
+        function metaHtml(clip, count) {
+            if (!clip) return '';
+            const ch = getChallenge(clip.chId), f = getFriend(clip.fid), p = pal(f);
+            const v = clip.video || { platform: 'link', label: 'Link' };
+            return `<div class="rounded-2xl bg-white border-2 p-3 space-y-2" style="border-color:${hexToRgba(p.glow, 0.5)}">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-xl p-0.5 shrink-0" style="background:${p.body}; border:2px solid ${p.face}">${pixelAvatar(f.palette)}</div>
+                    <div class="min-w-0">
+                        <p class="text-sm font-black text-slate-800 truncate">${esc(ch.title)}</p>
+                        <p class="text-xs font-bold text-slate-500 truncate">${esc(f.name)} ${esc(f.emoji)}${clip.date ? ' · ' + esc(fmtDate(parseLocal(clip.date))) : ''} · ${PLATFORM_ICON[v.platform]} ${esc(v.label)}</p>
+                    </div>
+                </div>
+                ${clip.note ? `<p class="text-xs text-slate-600 italic bg-pink-50 rounded-xl px-3 py-2">“${esc(clip.note)}”</p>` : ''}
+                <div class="flex gap-2">
+                    <a href="${esc(clip.url)}" target="_blank" rel="noopener" class="flex-1 text-center px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-extrabold transition">Open original ↗</a>
+                    ${count > 1 ? '<button type="button" onclick="nextClip()" class="flex-1 px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-extrabold transition">Next clip ▶</button>' : ''}
+                </div>
+            </div>`;
+        }
+
+        function renderWatch() {
+            const { all, shown } = shownClips();
+            document.getElementById('watch-count').textContent = all.length ? `(${all.length} clip${all.length === 1 ? '' : 's'})` : '';
+            renderWatchFilters(all);
+            const jump = document.getElementById('watch-jump');
+            jump.textContent = `🎬 ${all.length}`;
+            jump.setAttribute('aria-label', `Jump to ${all.length} clip${all.length === 1 ? '' : 's'}`);
+            jump.classList.toggle('hidden', !all.length);
+
+            const main = document.getElementById('watch-main');
+            const empty = document.getElementById('watch-empty');
+            main.classList.toggle('hidden', !all.length);
+            empty.classList.toggle('hidden', !!all.length);
+            if (!all.length) {
+                watch.key = null; watch.playing = false; stageSig = '';
+                const pick = todaysPick();
+                empty.innerHTML = `<div class="text-4xl">🎬</div>
+                    <p class="text-sm font-extrabold text-slate-700">The stage is empty… for now</p>
+                    <p class="text-xs font-semibold text-slate-500">Log a challenge with your TikTok or Instagram link and your clip plays here for everyone.</p>
+                    ${pick ? `<button type="button" onclick="openChallengeModal(${pick.id})" class="mt-1 px-4 py-2 rounded-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-extrabold shadow-sm transition">Be the first on stage →</button>` : ''}`;
+                return;
+            }
+
+            let cur = shown.find(c => c.key === watch.key);
+            if (!cur) { cur = shown[0] || null; watch.key = cur ? cur.key : null; watch.playing = false; }
+
+            document.getElementById('watch-list').innerHTML = shown.map(c => {
+                const f = getFriend(c.fid), ch = getChallenge(c.chId), pl = pal(f), sel = c.key === watch.key;
+                const v = c.video || { platform: 'link', label: 'Link' };
+                return `<button type="button" onclick="selectClip('${c.key}')" aria-pressed="${sel}" class="glow-card shrink-0 w-[236px] md:w-full text-left flex items-center gap-2.5 rounded-2xl p-2 border-2 bg-white" style="--glow:${pl.glow}; --glow-soft:${hexToRgba(pl.glow, 0.45)}; border-color:${sel ? pl.glow : '#FBD5DF'}; ${sel ? `box-shadow:0 0 0 2px ${pl.glow};` : ''}">
+                    <div class="relative shrink-0">
+                        ${visualHtml(ch, 'w-12 h-12 rounded-xl')}
+                        <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full p-0.5 bg-white border" style="border-color:${pl.face}">${pixelAvatar(f.palette)}</div>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs font-black text-slate-800 truncate">${esc(ch.title)}</p>
+                        <p class="text-xs font-bold text-slate-500 truncate">${esc(f.name)}${c.date ? ' · ' + esc(fmtDate(parseLocal(c.date))) : ''}</p>
+                        <span class="inline-block text-[11px] font-extrabold text-slate-500 bg-slate-100 rounded-full px-1.5">${PLATFORM_ICON[v.platform]} ${esc(v.label)}</span>
+                    </div>
+                    <span class="text-lg ${sel ? '' : 'text-slate-300'}" style="${sel ? `color:${pl.glow}` : ''}">${sel && watch.playing ? '♪' : '▶'}</span>
+                </button>`;
+            }).join('') || '<p class="text-xs font-bold text-slate-400 p-3">Nothing here yet.</p>';
+
+            // A background refresh must never restart a clip that is playing, so the
+            // video stage is only rebuilt when the clip or play state really changed.
+            const tall = !cur || !cur.video || cur.video.ratio !== 'wide' || !cur.video.embed;
+            const sig = cur ? [cur.key, cur.url, watch.playing, tall].join('|') : 'none';
+            if (sig !== stageSig) {
+                stageSig = sig;
+                const stage = document.getElementById('watch-stage');
+                stage.className = 'relative w-full mx-auto rounded-2xl overflow-hidden bg-slate-900 shadow-md ' + (tall ? 'max-w-[330px]' : 'aspect-video');
+                stage.style.height = tall ? 'min(72vh, 580px)' : '';
+                stage.innerHTML = stageHtml(cur);
+            }
+            document.getElementById('watch-meta').innerHTML = metaHtml(cur, shown.length);
+        }
+
+        function jumpToVault() {
+            document.getElementById('vault-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        function jumpToWatch() {
+            document.getElementById('watch-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        function selectClip(key) { watch.key = key; watch.playing = true; renderWatch(); }
+        function playCurrentClip() { watch.playing = true; renderWatch(); }
+        function setWatchFilter(id) { watch.filter = id; watch.key = null; watch.playing = false; renderWatch(); }
+        function nextClip() {
+            const { shown } = shownClips();
+            if (!shown.length) return;
+            const i = shown.findIndex(c => c.key === watch.key);
+            watch.key = shown[(i + 1) % shown.length].key;
+            watch.playing = true;
+            renderWatch();
+        }
+
+        // Called from the journey, the calendar and the quest popup
+        function playClip(chId, fid) {
+            const key = chId + ':' + fid;
+            const clip = getClips().find(c => c.key === key);
+            if (!clip) return;
+            if (!(clip.video && clip.video.embed)) { window.open(clip.url, '_blank', 'noopener'); return; }
+            closeChallengeModal();
+            watch.filter = 'all';
+            watch.key = key;
+            watch.playing = true;
+            renderWatch();
+            document.getElementById('watch-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ==========================================================
+        // 5. RENDER: HERO (today's pick, team momentum, the four girlies)
+        // ==========================================================
+        // Same pick all day for everybody; it only moves on once all four have done it.
+        // "Another one" walks forward through the quests that aren't finished by everyone yet.
+        let pickShift = 0;
+
+        function pickList() {
+            const n = state.challenges.length;
+            if (!n) return [];
+            const fr = getFriends();
+            const start = ((dayDiffFromStart(new Date()) % n) + n) % n;
+            const out = [];
+            for (let i = 0; i < n; i++) {
+                const ch = state.challenges[(start + i) % n];
+                if (fr.some(f => !isDone(ch.id, f.id))) out.push(ch);
+            }
+            return out;
+        }
+
+        function todaysPick() {
+            const list = pickList();
+            return list.length ? list[pickShift % list.length] : null;
+        }
+
+        function anotherPick() {
+            pickShift++;
+            renderHeroBoost();
+        }
+
+        function renderHeroBoost() {
+            const box = document.getElementById('hero-boost');
+            const pick = todaysPick();
+            const pickCount = pickList().length;
+
+            const ghost = 'order-2 sm:order-none shrink-0 w-11 h-11 flex items-center justify-center rounded-xl bg-pink-50 hover:bg-pink-100 text-[#CF5171] transition';
+            box.innerHTML = pick ? `
+                <div class="rounded-2xl p-3 bg-white border-2 border-[#F2B544] flex flex-wrap sm:flex-nowrap items-center gap-x-3 gap-y-2.5">
+                    ${visualHtml(pick, 'w-14 h-14 rounded-xl')}
+                    <div class="min-w-0 flex-1 basis-[calc(100%-4.5rem)] sm:basis-0">
+                        <p class="text-xs font-bold text-orange-600">Today's win</p>
+                        <h2 class="text-base font-black text-slate-800 leading-snug line-clamp-2">${esc(pick.title)}</h2>
+                    </div>
+                    <div class="w-full sm:w-auto flex items-center gap-1.5 sm:shrink-0">
+                        ${pickCount > 1 ? `<button type="button" onclick="anotherPick()" aria-label="Show another challenge" title="Show another" class="${ghost}">
+                            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+                        </button>` : ''}
+                        <button type="button" onclick="openChallengeModal(${pick.id})" class="h-11 flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-5 rounded-xl text-sm transition">
+                            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Log it
+                        </button>
+                    </div>
+                </div>` : `
+                <div class="rounded-2xl p-3 bg-white border-2 border-[#F2B544] flex items-center gap-3">
+                    <h2 class="flex-1 text-base font-black text-slate-800">${state.challenges.length ? '🏆 Every challenge is done!' : 'No challenges yet'}</h2>
+                    <button type="button" onclick="openQuestForm('add')" class="shrink-0 h-11 bg-orange-500 hover:bg-orange-600 text-white font-extrabold px-4 rounded-xl text-sm transition">+ Add one</button>
+                </div>`;
+        }
+
         function renderHeroCharacters() {
             const container = document.getElementById('hero-characters-grid');
             container.innerHTML = '';
 
             getFriends().forEach(friend => {
                 const p = pal(friend);
-                const count = getCompletedCount(friend.id);
-                const streak = computeStreak(friend.id);
+                const stats = friendStats(friend.id);
+                const badges = badgeList(friend.id, stats);
+                const earned = badges.filter(b => b.earned);
+                const pct = stats.total ? Math.round(stats.count / stats.total * 100) : 0;
                 const isSelected = state.activeCharacterId === friend.id;
 
                 const card = document.createElement('div');
-                card.className = `glow-card character-card cursor-pointer rounded-2xl p-3 border-3 relative overflow-hidden shadow-sm bg-white flex flex-col items-center text-center ${isSelected ? 'glow-active' : ''}`;
+                card.className = `glow-card character-card cursor-pointer rounded-2xl px-3 pt-3 pb-2.5 border-3 relative overflow-hidden shadow-sm bg-white flex flex-col items-center text-center ${isSelected ? 'glow-active' : ''}`;
                 card.style.setProperty('--glow', p.glow);
                 card.style.setProperty('--glow-soft', hexToRgba(p.glow, 0.45));
                 card.style.borderColor = isSelected ? p.glow : '#fff';
+                card.setAttribute('role', 'button');
+                card.tabIndex = 0;
+                card.setAttribute('aria-expanded', String(isSelected));
                 card.onclick = () => toggleCharacterSelection(friend.id);
+                card.onkeydown = e => { if (e.target === card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); toggleCharacterSelection(friend.id); } };
 
                 card.innerHTML = `
-                    <button onclick="event.stopPropagation(); openCustomizeModal('${friend.id}')" aria-label="Customize ${esc(friend.name)}" title="Customize" class="absolute top-2 left-2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-[11px] border border-slate-100 text-slate-400 hover:text-slate-600 leading-none">🎨</button>
-                    ${isSelected ? `<div class="absolute top-2 right-2 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow-sm" style="background:${p.glow}">ACTIVE</div>` : ''}
+                    <button onclick="event.stopPropagation(); openCustomizeModal('${friend.id}')" aria-label="Customize ${esc(friend.name)}" title="Customize" class="absolute top-2 left-2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-xs border border-slate-100 text-slate-400 hover:text-slate-600 leading-none">🎨</button>
 
-                    <div class="relative mb-2 mt-1">
-                        <div class="w-16 h-16 rounded-2xl p-1 shadow-inner flex items-center justify-center overflow-hidden" style="border:3px solid ${p.face}; background:linear-gradient(180deg, #fff, ${p.body})">
+                    <div class="relative mb-1.5">
+                        <div class="w-14 h-14 rounded-2xl p-1 shadow-inner flex items-center justify-center overflow-hidden" style="border:3px solid ${p.face}; background:linear-gradient(180deg, #fff, ${p.body})">
                             ${pixelAvatar(friend.palette)}
                         </div>
                         <div class="absolute -bottom-1 -right-1 bg-white text-xs p-0.5 rounded-full shadow-sm border" style="border-color:${p.face}">
@@ -675,28 +1108,20 @@
                         </div>
                     </div>
 
-                    <div class="space-y-0.5 mb-2 w-full">
-                        <h3 class="text-sm sm:text-base font-black text-slate-800 truncate">${esc(friend.name)}</h3>
-                        <p class="text-[10px] font-bold truncate px-1" style="color:${p.mouth}">${esc(friend.vibe)}</p>
+                    <h3 class="text-sm sm:text-base font-black text-slate-800 truncate w-full">${esc(friend.name)}</h3>
+                    <p class="text-xs font-bold truncate w-full mb-2" style="color:${p.mouth}">${esc(friend.vibe)}</p>
+
+                    <div class="w-full space-y-1.5">
+                        <div class="flex justify-between items-center text-xs font-extrabold text-slate-700">
+                            <span>🏆 ${stats.count}/${stats.total}</span>
+                            <span class="text-amber-600">🔥 ${stats.streak}</span>
+                        </div>
+                        <div class="h-2 rounded-full overflow-hidden" style="background:${hexToRgba(p.glow, 0.18)}"><div class="bar-fill h-full rounded-full" style="width:${pct}%; background:linear-gradient(90deg, ${p.hair}, ${p.face})"></div></div>
+                        ${earned.length ? `<div class="flex justify-center items-center gap-0.5 text-base leading-none">${earned.slice(0, 5).map(b => `<span title="${esc(b.name)}">${b.emoji}</span>`).join('')}${earned.length > 5 ? `<span class="text-xs font-black text-slate-500 pl-0.5">+${earned.length - 5}</span>` : ''}</div>` : '<div class="h-4"></div>'}
+                        <p class="min-h-[2.25rem] flex items-center justify-center rounded-xl px-2 py-1 text-xs font-black leading-tight" style="color:${p.mouth}; background:${hexToRgba(p.glow, 0.2)}">${esc(friendStatus(stats, nextBadge(badges)))}</p>
                     </div>
 
-                    <div class="w-full rounded-xl p-2 border space-y-1 text-center" style="background:${hexToRgba(p.glow, 0.10)}; border-color:${hexToRgba(p.glow, 0.35)}">
-                        <div class="flex justify-between items-center text-[11px] font-extrabold text-slate-700">
-                            <span>🏆 Quests:</span>
-                            <span class="font-black" style="color:${p.mouth}">${count} / ${state.challenges.length}</span>
-                        </div>
-                        <div class="flex justify-between items-center text-[11px] font-extrabold text-slate-700 pt-0.5 border-t" style="border-color:${hexToRgba(p.glow, 0.3)}">
-                            <span>🔥 Streak:</span>
-                            <span class="text-amber-600 font-black">${streak} Day${streak === 1 ? '' : 's'}</span>
-                        </div>
-                        <div class="mt-1 bg-white rounded-lg py-1 px-1.5 border font-black text-[10px] shadow-sm" style="color:${p.mouth}; border-color:${hexToRgba(p.glow, 0.45)}">
-                            ${esc(friend.indicator)}
-                        </div>
-                    </div>
-
-                    <button class="mt-2 w-full py-1 rounded-xl text-[11px] font-extrabold transition-all" style="${isSelected ? `background:${p.glow}; color:#fff` : `background:${hexToRgba(p.glow, 0.18)}; color:${p.mouth}`}">
-                        ${isSelected ? 'Close View ✕' : 'View Journey ✨'}
-                    </button>
+                    <span class="mt-auto pt-2 text-xs font-extrabold" style="color:${p.mouth}">${isSelected ? 'Close ✕' : 'Journey ›'}</span>
                 `;
                 container.appendChild(card);
             });
@@ -704,13 +1129,113 @@
 
         function toggleCharacterSelection(friendId) {
             state.activeCharacterId = state.activeCharacterId === friendId ? null : friendId;
+            cal.sel = null;
             renderHeroCharacters();
             renderCharacterDetailView();
         }
 
         // ==========================================================
-        // 6. RENDER: GROWTH HUB
+        // 6. RENDER: JOURNEY (badges first, small calendar on the right)
         // ==========================================================
+        const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const monthIdx = d => d.getFullYear() * 12 + d.getMonth();
+        const cal = { idx: null, sel: null };
+
+        function calNav(dir) {
+            cal.idx = (cal.idx == null ? monthIdx(new Date()) : cal.idx) + dir;
+            cal.sel = null;
+            renderCharacterDetailView();
+        }
+        function calPick(ds) {
+            cal.sel = cal.sel === ds ? null : ds;
+            renderCharacterDetailView();
+        }
+
+        function calendarHtml(friend, p) {
+            const days = friendDayMap(friend.id);
+            let lo = monthIdx(START_DATE), hi = monthIdx(new Date());
+            Object.keys(days).forEach(ds => { const i = monthIdx(parseLocal(ds)); lo = Math.min(lo, i); hi = Math.max(hi, i); });
+            const idx = Math.min(hi, Math.max(lo, cal.idx == null ? monthIdx(new Date()) : cal.idx));
+            cal.idx = idx;
+
+            const y = Math.floor(idx / 12), m = idx % 12;
+            const lead = new Date(y, m, 1).getDay();
+            const dim = new Date(y, m + 1, 0).getDate();
+            const todayStr = localDateStr();
+            const cells = [];
+            for (let i = 0; i < lead; i++) cells.push('<div></div>');
+            for (let d = 1; d <= dim; d++) {
+                const dt = new Date(y, m, d), ds = localDateStr(dt);
+                const list = days[ds];
+                const inWin = dt >= START_DATE;
+                const ring = cal.sel === ds ? `box-shadow:0 0 0 2px #fff, 0 0 0 4px ${p.mouth};` : ds === todayStr ? `outline:2px solid ${p.mouth}; outline-offset:1px;` : '';
+                cells.push(list
+                    ? `<button type="button" onclick="calPick('${ds}')" aria-label="${fmtDate(dt)}: ${list.length} logged" class="relative aspect-square rounded-lg text-xs font-black text-white" style="background:${p.glow}; ${ring}">${d}${list.length > 1 ? `<span class="absolute -top-1 -right-1 min-w-[14px] h-[14px] px-0.5 rounded-full bg-white text-[9px] leading-[14px] font-black" style="color:${p.mouth}">${list.length}</span>` : ''}</button>`
+                    : `<div class="aspect-square rounded-lg flex items-center justify-center text-xs font-bold ${inWin ? 'text-slate-600' : 'text-slate-300'}" style="${inWin ? `background:${hexToRgba(p.glow, 0.10)};` : ''} ${ring}">${d}</div>`);
+            }
+
+            const sel = cal.sel && days[cal.sel];
+            const detail = sel
+                ? `<div class="space-y-1.5 pt-2 mt-2 border-t" style="border-color:${hexToRgba(p.glow, 0.3)}">
+                        <p class="text-xs font-black text-slate-700">${fmtDate(parseLocal(cal.sel))} · ${sel.length} win${sel.length === 1 ? '' : 's'}</p>
+                        ${sel.map(id => { const c = getChallenge(id); return c ? `<div class="flex items-center gap-2"><span class="text-xs font-bold text-slate-600 truncate flex-1">${esc(c.title)}</span>${proofAction(id, friend.id)}</div>` : ''; }).join('')}
+                   </div>`
+                : '<p class="text-xs font-bold text-slate-400 text-center pt-2">Tap a coloured day to see what was posted.</p>';
+
+            const navBtn = (dir, label, off) => `<button type="button" onclick="calNav(${dir})" ${off ? 'disabled' : ''} aria-label="${label}" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-black leading-none disabled:opacity-30 disabled:cursor-not-allowed">${dir < 0 ? '‹' : '›'}</button>`;
+            return `<div class="w-full max-w-[17rem] mx-auto md:mx-0 rounded-2xl p-3 border-2 bg-white" style="border-color:${hexToRgba(p.glow, 0.4)}">
+                <div class="flex items-center justify-between mb-2">
+                    ${navBtn(-1, 'Previous month', idx <= lo)}
+                    <h3 class="text-sm font-black text-slate-800">${MONTHS[m]} ${y}</h3>
+                    ${navBtn(1, 'Next month', idx >= hi)}
+                </div>
+                <div class="grid grid-cols-7 gap-1 text-center mb-1">
+                    ${['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(w => `<div class="text-xs font-black text-slate-400">${w}</div>`).join('')}
+                </div>
+                <div class="grid grid-cols-7 gap-1">${cells.join('')}</div>
+                ${detail}
+            </div>`;
+        }
+
+        function achievementsHtml(friend, p, stats, badges) {
+            const earned = badges.filter(b => b.earned);
+            const next = nextBadge(badges);
+            const chip = 'px-2 py-0.5 rounded-full bg-white/90 border text-xs font-extrabold text-slate-700';
+            return `<div class="rounded-2xl p-3.5 border-2 space-y-3" style="background:linear-gradient(135deg, ${hexToRgba(p.glow, 0.18)}, ${hexToRgba(p.glow, 0.04)}); border-color:${hexToRgba(p.glow, 0.55)}">
+                <div class="flex items-start justify-between gap-2 flex-wrap">
+                    <div>
+                        <h3 class="text-base font-black text-slate-800">🏅 Achievements</h3>
+                        <p class="text-xs font-bold text-slate-500">${earned.length} of ${badges.length} unlocked</p>
+                    </div>
+                    <div class="flex gap-1.5 flex-wrap">
+                        <span class="${chip}" style="border-color:${hexToRgba(p.glow, 0.4)}">✅ ${stats.count} win${stats.count === 1 ? '' : 's'}</span>
+                        <span class="${chip}" style="border-color:${hexToRgba(p.glow, 0.4)}">🔥 ${stats.streak}-day streak</span>
+                    </div>
+                </div>
+
+                <div class="rounded-xl bg-white/90 border px-3 py-2 space-y-1.5" style="border-color:${hexToRgba(p.glow, 0.4)}">
+                    ${next ? `
+                        <p class="text-xs font-extrabold text-slate-700">🎯 Next up: ${next.emoji} ${esc(next.name)} <span class="font-bold text-slate-400">— ${esc(next.hint.toLowerCase())}</span></p>
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden"><div class="bar-fill h-full rounded-full" style="width:${Math.round(next.cur / next.goal * 100)}%; background:linear-gradient(90deg, ${p.hair}, ${p.face})"></div></div>
+                            <span class="text-xs font-black" style="color:${p.mouth}">${next.cur}/${next.goal}</span>
+                        </div>` : '<p class="text-xs font-extrabold text-slate-700">🎉 Every badge unlocked. Absolute legend!</p>'}
+                </div>
+
+                <div class="grid grid-cols-3 sm:grid-cols-5 gap-x-2 gap-y-3">
+                    ${badges.map(b => {
+                        const open = b.earned
+                            ? `<button type="button" onclick="openShare('badge','${friend.id}','${b.id}')" aria-label="Share the ${esc(b.name)} badge" title="${esc(b.name)}: tap to share" class="w-full text-center space-y-1 rounded-xl p-0.5 hover:bg-white/70 transition">`
+                            : `<div class="text-center space-y-1 p-0.5" title="${esc(b.name)}: ${esc(b.hint)}">`;
+                        return open + `
+                            <div class="mx-auto w-14 h-14 rounded-full flex items-center justify-center text-2xl ${b.earned ? '' : 'badge-locked'}" style="${b.earned ? `background:radial-gradient(circle at 30% 25%, #fff, ${p.body}); border:3px solid ${p.glow}; box-shadow:0 0 0 3px #fff, 0 4px 14px ${hexToRgba(p.glow, 0.55)}` : 'background:#F1F5F9; border:3px dashed #CBD5E1'}">${b.emoji}</div>
+                            <div class="text-xs font-black text-slate-700 leading-tight">${esc(b.name)}</div>
+                            <div class="text-xs font-bold leading-tight ${b.earned ? 'text-emerald-600' : 'text-slate-400'}">${b.earned ? 'Share ↗' : `${b.cur}/${b.goal}`}</div>` + (b.earned ? '</button>' : '</div>');
+                    }).join('')}
+                </div>
+            </div>`;
+        }
+
         function renderCharacterDetailView() {
             const box = document.getElementById('character-detail-view');
             if (!state.activeCharacterId) {
@@ -722,17 +1247,10 @@
             if (!friend) return;
             const p = pal(friend);
 
+            const stats = friendStats(friend.id);
+            const badges = badgeList(friend.id, stats);
             const completedList = state.challenges.filter(c => isDone(c.id, friend.id));
             const pendingList = state.challenges.filter(c => !isDone(c.id, friend.id));
-            const completedCount = completedList.length;
-            const streak = computeStreak(friend.id);
-            const counts = friendDayCounts(friend.id);
-            const todayNum = currentDayNumber();
-
-            const weekStats = [0, 0, 0, 0];
-            counts.forEach((n, i) => { weekStats[Math.min(3, Math.floor(i / 7))] += n; });
-            const maxWeek = Math.max(...weekStats, 1);
-            const weekRanges = ['D1-7', 'D8-14', 'D15-21', 'D22-30'];
 
             box.classList.remove('hidden');
             box.innerHTML = `
@@ -743,119 +1261,69 @@
                             <div class="w-12 h-12 rounded-2xl p-1 shrink-0" style="border:2px solid ${p.face}; background:${p.body}">${pixelAvatar(friend.palette)}</div>
                             <div class="min-w-0">
                                 <div class="flex items-center flex-wrap gap-x-2 gap-y-1">
-                                    <h2 class="text-base sm:text-lg font-black text-slate-800">${esc(friend.name)}'s Growth Hub ${esc(friend.emoji)}</h2>
-                                    <span class="font-black text-[10px] px-2 py-0.5 rounded-full border" style="background:${hexToRgba(p.glow, 0.15)}; color:${p.mouth}; border-color:${hexToRgba(p.glow, 0.4)}">${esc(friend.indicator)}</span>
+                                    <h2 class="text-base sm:text-lg font-black text-slate-800 whitespace-nowrap">${esc(friend.name)}'s journey ${esc(friend.emoji)}</h2>
+                                    <span class="font-black text-xs px-2 py-0.5 rounded-full border whitespace-nowrap" style="background:${hexToRgba(p.glow, 0.15)}; color:${p.mouth}; border-color:${hexToRgba(p.glow, 0.4)}">${esc(friendStatus(stats, nextBadge(badges)))}</span>
                                 </div>
                                 <p class="text-xs font-bold text-slate-500 truncate">${esc(friend.vibe)}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0">
+                            <button onclick="openShare('progress','${friend.id}')" class="px-2.5 py-1 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs">↗<span class="hidden sm:inline"> Share</span></button>
                             <button onclick="openCustomizeModal('${friend.id}')" class="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold text-xs border border-slate-100">🎨<span class="hidden sm:inline"> Customize</span></button>
                             <button onclick="toggleCharacterSelection('${friend.id}')" class="px-3 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">Close ✕</button>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <!-- 30-DAY CALENDAR -->
-                        <div class="rounded-2xl p-3.5 border space-y-2" style="background:${hexToRgba(p.glow, 0.08)}; border-color:${hexToRgba(p.glow, 0.3)}">
-                            <div class="flex items-center justify-between gap-2">
-                                <h3 class="text-xs font-black text-slate-800 flex items-center space-x-1"><span>📅</span><span>30-Day Activity Calendar</span></h3>
-                                <span class="text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-200">🔥 ${streak} Day Streak</span>
-                            </div>
-                            <p class="text-[10px] font-bold text-slate-400">Filled days = quests logged that day (Day-1 is 2026.10.21)</p>
-                            <div class="grid grid-cols-6 gap-1.5 pt-1">
-                                ${counts.map((n, i) => {
-                                    const dayNum = i + 1;
-                                    const done = n > 0;
-                                    const isToday = dayNum === todayNum;
-                                    return `
-                                    <div class="rounded-xl p-1.5 text-center border ${done ? 'text-white font-extrabold shadow-sm' : 'bg-white text-slate-400 font-bold opacity-70'}" style="${done ? `background:${p.glow}; border-color:${p.face}` : `border-color:${hexToRgba(p.glow, 0.3)}`}${isToday ? `; outline:2px solid ${p.mouth}; outline-offset:1px` : ''}">
-                                        <div class="text-[9px]">Day</div>
-                                        <div class="text-xs font-black">${dayNum}</div>
-                                        <div class="text-[8px]">${done ? (n > 1 ? '×' + n : '✨') : '⚪'}</div>
-                                    </div>`;
-                                }).join('')}
-                            </div>
-                        </div>
-
-                        <!-- WEEKLY GRAPH -->
-                        <div class="bg-purple-50/70 rounded-2xl p-3.5 border border-purple-100 space-y-3 flex flex-col justify-between">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-xs font-black text-slate-800 flex items-center space-x-1"><span>📊</span><span>Weekly Growth Graph</span></h3>
-                                <span class="text-[10px] text-purple-600 font-bold">4-Week Breakdown</span>
-                            </div>
-                            <div class="flex items-end justify-between h-36 pt-3 px-2 bg-white/80 rounded-xl border border-purple-100 pb-2">
-                                ${weekStats.map((val, idx) => {
-                                    const h = val === 0 ? 4 : Math.round((val / maxWeek) * 76) + 6;
-                                    return `
-                                    <div class="flex flex-col items-center flex-1 justify-end space-y-1">
-                                        <span class="text-[10px] font-black text-purple-700">${val}</span>
-                                        <div class="w-8 sm:w-10 rounded-t-lg transition-all duration-500 shadow-sm" style="height:${h}px; background:linear-gradient(to top, ${p.face}, ${p.hair})"></div>
-                                        <span class="text-[10px] font-bold text-slate-500">Wk ${idx + 1}</span>
-                                        <span class="text-[8px] font-bold text-slate-300">${weekRanges[idx]}</span>
-                                    </div>`;
-                                }).join('')}
-                            </div>
-                            <div class="bg-white/90 rounded-xl p-2 border border-purple-100 text-center">
-                                <span class="text-[11px] font-bold text-slate-600">Total Milestones Achieved: </span>
-                                <span class="text-xs font-black" style="color:${p.mouth}">${completedCount} / ${state.challenges.length} Challenges 🌟</span>
-                            </div>
-                        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_17rem] gap-4 items-start">
+                        ${achievementsHtml(friend, p, stats, badges)}
+                        ${calendarHtml(friend, p)}
                     </div>
 
-                    <!-- COMPLETED -->
+                    <!-- WINS -->
                     <div class="space-y-2 pt-1">
-                        <div class="flex items-center space-x-1.5">
-                            <span class="text-base">🏅</span>
-                            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wide">Completed Challenges (${completedList.length})</h3>
-                        </div>
+                        <h3 class="text-sm font-black text-slate-800">🏅 ${esc(friend.name)}'s wins (${completedList.length})</h3>
                         ${completedList.length > 0 ? `
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                                 ${completedList.map(c => {
                                     const proof = (state.proofs[c.id] && state.proofs[c.id][friend.id]) || {};
-                                    const url = proof.url ? safeUrl(proof.url) : '';
                                     const ds = state.dates[c.id] && state.dates[c.id][friend.id];
                                     return `
                                     <div onclick="openChallengeModal(${c.id})" class="glow-card cursor-pointer bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl p-2.5 flex gap-2.5 text-left" style="--glow:#34D399; --glow-soft:rgba(52,211,153,.4)">
                                         ${visualHtml(c, 'w-11 h-11 rounded-lg')}
-                                        <div class="min-w-0 flex-1 space-y-0.5">
-                                            <div class="flex items-center justify-between gap-1">
-                                                <span class="text-xs font-black text-emerald-800 truncate">🏅 ${esc(c.title)}</span>
-                                            </div>
-                                            <p class="text-[10px] font-bold text-slate-400">${ds ? esc(fmtDate(parseLocal(ds))) + ' · ' : ''}Medal earned</p>
-                                            ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-[10px] text-orange-700 underline font-bold block truncate hover:text-pink-700">🔗 Proof link</a>` : ''}
-                                            ${proof.note ? `<p class="text-[10px] text-slate-600 italic bg-white/80 p-1 rounded-md border border-emerald-100">"${esc(proof.note)}"</p>` : ''}
+                                        <div class="min-w-0 flex-1 space-y-1">
+                                            <span class="block text-xs font-black text-emerald-800 truncate">${esc(c.title)}</span>
+                                            <p class="text-xs font-bold text-slate-400">${ds ? esc(fmtDate(parseLocal(ds))) : 'Done'}</p>
+                                            ${proof.note ? `<p class="text-xs text-slate-600 italic bg-white/80 p-1 rounded-md border border-emerald-100">"${esc(proof.note)}"</p>` : ''}
                                         </div>
+                                        ${proofAction(c.id, friend.id)}
                                     </div>`;
                                 }).join('')}
                             </div>
                         ` : `
-                            <div class="p-3 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-center text-xs font-bold text-slate-400">
-                                No completed challenges yet! Pick a quest from the vault below to earn your first medal.
+                            <div class="p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-center text-xs font-bold text-slate-500">
+                                Your first win is one tap away. Pick any challenge below, they're all quick 🌱
                             </div>
                         `}
                     </div>
 
-                    <!-- PENDING -->
-                    <div class="space-y-2 pt-1 border-t border-pink-100">
-                        <div class="flex items-center space-x-1.5">
-                            <span class="text-base">⏳</span>
-                            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wide">Pending Challenges (${pendingList.length})</h3>
-                        </div>
+                    <!-- UP NEXT -->
+                    <div class="space-y-2 pt-3 border-t border-pink-100">
+                        <h3 class="text-sm font-black text-slate-800">✨ Up next (${pendingList.length})</h3>
+                        ${pendingList.length ? `
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
                             ${pendingList.map(c => `
-                                <div onclick="openChallengeModal(${c.id})" class="glow-card cursor-pointer bg-amber-50/60 border border-amber-200/80 rounded-xl p-2 text-center space-y-1" style="--glow:#FBBF24; --glow-soft:rgba(251,191,36,.4)">
+                                <div onclick="openChallengeModal(${c.id})" class="glow-card cursor-pointer bg-amber-50/60 border border-amber-200/80 rounded-xl p-2 text-center space-y-1" style="--glow:#F28C38; --glow-soft:rgba(242,140,56,.4)">
                                     ${visualHtml(c, 'w-full h-12 rounded-lg')}
-                                    <h4 class="text-[11px] font-bold text-slate-700 line-clamp-1">${esc(c.title)}</h4>
-                                    <span class="text-[9px] font-black text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded-full inline-block border border-amber-200">⏳ Pending</span>
+                                    <h4 class="text-xs font-bold text-slate-700 line-clamp-1">${esc(c.title)}</h4>
+                                    <span class="text-xs font-black text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full inline-block border border-orange-200">+ Log it</span>
                                 </div>
                             `).join('')}
-                        </div>
+                        </div>` : '<p class="text-xs font-bold text-slate-500">Nothing left. You did it all! 🏆</p>'}
                     </div>
                 </div>
             `;
         }
+
 
         // ==========================================================
         // 7. RENDER: CHALLENGE VAULT
@@ -866,10 +1334,12 @@
         }
 
         function challengeCardInner(ch) {
-            const badges = getFriends().map(friend => {
+            const fr = getFriends();
+            const nDone = fr.filter(f => isDone(ch.id, f.id)).length;
+            const badges = fr.map(friend => {
                 const done = isDone(ch.id, friend.id);
                 return `
-                    <div class="relative" title="${esc(friend.name)}: ${done ? 'Completed' : 'Pending'}">
+                    <div class="relative" title="${esc(friend.name)}: ${done ? 'Done' : 'Not yet'}">
                         <div class="w-6 h-6 rounded-full border border-orange-200 p-0.5 bg-white transition-all ${done ? 'opacity-100 scale-105' : 'filter grayscale opacity-30'}">
                             ${pixelAvatar(friend.palette)}
                         </div>
@@ -877,27 +1347,51 @@
                     </div>`;
             }).join('');
 
+            const progress = nDone === fr.length
+                ? '<span class="text-xs font-extrabold text-emerald-600">✓ All done</span>'
+                : `<span class="text-xs font-bold text-slate-500">${nDone}/${fr.length}</span>`;
+
             return `
                 <div class="relative">
                     ${visualHtml(ch, 'w-full h-24 rounded-xl')}
-                    <span class="absolute top-1.5 left-1.5 text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm" style="background:#F2B544;color:#6B2D0E">#${questNo(ch)}</span>
+                    <span class="absolute top-1.5 left-1.5 text-xs font-black px-2 py-0.5 rounded-full shadow-sm" style="background:#F2B544;color:#6B2D0E">#${questNo(ch)}</span>
                 </div>
-                <h3 class="text-xs font-black text-slate-800 line-clamp-2 min-h-[2rem] leading-snug">${esc(ch.title)}</h3>
-                ${ch.info ? `<p class="text-[10px] font-semibold text-slate-500 leading-snug line-clamp-3">${esc(ch.info)}</p>` : ''}
-                <div class="flex items-center justify-between pt-2 border-t border-orange-100 mt-auto">
-                    <span class="text-[10px] font-bold text-slate-400">Status</span>
+                <h3 class="text-[13px] font-black text-slate-800 line-clamp-2 min-h-[2.3rem] leading-snug">${esc(ch.title)}</h3>
+                <div class="flex items-center justify-between pt-2 border-t border-orange-100 mt-auto gap-1">
+                    ${progress}
                     <div class="flex space-x-1">${badges}</div>
                 </div>`;
         }
 
+        let vaultFilter = 'all';
+        const doneCount = ch => getFriends().filter(f => isDone(ch.id, f.id)).length;
+
+        function setVaultFilter(f) {
+            vaultFilter = f;
+            renderChallengesGrid();
+        }
+
         function renderChallengesGrid() {
+            const n = getFriends().length;
+            const all = state.challenges;
+            const counts = { all: all.length, open: all.filter(c => doneCount(c) < n).length, done: all.filter(c => doneCount(c) === n).length };
+            const list = vaultFilter === 'open' ? all.filter(c => doneCount(c) < n)
+                : vaultFilter === 'done' ? all.filter(c => doneCount(c) === n) : all;
+
+            document.getElementById('vault-count').textContent = `(${all.length})`;
+            document.getElementById('vault-filters').innerHTML = [['all', 'All'], ['open', 'Open'], ['done', 'Done by all']].map(([id, label]) => `
+                <button type="button" onclick="setVaultFilter('${id}')" aria-pressed="${vaultFilter === id}" class="h-8 px-3 rounded-full border-2 text-xs font-extrabold transition ${vaultFilter === id ? 'bg-[#CF5171] text-white border-[#CF5171]' : 'bg-white text-slate-600 border-pink-200 hover:border-[#CF5171]'}">${label} <span class="${vaultFilter === id ? 'text-pink-100' : 'text-slate-400'}">${counts[id]}</span></button>`).join('');
+
             const grid = document.getElementById('challenges-grid');
             grid.innerHTML = '';
-            document.getElementById('vault-count').textContent = `(${state.challenges.length} Quests)`;
-
-            state.challenges.forEach(ch => {
+            if (!list.length) {
+                grid.innerHTML = '<p class="col-span-full text-center text-xs font-bold text-slate-500 py-6">Nothing in this list yet. Try another filter 💫</p>';
+                return;
+            }
+            list.forEach(ch => {
+                const complete = doneCount(ch) === n;
                 const card = document.createElement('div');
-                card.className = 'glow-card bg-white rounded-2xl p-2.5 border-2 border-orange-200 shadow-sm flex flex-col justify-between cursor-pointer space-y-2';
+                card.className = `glow-card rounded-2xl p-2.5 border-2 shadow-sm flex flex-col justify-between cursor-pointer space-y-2 ${complete ? 'bg-amber-50 border-amber-300' : 'bg-white border-orange-200'}`;
                 card.onclick = () => openChallengeModal(ch.id);
                 card.innerHTML = challengeCardInner(ch);
                 grid.appendChild(card);
@@ -905,8 +1399,10 @@
         }
 
         function renderAll() {
+            renderHeroBoost();
             renderHeroCharacters();
             renderCharacterDetailView();
+            renderWatch();
             renderChallengesGrid();
         }
 
@@ -950,7 +1446,7 @@
                 <div class="flex items-center gap-3">
                     ${visualHtml(ch, 'w-16 h-16 rounded-2xl')}
                     <div class="min-w-0">
-                        <span class="inline-block text-[10px] font-black px-2 py-0.5 rounded-full" style="background:#F2B544;color:#6B2D0E">Quest #${questNo(ch)}</span>
+                        <span class="inline-block text-[11px] font-black px-2 py-0.5 rounded-full" style="background:#F2B544;color:#6B2D0E">Challenge #${questNo(ch)}</span>
                         <h3 class="text-base font-extrabold text-slate-800 leading-snug">${esc(ch.title)}</h3>
                     </div>
                 </div>
@@ -971,14 +1467,14 @@
                         class="relative aspect-square rounded-2xl border-2 flex flex-col items-center justify-center gap-0.5 p-1 transition ${d.done ? '' : 'bg-white'}"
                         style="border-color:${active ? p.glow : hexToRgba(p.glow, 0.35)}; ${d.done ? `background:${hexToRgba(p.glow, 0.16)};` : ''} ${active ? `box-shadow:0 0 0 2px ${p.glow}, 0 0 14px 2px ${hexToRgba(p.glow, 0.4)};` : ''}">
                         <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl p-0.5 ${d.done ? '' : 'opacity-60'}" style="background:${p.body}">${pixelAvatar(f.palette)}</div>
-                        <span class="text-[11px] font-black text-slate-700 truncate max-w-full">${esc(f.name)}</span>
-                        <span class="text-[9px] font-extrabold ${d.done ? 'text-emerald-600' : 'text-slate-400'}">${d.done ? '🏅 Done' : '⏳ Pending'}</span>
+                        <span class="text-xs font-black text-slate-700 truncate max-w-full">${esc(f.name)}</span>
+                        <span class="text-[11px] font-extrabold ${d.done ? 'text-emerald-600' : 'text-orange-500'}">${d.done ? '🏅 Done' : '✨ Your turn'}</span>
                     </button>`;
             }).join('');
 
             let panel;
             if (!modalActive) {
-                panel = `<p class="text-[11px] font-bold text-slate-400 text-center py-2">Tap your square to log this quest.</p>`;
+                panel = `<p class="text-xs font-extrabold text-orange-600 text-center py-2">Tap your square to log your win 👆</p>`;
             } else {
                 const f = getFriend(modalActive);
                 const p = pal(f);
@@ -998,14 +1494,20 @@
                                     <label for="proof-url" class="text-xs font-bold text-slate-700">Proof link</label>
                                     <span class="text-[9px] font-black uppercase tracking-wide text-white bg-orange-500 px-1.5 py-0.5 rounded-full">Required</span>
                                 </div>
-                                <input type="url" id="proof-url" value="${esc(d.url)}" oninput="onModalInput('url', this.value)" placeholder="Paste your Instagram / TikTok link" class="w-full px-3 py-2 text-xs rounded-xl border ${modalUrlError ? 'border-rose-500 ring-2 ring-rose-200' : 'border-orange-200'} bg-white focus:outline-none focus:ring-2 focus:ring-orange-300">
+                                <input type="url" id="proof-url" value="${esc(d.url)}" oninput="onModalInput('url', this.value)" placeholder="Paste your TikTok / Instagram / YouTube link" class="w-full px-3 py-2 text-xs rounded-xl border ${modalUrlError ? 'border-rose-500 ring-2 ring-rose-200' : 'border-orange-200'} bg-white focus:outline-none focus:ring-2 focus:ring-orange-300">
+                                <p id="proof-hint" class="text-xs font-bold leading-snug ${proofHint(d.url).cls}">${esc(proofHint(d.url).text)}</p>
+                                ${(() => {
+                                    const s = modalSnapshot[modalActive];
+                                    const v = s && s.done && s.url && s.url === d.url ? parseVideo(s.url) : null;
+                                    return v && v.embed ? `<button type="button" onclick="playClip(${activeModalChallengeId},'${modalActive}')" class="mt-1 px-3 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-extrabold transition">▶ Watch it on the dashboard</button>` : '';
+                                })()}
                             </div>
                             <div class="space-y-1">
                                 <label for="proof-note" class="text-xs font-bold text-slate-700">Reflection <span class="font-semibold text-slate-400">(optional)</span></label>
                                 <input type="text" id="proof-note" maxlength="140" value="${esc(d.note)}" oninput="onModalInput('note', this.value)" placeholder="How did it feel?" class="w-full px-3 py-2 text-xs rounded-xl border border-orange-200 bg-white focus:outline-none focus:ring-2 focus:ring-orange-300">
                             </div>
                         ` : `
-                            <p class="text-[11px] font-bold text-slate-400">Tick “Completed” when you've done it, then add your proof link.</p>
+                            <p class="text-xs font-bold text-slate-400">Tick “Completed” when you've done it, then add your proof link.</p>
                         `}
                     </div>`;
             }
@@ -1034,6 +1536,10 @@
         function onModalInput(kind, value) {
             if (!modalActive) return;
             modalDraft[modalActive][kind] = value;
+            if (kind === 'url') {
+                const h = proofHint(value), el = document.getElementById('proof-hint');
+                if (el) { el.textContent = h.text; el.className = 'text-xs font-bold leading-snug ' + h.cls; }
+            }
         }
 
         function closeChallengeModal() {
@@ -1061,7 +1567,8 @@
             // Only send what changed, so we never overwrite a friend's newer update
             const today = localDateStr();
             const changes = [];
-            let newlyCompleted = false;
+            const winners = [];
+            const before = earnedSnapshot();
 
             for (const f of getFriends()) {
                 const d = modalDraft[f.id];
@@ -1076,14 +1583,14 @@
                         modalUrlError = true;
                         renderModalRoles();
                         err.textContent = !url
-                            ? `${f.name}: add a proof link to mark this quest as done.`
+                            ? `${f.name}: add a proof link to mark this challenge as done.`
                             : `${f.name}'s proof link needs to start with http:// or https://`;
                         err.classList.remove('hidden');
                         setTimeout(() => { const i = document.getElementById('proof-url'); if (i) i.focus(); }, 0);
                         return;
                     }
                     changes.push({ challengeId: chId, friendId: f.id, done: true, url: safeUrl(url), note, date: today });
-                    if (!snap.done) newlyCompleted = true;
+                    if (!snap.done) winners.push(f.name);
                 } else if (snap.done) {
                     changes.push({ challengeId: chId, friendId: f.id, done: false });
                 }
@@ -1099,7 +1606,7 @@
                 await api('PUT', '/api/progress', { changes });
                 await refreshState(true);
                 closeChallengeModal();
-                if (newlyCompleted) triggerConfetti();
+                celebrateSave(before, winners);
             } catch (e) {
                 if (e.code !== 'auth') {
                     err.textContent = 'Could not save: ' + e.message;
@@ -1152,12 +1659,12 @@
                 body.innerHTML = `
                     <div class="space-y-4">
                         <div class="pr-6">
-                            <h3 class="text-base font-black text-slate-800">${f.mode === 'add' ? 'Add a new quest' : 'Edit quest'}</h3>
-                            <p class="text-[11px] font-bold text-slate-400">You'll preview it before anything is saved.</p>
+                            <h3 class="text-base font-black text-slate-800">${f.mode === 'add' ? 'Add a new challenge' : 'Edit challenge'}</h3>
+                            <p class="text-xs font-bold text-slate-400">You'll preview it before anything is saved.</p>
                         </div>
 
                         <div class="space-y-1">
-                            <label for="quest-title" class="block text-xs font-bold text-slate-700">Quest name</label>
+                            <label for="quest-title" class="block text-xs font-bold text-slate-700">Challenge name</label>
                             <input id="quest-title" type="text" maxlength="40" value="${esc(f.title)}" oninput="formState.title=this.value" onkeydown="if(event.key==='Enter'){goQuestPreview()}" placeholder="e.g. Dance to one full song" class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-orange-300">
                         </div>
 
@@ -1171,14 +1678,14 @@
                             <div class="flex items-center gap-3">
                                 ${visualHtml(draft, 'w-16 h-16 rounded-2xl')}
                                 <div class="flex flex-wrap gap-2">
-                                    <label class="px-3 py-1.5 rounded-xl bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold text-[11px] cursor-pointer transition">
+                                    <label class="px-3 py-1.5 rounded-xl bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold text-xs cursor-pointer transition">
                                         Upload photo
                                         <input type="file" accept="image/*" class="hidden" onchange="handleQuestImage(this)">
                                     </label>
-                                    ${f.img ? `<button onclick="formState.img=null; renderQuestForm()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-[11px]">Remove photo</button>` : ''}
+                                    ${f.img ? `<button onclick="formState.img=null; renderQuestForm()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs">Remove photo</button>` : ''}
                                 </div>
                             </div>
-                            <p class="text-[10px] font-bold text-slate-400">…or pick an illustration</p>
+                            <p class="text-[11px] font-bold text-slate-400">…or pick an illustration</p>
                             <div class="grid grid-cols-6 gap-1.5 max-h-40 overflow-y-auto p-1 rounded-xl border border-pink-100">
                                 ${Object.keys(ICONS).map(key => {
                                     const sel = !f.img && f.icon === key;
@@ -1187,7 +1694,7 @@
                             </div>
                         </div>
 
-                        <p id="quest-error" class="${f.error ? '' : 'hidden'} text-[11px] font-bold text-rose-500">${esc(f.error)}</p>
+                        <p id="quest-error" class="${f.error ? '' : 'hidden'} text-xs font-bold text-rose-500">${esc(f.error)}</p>
 
                         <div class="flex space-x-2 pt-1">
                             <button onclick="goQuestPreview()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-md transition">Preview →</button>
@@ -1201,15 +1708,15 @@
                     <div class="space-y-4">
                         <div class="pr-6">
                             <h3 class="text-base font-black text-slate-800">Does this look right?</h3>
-                            <p class="text-[11px] font-bold text-slate-400">${f.mode === 'add' ? 'This is how your new quest will appear in the vault.' : 'Here is the quest before and after your changes.'}</p>
+                            <p class="text-xs font-bold text-slate-400">${f.mode === 'add' ? 'This is how your new challenge will appear in the list.' : 'Here is the challenge before and after your changes.'}</p>
                         </div>
 
                         ${f.mode === 'add' ? `
                             <div class="max-w-[180px] mx-auto">${previewCard(draft)}</div>
                         ` : `
                             <div class="grid grid-cols-2 gap-3">
-                                <div class="space-y-1"><p class="text-[10px] font-black text-slate-400 uppercase text-center">Before</p>${previewCard(f.orig)}</div>
-                                <div class="space-y-1"><p class="text-[10px] font-black text-orange-600 uppercase text-center">After</p>${previewCard(draft)}</div>
+                                <div class="space-y-1"><p class="text-[11px] font-black text-slate-400 uppercase text-center">Before</p>${previewCard(f.orig)}</div>
+                                <div class="space-y-1"><p class="text-[11px] font-black text-orange-600 uppercase text-center">After</p>${previewCard(draft)}</div>
                             </div>
                         `}
 
@@ -1226,9 +1733,9 @@
             if (!f) return;
             const title = f.title.trim();
             let error = '';
-            if (!title) error = 'Give your quest a name first.';
+            if (!title) error = 'Give your challenge a name first.';
             else if (title.length > 40) error = 'Keep the name to 40 characters or fewer.';
-            else if (state.challenges.some(c => c.id !== f.id && c.title.trim().toLowerCase() === title.toLowerCase())) error = 'A quest with that name already exists.';
+            else if (state.challenges.some(c => c.id !== f.id && c.title.trim().toLowerCase() === title.toLowerCase())) error = 'A challenge with that name already exists.';
 
             if (error) {
                 f.error = error;
@@ -1252,7 +1759,7 @@
                 else await api('PUT', '/api/quests/' + f.id, body);
                 await refreshState(true);
                 closeQuestForm();
-                showToast(f.mode === 'add' ? 'New quest added ✨' : 'Quest updated ✨');
+                showToast(f.mode === 'add' ? 'New challenge added ✨' : 'Challenge updated ✨');
             } catch (e) {
                 if (e.code === 'auth') return;
                 f.saving = false;
@@ -1312,7 +1819,7 @@
                 <div class="space-y-4">
                     <div class="pr-6">
                         <h3 class="text-base font-black text-slate-800">Customize your character</h3>
-                        <p class="text-[11px] font-bold text-slate-400">Pick your colour and emoji — it updates everywhere.</p>
+                        <p class="text-xs font-bold text-slate-400">Pick your colour and emoji — it updates everywhere.</p>
                     </div>
 
                     <div class="flex items-center gap-3 p-3 rounded-2xl border" style="background:${hexToRgba(p.glow, 0.1)}; border-color:${hexToRgba(p.glow, 0.35)}">
@@ -1322,7 +1829,7 @@
                         </div>
                         <div class="min-w-0">
                             <div class="text-sm font-black text-slate-800 truncate">${esc(c.name || '…')}</div>
-                            <div class="text-[11px] font-bold truncate" style="color:${p.mouth}">${esc(c.vibe)}</div>
+                            <div class="text-xs font-bold truncate" style="color:${p.mouth}">${esc(c.vibe)}</div>
                         </div>
                     </div>
 
@@ -1354,7 +1861,7 @@
                             `).join('')}
                         </div>
                         <div class="flex items-center gap-2 pt-1">
-                            <span class="text-[10px] font-bold text-slate-400">or type your own:</span>
+                            <span class="text-[11px] font-bold text-slate-400">or type your own:</span>
                             <input type="text" id="cust-emoji-input" maxlength="8" placeholder="🙂" oninput="onCustomEmoji(this.value)" class="w-16 px-2 py-1 text-center text-sm rounded-lg border border-pink-200 focus:outline-none focus:ring-2 focus:ring-orange-300">
                         </div>
                     </div>
@@ -1403,13 +1910,245 @@
                 const p = pal(f);
                 return `<div class="text-center space-y-0.5">
                     <div class="w-12 h-12 mx-auto rounded-full p-1" style="background:${p.body}; border:2px solid ${p.face}">${pixelAvatar(f.palette)}</div>
-                    <span class="text-[10px] font-bold text-slate-600">${esc(f.name)} ${esc(f.emoji)}</span>
+                    <span class="text-[11px] font-bold text-slate-600">${esc(f.name)} ${esc(f.emoji)}</span>
                 </div>`;
             }).join('');
             document.getElementById('banner-modal').classList.remove('hidden');
         }
         function closeBannerModal() {
             document.getElementById('banner-modal').classList.add('hidden');
+        }
+
+        // ==========================================================
+        // 11b. SHARE CARDS (a 9:16 picture for Instagram / TikTok stories)
+        // ==========================================================
+        const CARD_FONT = '"Plus Jakarta Sans", "Segoe UI", sans-serif';
+        const CARD_EMOJI_FONT = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+        const share = { blob: null, url: '', name: 'badge', token: 0 };
+
+        function loadImg(src) {
+            return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+        }
+
+        function starPath(ctx, cx, cy, spikes, outer, inner, rot) {
+            ctx.beginPath();
+            for (let i = 0; i < spikes * 2; i++) {
+                const r = i % 2 ? inner : outer, a = rot + i * Math.PI / spikes;
+                ctx[i ? 'lineTo' : 'moveTo'](cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+            }
+            ctx.closePath();
+        }
+
+        function roundRectPath(ctx, x, y, w, h, r) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + w, y, x + w, y + h, r);
+            ctx.arcTo(x + w, y + h, x, y + h, r);
+            ctx.arcTo(x, y + h, x, y, r);
+            ctx.arcTo(x, y, x + w, y, r);
+            ctx.closePath();
+        }
+
+        // shrink the font until the text fits the width
+        function fitFont(ctx, text, weight, maxPx, minPx, maxW) {
+            let px = maxPx;
+            for (; px > minPx; px -= 4) {
+                ctx.font = `${weight} ${px}px ${CARD_FONT}`;
+                if (ctx.measureText(text).width <= maxW) break;
+            }
+            ctx.font = `${weight} ${px}px ${CARD_FONT}`;
+        }
+
+        async function buildShareImage(o) {
+            const W = 1080, H = 1920, p = pal(o.friend);
+            const cv = document.createElement('canvas');
+            cv.width = W; cv.height = H;
+            const ctx = cv.getContext('2d');
+            try { await Promise.all([document.fonts.load(`800 80px ${CARD_FONT}`), document.fonts.load(`600 40px ${CARD_FONT}`)]); } catch (e) { /* fall back to the system font */ }
+
+            // colourful backdrop from the girlie's own palette
+            const bg = ctx.createLinearGradient(0, 0, W * 0.3, H);
+            bg.addColorStop(0, p.face); bg.addColorStop(0.5, p.hair); bg.addColorStop(1, '#FFF3E4');
+            ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+            [[130, 260, 210, .18], [960, 180, 150, .16], [1010, 1020, 240, .14], [60, 1280, 170, .16]].forEach(([x, y, r, a]) => {
+                ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+            });
+            ctx.fillStyle = 'rgba(255,255,255,.9)';
+            [[150, 520, 34], [930, 470, 26], [200, 1030, 22], [900, 1090, 38], [540, 330, 20], [100, 760, 18], [990, 760, 20]].forEach(([x, y, r]) => {
+                starPath(ctx, x, y, 4, r, r * 0.28, 0); ctx.fill();
+            });
+
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'alphabetic';
+            ctx.fillStyle = 'rgba(59,29,46,.8)';
+            ctx.font = `800 44px ${CARD_FONT}`;
+            ctx.fillText("GIRLIES' 30 CHALLENGES", W / 2, 170);
+
+            // the medallion
+            const cx = W / 2, cy = 780;
+            ctx.fillStyle = 'rgba(255,255,255,.4)'; starPath(ctx, cx, cy, 14, 480, 400, -Math.PI / 2); ctx.fill();
+            ctx.fillStyle = 'rgba(0,0,0,.16)'; ctx.beginPath(); ctx.arc(cx, cy + 22, 340, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = p.mouth; ctx.beginPath(); ctx.arc(cx, cy, 340, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx, cy, 312, 0, Math.PI * 2); ctx.fill();
+            const ig = ctx.createRadialGradient(cx - 90, cy - 110, 30, cx, cy, 290);
+            ig.addColorStop(0, '#fff'); ig.addColorStop(1, p.body);
+            ctx.fillStyle = ig; ctx.beginPath(); ctx.arc(cx, cy, 288, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,.95)'; ctx.lineWidth = 18; ctx.lineCap = 'round';
+            ctx.beginPath(); ctx.arc(cx, cy, 252, Math.PI * 1.08, Math.PI * 1.38); ctx.stroke();
+            ctx.textBaseline = 'middle';
+            ctx.font = `330px ${CARD_EMOJI_FONT}`;
+            ctx.fillStyle = '#000';
+            ctx.fillText(o.emoji, cx, cy + 18);
+
+            // kicker pill, title, subtitle
+            ctx.textBaseline = 'alphabetic';
+            ctx.font = `800 38px ${CARD_FONT}`;
+            const kw = ctx.measureText(o.kicker).width + 90;
+            ctx.fillStyle = '#fff'; roundRectPath(ctx, cx - kw / 2, 1190, kw, 88, 44); ctx.fill();
+            ctx.fillStyle = p.mouth; ctx.fillText(o.kicker, cx, 1248);
+
+            ctx.fillStyle = '#2D1B2E';
+            fitFont(ctx, o.title, 800, 130, 70, 900);
+            ctx.fillText(o.title, cx, 1440);
+            ctx.fillStyle = '#6B4A5A';
+            fitFont(ctx, o.sub, 600, 50, 32, 900);
+            ctx.fillText(o.sub, cx, 1516);
+
+            // who earned it
+            ctx.save();
+            ctx.shadowColor = 'rgba(0,0,0,.12)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 10;
+            ctx.fillStyle = '#fff'; roundRectPath(ctx, 160, 1590, 760, 170, 50); ctx.fill();
+            ctx.restore();
+            ctx.fillStyle = p.body; roundRectPath(ctx, 190, 1620, 110, 110, 26); ctx.fill();
+            try {
+                const svg = pixelAvatar(o.friend.palette).replace('class="pixel-rendering w-full h-full"', 'xmlns="http://www.w3.org/2000/svg" width="228" height="228"');
+                const av = await loadImg('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg));
+                ctx.drawImage(av, 198, 1628, 94, 94);
+            } catch (e) { /* the card still works without the little avatar */ }
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#2D1B2E'; ctx.font = `800 52px ${CARD_FONT}`;
+            ctx.fillText(`${o.friend.name} ${o.friend.emoji}`, 330, 1668);
+            ctx.fillStyle = '#6B4A5A'; ctx.font = `600 34px ${CARD_FONT}`;
+            ctx.fillText(`${o.stats.count} of ${o.stats.total} challenges done`, 330, 1722);
+
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'rgba(59,29,46,.75)'; ctx.font = `800 40px ${CARD_FONT}`;
+            ctx.fillText('Create with girlies ✨', cx, 1850);
+
+            return new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('no image')), 'image/png'));
+        }
+
+        function resetShare() {
+            if (share.url) URL.revokeObjectURL(share.url);
+            share.blob = null; share.url = '';
+            const img = document.getElementById('share-img');
+            img.removeAttribute('src'); img.classList.add('hidden');
+            const ld = document.getElementById('share-loading');
+            ld.textContent = 'Making your card…'; ld.classList.remove('hidden');
+            document.getElementById('share-actions').classList.add('hidden');
+            document.getElementById('share-note').textContent = '';
+        }
+
+        function canShareFile() {
+            try { return !!(navigator.canShare && navigator.canShare({ files: [new File([share.blob], 'a.png', { type: 'image/png' })] })); } catch (e) { return false; }
+        }
+
+        async function openShare(kind, fid, bid) {
+            const f = getFriend(fid);
+            if (!f) return;
+            const stats = friendStats(fid);
+            let o;
+            if (kind === 'badge') {
+                const b = badgeList(fid, stats).find(x => x.id === bid);
+                if (!b || !b.earned) return;
+                o = { emoji: b.emoji, kicker: 'BADGE UNLOCKED', title: b.name, sub: b.hint, file: 'badge-' + b.id };
+            } else {
+                o = { emoji: '🏆', kicker: 'MY PROGRESS', title: `${stats.count} / ${stats.total}`, sub: stats.streak > 1 ? `done · 🔥 ${stats.streak}-day streak` : 'challenges done', file: 'progress' };
+            }
+            o.friend = f; o.stats = stats;
+
+            const token = ++share.token;
+            hideCelebrate();
+            resetShare();
+            document.getElementById('share-title').textContent = kind === 'badge' ? 'Share your badge' : 'Share your progress';
+            document.getElementById('share-modal').classList.remove('hidden');
+            try {
+                const blob = await buildShareImage(o);
+                if (token !== share.token) return;
+                share.blob = blob;
+                share.name = `${f.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'girlie'}-${o.file}`;
+                share.url = URL.createObjectURL(blob);
+                const img = document.getElementById('share-img');
+                img.src = share.url; img.classList.remove('hidden');
+                document.getElementById('share-loading').classList.add('hidden');
+                document.getElementById('share-actions').classList.remove('hidden');
+                const can = canShareFile();
+                document.getElementById('share-btn').classList.toggle('hidden', !can);
+                document.getElementById('share-note').textContent = can
+                    ? 'Tap Share, then pick Instagram or TikTok.'
+                    : 'Save it, then add it to your story from your gallery.';
+            } catch (e) {
+                if (token === share.token) document.getElementById('share-loading').textContent = 'Could not make the card. Please try again.';
+            }
+        }
+
+        function closeShare() {
+            share.token++;
+            resetShare();
+            document.getElementById('share-modal').classList.add('hidden');
+        }
+
+        async function shareImage() {
+            if (!share.blob) return;
+            const file = new File([share.blob], share.name + '.png', { type: 'image/png' });
+            try {
+                await navigator.share({ files: [file], title: "Girlies' 30 Challenges" });
+            } catch (e) {
+                if (e && e.name === 'AbortError') return;
+                saveImage();
+            }
+        }
+
+        function saveImage() {
+            if (!share.url) return;
+            const a = document.createElement('a');
+            a.href = share.url; a.download = share.name + '.png';
+            document.body.appendChild(a); a.click(); a.remove();
+            showToast('Saved to your device ✨');
+        }
+
+        // After a save: a win toast, and a bigger moment when someone unlocks a badge
+        const CHEERS = ['That’s a win! 🙌', 'Look at you go! 🔥', 'Yes!! Keep it going ✨', 'Nice one! 🎉', 'Proud of you! 💖'];
+        let celebrateTimer = null;
+
+        function celebrateSave(before, winners) {
+            if (!winners.length) return;
+            const unlocked = [];
+            getFriends().forEach(f => badgeList(f.id).forEach(b => {
+                if (b.earned && !(before[f.id] && before[f.id].has(b.id))) unlocked.push({ f, b });
+            }));
+            triggerConfetti();
+            if (!unlocked.length) {
+                showToast(`${joinNames(winners)} +1 win. ${CHEERS[Math.floor(Math.random() * CHEERS.length)]}`);
+                return;
+            }
+            const first = unlocked[0];
+            const more = unlocked.slice(1).map(u => `${u.b.emoji} ${esc(u.f.name)}: ${esc(u.b.name)}`);
+            document.getElementById('celebrate-card').innerHTML = `
+                <div class="text-6xl">${first.b.emoji}</div>
+                <p class="text-xs font-black uppercase tracking-wide text-orange-600">New badge unlocked!</p>
+                <h3 class="text-xl font-black text-slate-800">${esc(first.b.name)}</h3>
+                <p class="text-xs font-bold text-slate-500">${esc(first.f.name)} · ${esc(first.b.hint)}</p>
+                ${more.length ? `<p class="text-xs font-bold text-slate-500 pt-1">Plus ${more.join(' · ')}</p>` : ''}
+                <button type="button" onclick="event.stopPropagation(); openShare('badge','${first.f.id}','${first.b.id}')" class="mt-2 w-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-sm transition">📸 Share this badge</button>
+                <button type="button" class="w-full text-slate-500 hover:text-slate-700 font-bold py-1.5 text-xs">Maybe later</button>`;
+            document.getElementById('celebrate').classList.remove('hidden');
+            clearTimeout(celebrateTimer);
+            celebrateTimer = setTimeout(hideCelebrate, 10000);
+        }
+        function hideCelebrate() {
+            clearTimeout(celebrateTimer);
+            document.getElementById('celebrate').classList.add('hidden');
         }
 
         function triggerConfetti() {
@@ -1438,7 +2177,8 @@
                 'challenge-modal': closeChallengeModal,
                 'quest-modal': closeQuestForm,
                 'customize-modal': closeCustomizeModal,
-                'banner-modal': closeBannerModal
+                'banner-modal': closeBannerModal,
+                'share-modal': closeShare
             };
             Object.keys(closers).forEach(id => {
                 const el = document.getElementById(id);
@@ -1446,7 +2186,8 @@
             });
             document.addEventListener('keydown', e => {
                 if (e.key !== 'Escape') return;
-                for (const id of ['quest-modal', 'customize-modal', 'challenge-modal', 'banner-modal']) {
+                if (!document.getElementById('celebrate').classList.contains('hidden')) { hideCelebrate(); return; }
+                for (const id of ['share-modal', 'quest-modal', 'customize-modal', 'challenge-modal', 'banner-modal']) {
                     if (!document.getElementById(id).classList.contains('hidden')) { closers[id](); break; }
                 }
             });

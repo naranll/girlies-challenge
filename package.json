@@ -2,7 +2,7 @@
   "name": "girlies-challenge",
   "version": "1.0.0",
   "private": true,
-  "description": "Girlies' 30-Day growth challenge tracker (Express + MongoDB)",
+  "description": "Girlies' 30 Challenges tracker (Express + MongoDB)",
   "main": "server.js",
   "engines": {
     "node": ">=20"

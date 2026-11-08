@@ -1,4 +1,4 @@
-# Girlies' 30-Day Creative Challenge
+# Girlies' 30 Challenges
 
 A shared tracker for four friends. Express serves the page and a small API; MongoDB Atlas stores everything.
 Everyone opens the same link, enters the group passcode once, and sees the same progress (it refreshes every ~8 seconds).
