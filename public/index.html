@@ -308,8 +308,8 @@
                 </div>
             </div>
             <div id="share-actions" class="hidden flex gap-2">
-                <button id="share-btn" onclick="shareImage()" class="hidden flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-sm shadow-md transition">Share ↗</button>
-                <button onclick="saveImage()" class="flex-1 bg-pink-100 hover:bg-pink-200 text-[#CF5171] font-extrabold py-2.5 rounded-xl text-sm transition">Save image</button>
+                <button id="share-btn" onclick="shareImage()" class="hidden flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 rounded-xl text-sm shadow-md transition"></button>
+                <button id="save-btn" onclick="saveImage()" class="flex-1 bg-pink-100 hover:bg-pink-200 text-[#CF5171] font-extrabold py-2.5 rounded-xl text-sm transition">Save image</button>
             </div>
             <p id="share-note" class="text-xs font-bold text-slate-400 text-center"></p>
         </div>
@@ -2066,11 +2066,18 @@
                 img.src = share.url; img.classList.remove('hidden');
                 document.getElementById('share-loading').classList.add('hidden');
                 document.getElementById('share-actions').classList.remove('hidden');
+                // Websites can't write into the photo gallery. On a phone the share sheet can
+                // ("Save Image" / "Save to Photos"), so there it becomes the one main button.
                 const can = canShareFile();
-                document.getElementById('share-btn').classList.toggle('hidden', !can);
-                document.getElementById('share-note').textContent = can
-                    ? 'Tap Share, then pick Instagram or TikTok.'
-                    : 'Save it, then add it to your story from your gallery.';
+                const phone = can && window.matchMedia && matchMedia('(pointer: coarse)').matches;
+                const shareBtn = document.getElementById('share-btn');
+                shareBtn.textContent = phone ? 'Save or share ↗' : 'Share ↗';
+                shareBtn.classList.toggle('hidden', !can);
+                document.getElementById('save-btn').classList.toggle('hidden', phone);
+                document.getElementById('share-note').textContent = phone
+                    ? 'In the menu pick Save Image to keep it in your gallery, or Instagram / TikTok to post.'
+                    : can ? 'Tap Share, then pick Instagram or TikTok.'
+                    : 'Tap Save, or press and hold the picture to keep it in your gallery.';
             } catch (e) {
                 if (token === share.token) document.getElementById('share-loading').textContent = 'Could not make the card. Please try again.';
             }
